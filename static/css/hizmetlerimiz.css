@@ -1,0 +1,653 @@
+/* Created By AkinaCss */
+/* mainHizmet Css */
+
+table {
+    width: 100%;
+}
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    font-size: 30px;
+}
+td{
+    font-size: 20px;
+}
+
+.mainHizmet {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    clip-path: none;
+    height: calc(100vh - 400px);
+    min-height: 400px;
+    max-height: 600px;
+}
+
+.mainPageImg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.overlay.dark {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.main-textHiz {
+    z-index: 2;
+    color: var(--white);
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+}
+
+.mainTextInsideHiz {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+    text-align: left;
+    gap: 20px;
+}
+
+.main-textHiz h1 {
+    font-weight: 900;
+    font-size: 50px;
+    margin-bottom: 20px;
+    color: var(--main);
+}
+
+.main-textHiz h2 span, .baslik h2 span {
+    color: var(--main);
+}
+
+.main-textHiz h2 {
+    font-weight: 400;
+    font-size: 30px;
+}
+
+.main-textHiz p {
+    font-size: 20px;
+    color: #ffffffcb;
+    max-width: 60%;
+}
+
+/* Masalar Css */
+
+.vip-gaming-container {
+    background-color: #1a1a1a;
+    padding: 20px;
+    color: #fff;
+    border-radius: 10px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.row-vip {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.vip-title {
+    font-size: 24px;
+    font-weight: bold;
+    flex: 2;
+    margin-bottom: 10px;
+}
+
+.vip-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-align: right;
+    flex: 1;
+}
+
+.specs {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.spec-item {
+    flex: 1;
+}
+
+
+
+.fiyatTable table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.fiyatTable th, .fiyatTable td {
+    padding: 8px;
+    text-align: left;
+}
+
+.fiyatTable th[rowspan="5"] {
+    width: 15%;
+}
+
+.fiyatTable td {
+    width: 40%;
+}
+
+.mtb-1 {
+    margin: 20px 0px;
+}
+
+.mainclr {
+    color: var(--main);
+}
+
+.vipclr {
+    color: #00FFFF;
+}
+
+
+.whytclr {
+    color: var(--white);
+}
+
+.sc-down {
+    object-fit: scale-down !important;
+}
+/* Yiyecekler Css */
+
+.w-100 {
+    width: 100%;
+}
+
+.rowx {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 30px;
+    gap: 10px;
+}
+
+.mt-0 {
+    margin-top: 0px;
+}
+
+.mb-30 {
+    margin-bottom: 30px;
+}
+
+.mt-30 {
+    margin-top: 30px;
+}
+
+.datax {
+    box-shadow: 0 0 18px 0 #ffc40021;
+    flex: 0 0 49%;
+    max-width: calc(100%);
+    min-width: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.rowTableImg {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.rowTableImg img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.rowTableImg span {
+    font-weight: 900;
+    color: var(--bgblue);
+}
+
+.clrbgblue {
+    font-weight: 700;
+    color: var(--border);
+}
+
+/* Oyun Hesaplari Css */
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.btnOyun {
+    flex: 1 0 9%;
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    border: 2px solid var(--main);
+    color: var(--main);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btnOyun.active {
+    background-color: var(--main);
+    border: 2px solid var(--main);
+    color: var(--bg);
+}
+
+.btnOyun:hover {
+    background-color: var(--main-1);
+    border: 2px solid var(--main-1);
+    color: var(--bg);
+}
+
+.contentOyun {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    gap: 10px;
+}
+
+.data {
+    box-shadow: 0 0 18px 0 #ffc40021;
+    flex: 1 0 25%;
+    max-width: calc(25% - 10px);
+    min-width: 250px;
+    display: none;
+    padding: 10px;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+}
+.data img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #000;
+}
+
+.data.active-data {
+    display: flex;
+}
+/* burada başlıyor yazdığım cssler */
+.btnOyunOzel {
+    flex: 1 0 15%;
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    border: 2px solid var(--main);
+    color: var(--main);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.btnOyunOzel img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+
+}
+
+.btnOyunOzel.active {
+    background-color: var(--main);
+    border: 2px solid var(--main);
+    color: var(--bg);
+}
+
+.btnOyunOzel:hover {
+    background-color: var(--main-1);
+    border: 2px solid var(--main-1);
+    color: var(--bg);
+}
+.dataOzel {
+    box-shadow: 0 0 18px 0 #ffc40021;
+    flex: 1 0 25%;
+    max-width: calc(100%);
+    min-width: 250px;
+    display: none;
+    padding: 10px;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+}
+.dataOzel img{
+    width: 300px;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #000;
+    box-shadow: none;
+}
+.dataOzel h2 {
+    color: var(--main);
+}
+
+.dataText {
+    padding: 10px;
+    width: 100%;
+}
+
+.active-data {
+    display: flex;
+}
+
+.center-text {
+    text-align: center;
+}
+
+/* Galeri Css */
+
+.imgHizmetInside {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+
+.imgHizmetInside img {
+    flex: 1 1 50%;
+    max-width: calc(50% - 20px);
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+
+.imgArsiv {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 70%;
+    height: 100%;
+    flex-direction: row;
+    align-items: start;
+}
+
+
+.imgArsiv img {
+    flex: 1 1 20%;
+    max-width: calc(20% - 20px);
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.imgArsiv img:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 24px 5px #ffc40021;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: scale-down;
+    border-radius: 10px;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.yicekYeni {
+    box-shadow: 0 0 18px 0 #ffc40021;
+    flex: 1 0 50%;
+    max-width: calc(50% - 10px);
+    min-width: 250px;
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: flex-start;
+    align-items: start;
+    border-radius: 10px;
+}
+
+.yicekYeni img {
+    width: 270px;
+    min-width: 270px;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #000;
+    box-shadow: none;
+}
+
+.yicekYenitext {
+    width: 100%;
+}
+
+.yicekYenitext ul {
+    width: 100%;
+}
+
+.yicekYenitext ul li {
+    margin-left: 20px;
+}
+
+.yicekYenitext h2 {
+    color: var(--main);
+    font-size: 20px;
+}
+.modlar ul li {
+    margin-left: 20px;
+}
+.modlar ol li{
+    margin-left: 20px;
+}
+/* Responsive CSS */
+
+@media (max-width: 1400px) {
+    .imgArsiv img {
+        flex: 1 1 25%;
+        max-width: calc(25% - 20px);
+    }
+}
+@media (max-width: 1100px) {
+    .imgArsiv img {
+        flex: 1 1 33%;
+        max-width: calc(33% - 20px);
+    }
+}
+@media (max-width: 850px) {
+    .imgArsiv img {
+        flex: 1 1 50%;
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 1229px) {
+    .data, .datax {
+        flex: 1 0 33%;
+        max-width: calc(33% - 10px);
+        min-width: 250px;
+    }
+}
+@media (max-width: 969px) {
+    .data, .datax {
+        flex: 1 0 50%;
+        max-width: calc(50% - 10px);
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 890px) {
+    .imgHizmetInside img {
+        flex: 1 1 100%;
+        max-width: 100%;
+        height: 400px;
+        width: 100%;
+        max-height: 400px;
+    }
+
+    .dataOzel {
+        flex-direction: column;
+    }
+
+    .dataOzel img {
+        width: 100%;
+        height: 300px;
+    }
+}
+
+@media (max-width: 710px) {
+    .data, .datax {
+        flex: 1 0 100%;
+        max-width: 100%;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .mainHizmet {
+        height: calc(100vh - 300px);
+        max-height: 100%;
+    }
+    .mainTextInsideHiz {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    .main-textHiz p {
+        max-width: 100%;
+    }
+    .imgArsiv img {
+        flex: 1 1 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 420px) {
+    .specs {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .yicekYeni img {
+        width: 220px;
+        min-width: 220px;
+        height: 270px;
+    }
+}
+
+@media (max-width: 1270px) {
+    .yicekYeni {
+        flex: 1 0 100%;
+        max-width: 100%;
+    }
+    .yicekYeni img {
+        width: 270px;
+        min-width: 270px;
+        height: 270px;
+    }
+}
+
+@media (max-width: 840px) {
+    .yicekYeni img {
+        width: 200px;
+        min-width: 200px;
+        height: 270px;
+    }
+}
+
+@media (max-width: 768px) {
+    .yicekYeni img {
+        width: 100%;
+        min-width: 100%;
+        height: 250px;
+    }
+    .yicekYeni {
+        flex-direction: column;
+    }
+}
+
+.low-date {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.pingTable{
+    display: flex;
+    width: 100%;
+}
+.pingTableImageDiv{
+    width: 75%;
+    margin-left: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.pingTable img{
+    width: 100%;
+    min-width: 100%;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #000;
+    box-shadow: none;
+}

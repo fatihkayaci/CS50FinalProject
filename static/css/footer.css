@@ -1,0 +1,104 @@
+/* Created By AkinaCss */
+/* Footer area */
+
+footer {
+    background-color: var(--bg);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 0;
+    color: var(--white);
+    padding: 0px 100px;
+}
+
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0px;
+}
+
+.footer-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+
+.footer-left a {
+    color: var(--white);
+    font-size: 15px;
+}
+.footer-left a:hover {
+    color: var(--main);
+}
+
+.footer-right {
+    height: 50px;
+}
+.footer-right img {
+    height: 50px;
+    object-fit: scale-down;
+}
+
+@media (max-width: 1200px) {
+    .footer {
+        gap: 20px;
+        justify-content: center;
+    }
+    .footer-left {
+        align-items: start;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        width: 90%;
+    }
+}
+
+@media (max-width: 670px) {
+    .footer-left  {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .footer {
+        gap: 40px;
+    }
+    .footer-right {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media (max-width: 490px) {
+    .footer {
+        width: 90%;
+    }
+    .footer-right img {
+        height: 30px;
+        object-fit: scale-down;
+    }
+}
+
+@media (max-width: 300px) {
+    .footer-right img {
+        height: 20px;
+        object-fit: scale-down;
+    }
+}

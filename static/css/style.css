@@ -1,0 +1,695 @@
+/* Created By AkinaCss */
+/* main area */
+
+.main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    clip-path: none;
+    height: calc(100vh - 150px);
+    min-height: 600px;
+    max-height: 900px;
+}
+
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.main-text {
+    z-index: 2;
+    color: var(--white);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+}
+
+.mainTextInside {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+
+.main-text h1 {
+    font-weight: 900;
+    font-size: 50px;
+    text-align: center;
+    line-height: 1;
+}
+
+.main-text h3 {
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.main-text h1 span {
+    color: var(--main);
+}
+
+.main-text h2 {
+    font-weight: 400;
+    font-size: 30px;
+    text-align: center;
+}
+
+.main-text p {
+    font-size: 20px;
+    color: #ffffffcb;
+    text-align: center;
+    max-width: 60%;
+}
+
+.customBtn {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 25px;
+    border-radius: 25px;
+    transition: 0.3s;
+}
+
+.btnClr1 {
+    background: linear-gradient(315deg, #cc9c00 0, #ffc300 50%, #ffd23d 100%);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 30px;
+    margin-top: 25px;
+}
+.btnClr1 i {
+    color: var(--bg);
+    font-weight: 600;
+    font-size: 40px;
+    transition: 0.3s;
+}
+
+.btnClr1:hover {
+    color: var(--bg);
+    background: linear-gradient(315deg, #ffd23d 0, #ffc300 50%, #cc9c00 100%);
+    box-shadow: 0 10px 20px -10px #fddb6940, 0 10px 20px -10px #ffc30080, 0 10px 25px -10px #cc9c0080;
+}
+
+.btnClr1:hover i {
+    color: var(--white);
+}
+
+/* Hizmet Css */
+
+section {
+    display: flex;
+    width: 100%;
+    padding: 100px;
+}
+
+.hizmetSec {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    height: 100%;
+    background: radial-gradient(70% 70% at 50% 50%, #ffd23d33 0, #0a0a0a00 75%, #0a0a0a00 100%);
+}
+
+.baslik {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+}
+
+.baslik h2 {
+    font-weight: 700;
+    font-size: 3rem;
+    color: var(--white);
+}
+
+.btnClr2 {
+    background-color: #80808033;
+    color: #f9f9f9;
+    font-size: .813rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    line-height: 1;
+}
+
+.btnClr2:hover {
+    color: var(--bg);
+    background: linear-gradient(315deg, #ffd23d 0, #ffc300 50%, #cc9c00 100%);
+    box-shadow: 0 10px 20px -10px #fddb6940, 0 10px 20px -10px #ffc30080, 0 10px 25px -10px #cc9c0080;
+}
+
+.hizmetInside {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: start;
+    gap: 25px;
+}
+
+.hizmetSol {
+    flex: 1 0 65%;
+    max-width: 65%;
+    box-sizing: border-box;
+    min-width: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 30px;
+}
+
+.hizmetSolBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+}
+.hizmetSolBox:hover .hizmetSolBoxImg {
+    box-shadow: 0 0 28px 0 #ffc30012;
+}
+.hizmetSolBox:hover img {
+    transform: scale(1.05);
+}
+
+.hizmetSolBoxImg {
+    width: 100%;
+    height: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px #0a0a0a26;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.hizmetSolBoxImg::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background: linear-gradient(200deg, rgba(10, 10, 10, 0) 50%, rgba(10, 10, 10, 0.6) 90%);
+}
+
+.hizmetSolBoxImg img {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    transition: 0.5s;
+}
+
+.hizmetSolBox:hover {
+    text-decoration: underline;
+}
+
+.boxText {
+    padding: 1rem 0;
+    font-size: 1.938rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+}
+
+.kategori {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+.kategori i {
+    background-color: #80808033;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    color: var(--main);
+}
+.kategori p {
+    font-weight: 800;
+    letter-spacing: .08em;
+    font-size: .938rem;
+    color: rgba(101, 100, 98, .9);
+}
+
+.hizmetSag {
+    flex: 1 0 35%;
+    max-width: 35%;
+    box-sizing: border-box;
+    min-width: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    height: max-content;
+    gap: 20px;
+}
+
+.hizmetSagBox {
+    width: 100%;
+    min-height: 130px;
+    box-shadow: 0 4px 4px #0a0a0a26;
+    border-radius: 8px;
+    background-color: #80808033;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+}
+
+.hizmetSagBox:hover .boxsagImg img{
+    transform: scale(1.1);
+}
+.hizmetSagBox:hover{
+    text-decoration: underline;
+    box-shadow: 0 0 28px 0 #ffc30012;
+}
+
+.hizmetSagText {
+    width: 65%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    padding-left: 10px;
+}
+
+.hizmetSagText .boxText {
+    padding: 0px;
+    font-weight: 500;
+    font-size: 1.125rem;
+}
+
+.boxsagImg {
+    width: 35%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.boxsagImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+/* Rezervasyon Css */
+
+.tableArea {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.tableArea table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableArea td, .tableArea th {
+  text-align: left;
+  padding: 8px;
+  width: 33%;
+}
+
+.tableArea th {
+    font-weight: 900;
+}
+
+.tableArea tr:nth-child(even) {
+  background-color: #1a1a1a;
+}
+
+.center {
+    text-align: center !important;
+}
+
+.rez-btn {
+    color: #1f1f1f;
+    font-weight: 800;
+    letter-spacing: .08em;
+    line-height: 1;
+    padding: 15px 25px;
+    width: fit-content;
+    font-size: 20px;
+    background: linear-gradient(315deg, #ffd23d 0, #ffc300 50%, #cc9c00 100%);
+}
+
+.rez-btn:hover {
+    color: var(--main);
+    background: #80808033;
+    box-shadow: 0 0px 20px -5px #fddb6940, 0 0px 20px -5px #ffc30080, 0 0px 25px -5px #cc9c0080;
+}
+
+/* hakkimizda Css */
+
+.hakkSec {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    height: 100%;
+    z-index: 1;
+    /* background-color: #1a1a1a; */
+    background: url(../img/bgtex.avif);
+    position: relative;
+}
+.hakkSec::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background: linear-gradient(0deg, rgba(10, 10, 10, 0.8) 50%, rgb(10, 10, 10, 0.8) 100%);
+}
+
+.hakkInside {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 3;
+}
+
+.hakkMetin {
+    width: 50%;
+    color: var(--white);
+}
+
+.hakkMetin h2 {
+    font-size: 42px;
+    line-height: 44px;
+    font-weight: 700;
+    padding-bottom: 24px;
+}
+.hakkMetin p {
+    letter-spacing: .015em;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 200;
+    width: 80%;
+}
+
+.hakkMetin img {
+    border-radius: 10px;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    box-shadow: 0 0 28px 0 #ffc40021;
+}
+
+.hakkInside.f-start {
+    justify-content: flex-start;
+    align-items: start;
+}
+.yazilimimg{
+    width: 60%;
+}
+.yazilimimg img {
+    border-radius: 10px;
+    width: 100%;
+    height: 450px;
+    object-fit: inherit;
+    box-shadow: 0 0 28px 0 #ffc40021;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+/* İletisim Css */
+
+.iletisimSec {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    height: 100%;
+    padding: 0px 0px;
+    z-index: 1;
+    background-color: var(--white);
+    position: relative;
+}
+
+.hakkInside.newP {
+    display: flex;
+    padding: 0px;
+}
+
+.baslik.dark h2 {
+    font-weight: 700;
+    font-size: 3rem;
+    color: var(--bg);
+}
+
+.hakkMetin.dark {
+    color: var(--bg);
+}
+
+.hakkMetin.imgPath {
+    -webkit-clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
+    position: relative;
+    overflow: hidden;
+    height: auto;
+    width: 55%;
+}
+.hakkMetin.imgPath iframe {
+    border-radius: 0px;
+    width: 100%;
+    height: 600px;
+    display: block; 
+}
+
+.iletisimForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+    gap: 10px;
+    width: 100%;
+}
+
+.formCol {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+    gap: 5px;
+    width: 100%;
+    padding-right: 100px;
+}
+
+.formCol label {
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    font-size: 14px;
+    color: #4a4a4a;
+}
+
+.formCol input::placeholder, .formCol textarea::placeholder  {
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    font-size: 12px;
+    color: #666666;
+}
+
+.formCol input, .formCol textarea {
+    height: 44px;
+    padding: 8px;
+    line-height: 19.2px;
+    font-size: 16px;
+    background-color: rgba(186, 186, 186, 0.2);
+    border: 2px solid rgba(126, 126, 126, 0.15);
+    box-sizing: border-box;
+    display: block;
+    outline: none;
+    width: 100%;
+    color: rgb(31, 31, 31);
+    font-weight: 700;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.formCol textarea {
+    width: 100% !important;
+    height: 150px;
+    resize: none;
+}
+
+.gonder {
+    color: #1f1f1f;
+    font-weight: 800;
+    letter-spacing: .08em;
+    line-height: 1;
+    padding: 15px 25px;
+    width: fit-content;
+    font-size: 20px;
+    background: linear-gradient(315deg, #ffd23d 0, #ffc300 50%, #cc9c00 100%);
+}
+
+.gonder:hover {
+    color: var(--main);
+    background: #1f1f1f;
+    box-shadow: 0 0px 20px -5px #fddb6940, 0 0px 20px -5px #ffc30080, 0 0px 25px -5px #cc9c0080;
+}
+
+/* responsive Css */
+
+@media (max-width: 1440px) {
+    .boxsagImg {
+        height: 120px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .hizmetSol {
+        flex: 1 0 55%;
+        max-width: 55%;
+    }
+    .hizmetSag {
+        flex: 1 0 45%;
+        max-width: 45%;
+    }
+}
+
+@media (max-width: 890px) {
+    .hizmetInside {
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+    }
+    .hizmetSol, .hizmetSag {
+        flex: 1 0 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+    .boxsagImg {
+        height: auto;
+    }
+
+    .hakkInside {
+        flex-direction: column;
+    }
+    .hakkMetin {
+        width: 100%;
+    }
+
+    .hakkMetin.imgPath {
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        width: 100%;
+    }
+    .hakkMetin.imgPath iframe {
+        height: 300px;
+    }
+    .hakkMetin.dark {
+        padding-left: 100px;
+        padding-bottom: 30px;
+    }
+    .hakkMetin p {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hizmetInside {
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+    }
+    .hizmetSol, .hizmetSag {
+        flex: 1 0 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+    .boxsagImg {
+        height: auto;
+    }
+    .baslik h2 {
+        font-weight: 700;
+        font-size: 2rem;
+        color: var(--white);
+    }
+    .hakkMetin h2 {
+        font-weight: 700;
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 590px) {
+    .baslik {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: start;
+        gap: 10px;
+    }
+    section {
+        padding: 50px 30px;
+    }
+    .hakkMetin.dark {
+        padding-left: 30px;
+        padding-bottom: 30px;
+    }
+    .formCol {
+        padding-right: 30px;
+    }
+    .main-text h1 {
+        font-size: 43px;
+    }
+    .main-text h2 {
+        font-size: 25px;
+    }
+    .main-text p {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 440px) {
+    .hizmetSolBoxImg {
+        height: 400px;
+    }
+    .hizmetSolBoxImg img {
+        height: 400px;
+    }
+}

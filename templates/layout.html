@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dost Oyun Merkezi</title>
+    <link rel="icon" type="image/png" href="static/img/logo/ico.png">
+
+    <!-- Icon Library -->
+    <script src="https://kit.fontawesome.com/be694eddd8.js" crossorigin="anonymous"></script>
+    <!-- MyStyle -->
+     <link rel="stylesheet" href="static/css/header.css">
+     <link rel="stylesheet" href="static/css/style.css">
+     <link rel="stylesheet" href="static/css/footer.css">
+     <link rel="stylesheet" href="static/css/hizmetlerimiz.css">
+</head>
+<body>
+    
+    <!-- Header Area Start -->
+
+    <header id="myHeader">
+        <div class="header">
+            <a href="index.html" class="imga">
+                <img src="static/img/logo/logo.webp" alt="Dost Oyun Merkezi">
+            </a>
+        
+            <nav class="nav-desktop">
+                <ul>
+                    <li><a class="navA" href="/#anasayfa">Ana sayfa</a></li>
+                    <li><a class="navA" href="/#hizmet">Hizmetlerimiz</a></li>
+                    <li><a class="navA" href="/arsiv">Arşiv</a></li>
+                    <li><a class="navA" href="/#rezervasyon">Rezervasyon</a></li>
+                    <li><a class="navA" href="/#hakkimizda">Hakkımızda</a></li>
+                    <li><a class="navA" href="https://wa.me/905302090732?text=Merhaba,kolay gelsin." target="_blank">İletişim</a></li>
+                </ul>
+            </nav>
+        
+            <a class="btn-tel" href="tel:05302090732">
+                <i class="fa-solid fa-phone"></i>
+                <p class="none-p">0530 209 07 32</p>
+            </a>
+        
+            <!-- Mobile menu button -->
+            <button class="menu-btn" id="menu-toggle"><i class="fa fa-bars"></i></button>
+        
+            <!-- Mobile menu -->
+            <nav class="nav-mobile" id="nav-mobile">
+                <ul>
+                    <li><a class="navA" href="/#anasayfa">Ana sayfa</a></li>
+                    <li><a class="navA" href="/#hizmet">Hizmetlerimiz</a></li>
+                    <li><a class="navA" href="/arsiv">Arşiv</a></li>
+                    <li><a class="navA" href="/#rezervasyon">Rezervasyon</a></li>
+                    <li><a class="navA" href="/#hakkimizda">Hakkımızda</a></li>
+                    <!-- bakılacak -->
+                    <li><a class="navA"  href="https://wa.me/905302090732?text=Merhaba,kolay gelsin." target="_blank">İletişim</a></li>
+                </ul>
+                <a class="btn-tel1" href="tel:05302090732">
+                    <i class="fa-solid fa-phone"></i>
+                    <p>0530 209 07 32</p>
+                </a>
+            </nav>
+        </div>
+        
+    </header>
+    <!-- main block -->
+    {% block main %}
+    
+    
+    {% endblock %}
+
+
+
+    
+    <section id="iletisim" class="iletisimSec">
+        <div class="hakkInside newP">
+            <div class="hakkMetin imgPath">
+                <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96154.16962110915!2d28.969619469211132!3d41.13850324220533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14caca992a348879%3A0xfb996c9b4a833914!2sDOST%20OYUN%20MERKEZI!5e0!3m2!1str!2str!4v1727980395031!5m2!1str!2str" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
+            </div>
+            <div class="hakkMetin dark">
+                <h2>Bizimle İletişime Geçin</h2>
+                <form action="" class="iletisimForm">
+                    <div class="formCol">
+                        <label for="name">Ad Soyad</label>
+                        <input type="text" name="name" id="name" placeholder="Ad Soyad">
+                    </div>
+                    <div class="formCol">
+                        <label for="phone">Telefon</label>
+                        <input type="tel" name="phone" id="phone" placeholder="05** *** ** **">
+                    </div>
+                    <div class="formCol">
+                        <label for="mail">E-Posta</label>
+                        <input type="email" name="mail" id="mail" placeholder="örnek@mail.com">
+                    </div>
+                    <div class="formCol">
+                        <label for="mesaj">Mesajınız</label>
+                        <textarea name="mesaj" id="mesaj" placeholder="İletmek istediğiniz mesajı giriniz."></textarea>
+                    </div>
+                    <!-- bakılacak -->
+                    <a href="#hizmetler" class="customBtn gonder">GÖNDER</a>
+                </form>
+            </div>
+        </div>     
+    </section>
+
+    <footer>
+        <div class="footer">
+            <div class="footer-right">
+                <a href="/"><img src="static/img/logo/logo.webp" alt="logo"></a>
+            </div>
+            <div class="footer-left">
+                <a href="/#anasayfa">Ana sayfa</a>
+                <a href="/#hizmet">Hizmetlerimiz</a>
+                <a href="/arsiv">Arşiv</a>
+                <a href="/#rezervasyon">Rezervasyon</a>
+                <a href="/#hakkimizda">Hakkımızda</a>
+                <a href="https://wa.me/905302090732?text=Merhaba,kolay gelsin." target="_blank">İletişim</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="static/js/headerMenu.js"></script>
+
+    <script src="static/js/headerScroll.js"></script>
+
+</body>
+</html>
