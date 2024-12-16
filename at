@@ -1,0 +1,3 @@
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index) VALUES('hizmetler', 'static/img/mainpage/03.webp', '03.webp', true, 0);
+INSERT INTO media_tbl (group_name, type, path) VALUES('hizmetler', 'photo', 'static/img/mainpage/games.jpg');
+INSERT INTO media_tbl (group_name, type, path) VALUES('hizmetler', 'photo', 'static/img/mainpage/speedtest.jpg');

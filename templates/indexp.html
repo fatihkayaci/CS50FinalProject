@@ -1,0 +1,306 @@
+{%extends "layout.html" %}
+
+
+{% block main %}
+
+<main id="anasayfa">
+    <div class="main">
+        <video autoplay muted loop playsinline class="background-video">
+            <source src="static/img/dostCafe.mp4" type="video/mp4">
+            Tarayıcınız video etiketini desteklemiyor.
+        </video>
+        <div class="overlay"></div>
+        <div class="main-text">
+            <div class="mainTextInside">
+                <h1><span>DOST</span> OYUN MERKEZİ</h1>
+                {% for t in text %}
+                {% if t.id_name == "titleh3" %}
+                <h3>{{ t.text }}</h3>
+                {% endif %}
+                {% if t.id_name == "titleh2" %}
+                <h2>{{ t.text }}</h2>
+                {% endif %}
+                {% if t.id_name == "titlep" %}
+                <p>{{ t.text }}</p>
+                {% endif %}
+                {% endfor %}
+                <a href="https://wa.me/905302090732?text=Merhaba,kolay gelsin." target="_blank"
+                    class="customBtn btnClr1"> İLETİŞİM <i class="fa-solid fa-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Main Area End -->
+
+<!-- ======================================================= -->
+
+<!-- Hizmet Area Start -->
+
+<section id="hizmet" class="hizmetSec">
+    {% set found = false %}
+    {% for t in text %}
+    {% if not found and t.id_name == "hizmeth2" %}
+    <div class="baslik">
+        <h2>{{ t.text }}</h2>
+    </div>
+    {% set found = true %}
+    {% endif %}
+    {% endfor %}
+    <div class="hizmetInside">
+        <div class="hizmetSol">
+            <a href="/cafeattribute" class="hizmetSolBox">
+                <div class="hizmetSolBoxImg">
+                    <img src="static/img/sliders/03.webp" alt="Dost Oyun Merkezi">
+                </div>
+                <p class="boxText">Dost Oyun Merkezi</p>
+                <div class="kategori">
+                    <i class="fa-solid fa-globe"></i>
+                    <p>KAFEMİZ</p>
+                </div>
+            </a>
+        </div>
+        <div class="hizmetSag">
+            <a href="/cafeattribute#bilgisayarParcalari" name="computerfields" class="hizmetSagBox">
+                <div class="hizmetSagText">
+                    {% set found = false %}
+                    {% for t in text %}
+                    {% if not found and t.id_name == "hizmetp1" %}
+                    <p class="boxText">{{ t.text }}</p>
+                    {% set found = true %}
+                    {% endif %}
+                    {% endfor %}
+                    {% set found = false %}
+                    {% for t in text %}
+                    {% if not found and t.id_name == "hizmetp2" %}
+                    <div class="kategori">
+                        <i class="fa-solid fa-computer"></i>
+                        <p>{{ t.text }}</p>
+                    </div>
+                    {% set found = true %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="boxsagImg">
+                    <img src="static/img/hizmetler/computer.jpg" alt="Bakım Servisi">
+                </div>
+            </a>
+            <a href="/cafeattribute#yiyecek" class="hizmetSagBox">
+                <div class="hizmetSagText">
+                    {% set found = false %}
+                    {% for t in text %}
+                    {% if not found and t.id_name == "hizmetp3" %}
+                    <p class="boxText">{{ t.text }}</p>
+                    {% set found = true %}
+                    {% endif %}
+                    {% endfor %}
+                    <div class="kategori">
+                        <i class="fa-solid fa-utensils"></i>
+                        {% set found = false %}
+                        {% for t in text %}
+                        {% if not found and t.id_name == "hizmetp4" %}
+                        <p>{{ t.text }}</p>
+                        {% set found = true %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="boxsagImg">
+                    <img src="static/img/hizmetPage/yemek/tost4.webp" alt="Yiyecek Hizmeti">
+                </div>
+            </a>
+            <a href="/cafeattribute#oyunHesap" class="hizmetSagBox">
+                <div class="hizmetSagText">
+                    {% set found = false %}
+                    {% for t in text %}
+                    {% if not found and t.id_name == "hizmetp5" %}
+                    <p class="boxText">{{ t.text }}</p>
+                    {% set found = true %}
+                    {% endif %}
+                    {% endfor %}
+                    <div class="kategori">
+                        <i class="fa-solid fa-gamepad"></i>
+                        {% set found = false %}
+                        {% for t in text %}
+                        {% if not found and t.id_name == "hizmetp6" %}
+                        <p>{{ t.text }}</p>
+                        {% set found = true %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="boxsagImg">
+                    <img src="static/img/hizmetler/games.jpg" alt="Oyun Hesapları">
+                </div>
+            </a>
+            <a href="/cafeattribute#internet" class="hizmetSagBox">
+                <div class="hizmetSagText">
+                    {% set found = false %}
+                    {% for t in text %}
+                    {% if not found and t.id_name == "hizmetp7" %}
+                    <p class="boxText">{{ t.text }}</p>
+                    {% set found = true %}
+                    {% endif %}
+                    {% endfor %}
+                    <div class="kategori">
+                        <i class="fa-solid fa-wifi"></i>
+                        {% set found = false %}
+                        {% for t in text %}
+                        {% if not found and t.id_name == "hizmetp8" %}
+                        <p>{{ t.text }}</p>
+                        {% set found = true %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="boxsagImg">
+                    <img src="static/img/hizmetler/speedtest.jpg" alt="İnternet">
+                </div>
+            </a>
+            <a href="/cafeattribute#bakimServisi" class="hizmetSagBox">
+                <div class="hizmetSagText">
+                    {% set found = false %}
+                    {% for t in text %}
+                    {% if not found and t.id_name == "hizmetp9" %}
+                    <p class="boxText">{{ t.text }}</p>
+                    {% set found = true %}
+                    {% endif %}
+                    {% endfor %}
+                    <div class="kategori">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        {% set found = false %}
+                        {% for t in text %}
+                        {% if not found and t.id_name == "hizmetp10" %}
+                        <p>{{ t.text }}</p>
+                        {% set found = true %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="boxsagImg">
+                    <img src="static/img/hizmetler/fix.webp" alt="Bilgisayar Bakım">
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+
+
+    <div class="baslik">
+        <h2><span>Yazılım</span> Geliştirme Hizmetleri</h2>
+    </div>
+    <div class="hakkInside f-start">
+
+        <div class="hakkMetin yazilimimg">
+            <img style="width: 80%;" src="static/img/Software/software.webp" alt="software">
+        </div>
+        <div class="hakkMetin">
+            {% set found = false %}
+            {% for t in text %}
+            {% if not found and t.id_name == "hizmetp11" %}
+            <p>{{ t.text }}</p>
+            {% set found = true %}
+            {% endif %}
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+<!-- Hizmet Area End -->
+
+<!-- ======================================================= -->
+
+<!-- Rezervasyon Area Start -->
+
+<section id="rezervasyon" class="hakkSec">
+    <div class="baslik">
+        <h2>Rezervasyon</h2>
+    </div>
+    <div class="hakkInside">
+        <div class="hakkMetin">
+            <img src="static/img/sliders/18.webp" alt="hakkimizda">
+        </div>
+        <div class="hakkMetin">
+            <h2>Çalışma Saatlerimiz</h2>
+            <div class="tableArea">
+                <table>
+                    <tr>
+                        <th>Günler</th>
+                        <th>Açılış Saati</th>
+                        <th>Kapanış Saati</th>
+                    </tr>
+                    <tr>
+                        <td>Hafta İçi</td>
+                        <td>11.00</td>
+                        <td>02.00</td>
+                    </tr>
+                    <tr>
+                        <td>Cumartesi</td>
+                        <td>11.00</td>
+                        <td>02.00</td>
+                    </tr>
+                    <tr>
+                        <td>Pazar</td>
+                        <td>11.00</td>
+                        <td>02.00</td>
+                    </tr>
+
+                </table>
+            </div>
+            <!--   -->
+            <a href="https://wa.me/905302090732?text=Merhaba,%20rezervasyon%20yapmak%20istiyorum."
+                class="customBtn rez-btn" target="_blank">Rezervasyon Yap</a>
+        </div>
+    </div>
+</section>
+
+<!-- Rezervasyon Area End -->
+
+<!-- ======================================================= -->
+
+<!-- hakkimizda Area Start -->
+
+<section id="hakkimizda" class="hakkSec">
+    <div class="baslik">
+        <h2>Hakkımızda</h2>
+    </div>
+    <div class="hakkInside">
+        <div class="hakkMetin">
+            <h2>Dost Oyun Merkezi</h2>
+            <p>"1 Mart 2003 tarihinde "Dost İnternet Cafe" adıyla faaliyete başlamış olmanın gururunu yaşıyoruz. İlk
+                günden itibaren,
+                siz değerli müşterilerimizin desteğiyle büyüyüp gelişerek, teknoloji ve yeniliklerin izinde ilerledik. O
+                günden bu yana,
+                internet erişimi, oyun hizmetleri ve çeşitli eğlence seçenekleri sunarak birçok insanın buluşma noktası
+                haline geldik.
+                <br><br>
+                Zamanla değişen ihtiyaçlar ve beklentiler doğrultusunda kendimizi sürekli olarak yeniledik ve
+                geliştirdik. Müşteri
+                memnuniyetini her zaman ön planda tutarak, sunduğumuz hizmetleri çeşitlendirdik. Böylece, sadece bir
+                internet kafe
+                olmanın ötesine geçerek, sosyal etkileşim ve eğlence alanında da önemli bir rol oynamaya başladık.
+                <br><br>
+                6 Temmuz 2018 tarihinde, işletmemizin ismini "Dost Oyun Merkezi" olarak değiştirdik. Bu adım, bizim oyun
+                ve eğlence
+                sektöründeki konumumuzu güçlendirdi ve sunduğumuz hizmetlerin kalitesini artırdı. Yeni ismimizle
+                birlikte, çeşitli
+                oyun etkinlikleri, turnuvalar ve sosyal etkinliklerle zenginleşen bir atmosfer oluşturduk.
+                <br><br>
+                Sizlerin bize gösterdiği güven ve destek sayesinde, bugüne kadar önemli bir yol kat ettik. Geçmişten
+                gelen bu birikimle,
+                gelecekte de sizlere daha iyi hizmet sunmak için var gücümüzle çalışmaya devam edeceğiz. Bize verdiğiniz
+                destek için içtenlikle
+                teşekkür ederiz. Her zaman yanınızda olmak ve yeni deneyimler sunmak için buradayız!"
+            </p>
+        </div>
+        <div class="hakkMetin">
+            <img src="static/img/sliders/20.webp" alt="hakkimizda">
+        </div>
+    </div>
+</section>
+
+<!-- hakkimizda Area End -->
+
+{% endblock %}

@@ -1,0 +1,147 @@
+/* layout ortak css */
+
+body
+{
+    margin: auto;
+    padding: 0%;
+    background: #222D32;
+}
+.leftbar
+{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+/* right bar */
+.rightbar
+{
+    display: flex;
+    flex-direction: column-reverse;
+    width: 70%;
+    float: right;
+}
+
+.form-group
+{
+    display: flex;
+    background-color: #07090973;
+    align-items: center;
+    width: 90%;
+    height: 100%;
+    gap: 20px;
+    flex-direction: column;
+    border-radius: 20px;
+}
+.form-group input
+{
+    margin-top:20px;
+    margin-bottom: 20px;
+    outline: 0;
+    border-radius: 10px;
+    background-color: #5d60606c;
+    color: white;
+    width: 70%;
+    border-bottom: 2px solid #0db8de34;
+}
+.form-group input:focus {
+    outline: none;
+    background-color: #5d60606c;
+    color: rgb(195, 195, 195);
+    box-shadow: 0 0 0;
+}
+label
+{
+    color: rgb(186, 184, 184);
+}
+/* photo and video */
+.photoandvideo
+{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    gap: 30px;
+}
+.photoandvideo div
+{
+    width: 30%;
+    height: 30%;
+}
+.photoandvideo video
+{
+    width: 100%;
+    height: 100%;
+}
+.photoandvideo img
+{
+    width: 100%;
+}
+/* popup */
+.popup-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Popup içeriği */
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.kapat
+{
+    background-color: rgb(212, 207, 207);
+    width: 10%;
+    float: right;
+    border: none;
+}
+.kapat:hover
+{
+    background-color: rgb(150, 147, 147);
+    cursor: pointer;
+}
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+/* Kapat butonu */
+.guncelle-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.close-btn:hover {
+    background-color: #d32f2f;
+}
+/* button */
+.btn-outline-primary {
+    border-color: #0DB8DE;
+    color: #0DB8DE;
+    border-radius: 0px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.btn-outline-primary:hover {
+    background-color: #0DB8DE;
+    right: 0px;
+}
