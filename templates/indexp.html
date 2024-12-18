@@ -14,15 +14,15 @@
             <div class="mainTextInside">
                 <h1><span>DOST</span> OYUN MERKEZİ</h1>
                 {% for t in text %}
-                {% if t.id_name == "titleh3" %}
-                <h3>{{ t.text }}</h3>
-                {% endif %}
-                {% if t.id_name == "titleh2" %}
-                <h2>{{ t.text }}</h2>
-                {% endif %}
-                {% if t.id_name == "titlep" %}
-                <p>{{ t.text }}</p>
-                {% endif %}
+                    {% if t.id_name == "titleh3" %}
+                        <h3>{{ t.text }}</h3>
+                    {% endif %}
+                    {% if t.id_name == "titleh2" %}
+                        <h2>{{ t.text }}</h2>
+                    {% endif %}
+                    {% if t.id_name == "titlep" %}
+                        <p>{{ t.text }}</p>
+                    {% endif %}
                 {% endfor %}
                 <a href="https://wa.me/905302090732?text=Merhaba,kolay gelsin." target="_blank"
                     class="customBtn btnClr1"> İLETİŞİM <i class="fa-solid fa-circle-right"></i></a>
@@ -40,18 +40,24 @@
 <section id="hizmet" class="hizmetSec">
     {% set found = false %}
     {% for t in text %}
-    {% if not found and t.id_name == "hizmeth2" %}
-    <div class="baslik">
-        <h2>{{ t.text }}</h2>
-    </div>
-    {% set found = true %}
-    {% endif %}
+        {% if not found and t.id_name == "hizmeth2" %}
+            <div class="baslik">
+                <h2>{{ t.text }}</h2>
+            </div>
+            {% set found = true %}
+        {% endif %}
     {% endfor %}
     <div class="hizmetInside">
         <div class="hizmetSol">
             <a href="/cafeattribute" class="hizmetSolBox">
                 <div class="hizmetSolBoxImg">
-                    <img src="static/img/sliders/03.webp" alt="Dost Oyun Merkezi">
+                    {% set found = false %}
+                    {% for m in media %}
+                        {% if not found and m.group_name == "hizmetler" and m.order_index == 0 and m.active == true %}
+                            <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                            {% set found = true %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 <p class="boxText">Dost Oyun Merkezi</p>
                 <div class="kategori">
@@ -65,120 +71,150 @@
                 <div class="hizmetSagText">
                     {% set found = false %}
                     {% for t in text %}
-                    {% if not found and t.id_name == "hizmetp1" %}
-                    <p class="boxText">{{ t.text }}</p>
-                    {% set found = true %}
-                    {% endif %}
+                        {% if not found and t.id_name == "hizmetp1" %}
+                            <p class="boxText">{{ t.text }}</p>
+                            {% set found = true %}
+                        {% endif %}
                     {% endfor %}
                     {% set found = false %}
                     {% for t in text %}
-                    {% if not found and t.id_name == "hizmetp2" %}
-                    <div class="kategori">
-                        <i class="fa-solid fa-computer"></i>
-                        <p>{{ t.text }}</p>
-                    </div>
-                    {% set found = true %}
-                    {% endif %}
+                        {% if not found and t.id_name == "hizmetp2" %}
+                            <div class="kategori">
+                                <i class="fa-solid fa-computer"></i>
+                                <p>{{ t.text }}</p>
+                            </div>
+                            {% set found = true %}
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <div class="boxsagImg">
-                    <img src="static/img/hizmetler/computer.jpg" alt="Bakım Servisi">
+                    {% set found = false %}
+                    {% for m in media %}
+                        {% if not found and m.group_name == "hizmetler" and m.order_index == 1 and m.active == true %}
+                            <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                            {% set found = true %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </a>
             <a href="/cafeattribute#yiyecek" class="hizmetSagBox">
                 <div class="hizmetSagText">
                     {% set found = false %}
                     {% for t in text %}
-                    {% if not found and t.id_name == "hizmetp3" %}
-                    <p class="boxText">{{ t.text }}</p>
-                    {% set found = true %}
-                    {% endif %}
+                        {% if not found and t.id_name == "hizmetp3" %}
+                            <p class="boxText">{{ t.text }}</p>
+                            {% set found = true %}
+                        {% endif %}
                     {% endfor %}
                     <div class="kategori">
                         <i class="fa-solid fa-utensils"></i>
                         {% set found = false %}
                         {% for t in text %}
-                        {% if not found and t.id_name == "hizmetp4" %}
-                        <p>{{ t.text }}</p>
-                        {% set found = true %}
-                        {% endif %}
+                            {% if not found and t.id_name == "hizmetp4" %}
+                                <p>{{ t.text }}</p>
+                                {% set found = true %}
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
                 <div class="boxsagImg">
-                    <img src="static/img/hizmetPage/yemek/tost4.webp" alt="Yiyecek Hizmeti">
+                    {% set found = false %}
+                    {% for m in media %}
+                        {% if not found and m.group_name == "hizmetler" and m.order_index == 2 and m.active == true %}
+                            <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                            {% set found = true %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </a>
             <a href="/cafeattribute#oyunHesap" class="hizmetSagBox">
                 <div class="hizmetSagText">
                     {% set found = false %}
                     {% for t in text %}
-                    {% if not found and t.id_name == "hizmetp5" %}
-                    <p class="boxText">{{ t.text }}</p>
-                    {% set found = true %}
-                    {% endif %}
+                        {% if not found and t.id_name == "hizmetp5" %}
+                            <p class="boxText">{{ t.text }}</p>
+                            {% set found = true %}
+                        {% endif %}
                     {% endfor %}
                     <div class="kategori">
                         <i class="fa-solid fa-gamepad"></i>
                         {% set found = false %}
                         {% for t in text %}
-                        {% if not found and t.id_name == "hizmetp6" %}
-                        <p>{{ t.text }}</p>
-                        {% set found = true %}
-                        {% endif %}
+                            {% if not found and t.id_name == "hizmetp6" %}
+                                <p>{{ t.text }}</p>
+                                {% set found = true %}
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
                 <div class="boxsagImg">
-                    <img src="static/img/hizmetler/games.jpg" alt="Oyun Hesapları">
+                    {% set found = false %}
+                    {% for m in media %}
+                        {% if not found and m.group_name == "hizmetler" and m.order_index == 3 and m.active == true %}
+                            <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                            {% set found = true %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </a>
             <a href="/cafeattribute#internet" class="hizmetSagBox">
                 <div class="hizmetSagText">
                     {% set found = false %}
                     {% for t in text %}
-                    {% if not found and t.id_name == "hizmetp7" %}
-                    <p class="boxText">{{ t.text }}</p>
-                    {% set found = true %}
-                    {% endif %}
+                        {% if not found and t.id_name == "hizmetp7" %}
+                            <p class="boxText">{{ t.text }}</p>
+                            {% set found = true %}
+                        {% endif %}
                     {% endfor %}
                     <div class="kategori">
                         <i class="fa-solid fa-wifi"></i>
                         {% set found = false %}
                         {% for t in text %}
-                        {% if not found and t.id_name == "hizmetp8" %}
-                        <p>{{ t.text }}</p>
-                        {% set found = true %}
-                        {% endif %}
+                            {% if not found and t.id_name == "hizmetp8" %}
+                                <p>{{ t.text }}</p>
+                                {% set found = true %}
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
                 <div class="boxsagImg">
-                    <img src="static/img/hizmetler/speedtest.jpg" alt="İnternet">
+                    {% set found = false %}
+                    {% for m in media %}
+                        {% if not found and m.group_name == "hizmetler" and m.order_index == 4 and m.active == true %}
+                            <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                            {% set found = true %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </a>
             <a href="/cafeattribute#bakimServisi" class="hizmetSagBox">
                 <div class="hizmetSagText">
                     {% set found = false %}
                     {% for t in text %}
-                    {% if not found and t.id_name == "hizmetp9" %}
-                    <p class="boxText">{{ t.text }}</p>
-                    {% set found = true %}
-                    {% endif %}
+                        {% if not found and t.id_name == "hizmetp9" %}
+                            <p class="boxText">{{ t.text }}</p>
+                            {% set found = true %}
+                        {% endif %}
                     {% endfor %}
                     <div class="kategori">
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                         {% set found = false %}
                         {% for t in text %}
-                        {% if not found and t.id_name == "hizmetp10" %}
-                        <p>{{ t.text }}</p>
-                        {% set found = true %}
-                        {% endif %}
+                            {% if not found and t.id_name == "hizmetp10" %}
+                                <p>{{ t.text }}</p>
+                                {% set found = true %}
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
                 <div class="boxsagImg">
-                    <img src="static/img/hizmetler/fix.webp" alt="Bilgisayar Bakım">
+                    {% set found = false %}
+                    {% for m in media %}
+                        {% if not found and m.group_name == "hizmetler" and m.order_index == 5 and m.active == true %}
+                            <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                            {% set found = true %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </a>
 
@@ -193,15 +229,21 @@
     <div class="hakkInside f-start">
 
         <div class="hakkMetin yazilimimg">
-            <img style="width: 80%;" src="static/img/Software/software.webp" alt="software">
+            {% set found = false %}
+            {% for m in media %}
+                {% if not found and m.group_name == "hizmetler" and m.order_index == 6 and m.active == true %}
+                    <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                    {% set found = true %}
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="hakkMetin">
             {% set found = false %}
             {% for t in text %}
-            {% if not found and t.id_name == "hizmetp11" %}
-            <p>{{ t.text }}</p>
-            {% set found = true %}
-            {% endif %}
+                {% if not found and t.id_name == "hizmetp11" %}
+                    <p>{{ t.text }}</p>
+                    {% set found = true %}
+                {% endif %}
             {% endfor %}
         </div>
 
@@ -269,34 +311,22 @@
     <div class="hakkInside">
         <div class="hakkMetin">
             <h2>Dost Oyun Merkezi</h2>
-            <p>"1 Mart 2003 tarihinde "Dost İnternet Cafe" adıyla faaliyete başlamış olmanın gururunu yaşıyoruz. İlk
-                günden itibaren,
-                siz değerli müşterilerimizin desteğiyle büyüyüp gelişerek, teknoloji ve yeniliklerin izinde ilerledik. O
-                günden bu yana,
-                internet erişimi, oyun hizmetleri ve çeşitli eğlence seçenekleri sunarak birçok insanın buluşma noktası
-                haline geldik.
-                <br><br>
-                Zamanla değişen ihtiyaçlar ve beklentiler doğrultusunda kendimizi sürekli olarak yeniledik ve
-                geliştirdik. Müşteri
-                memnuniyetini her zaman ön planda tutarak, sunduğumuz hizmetleri çeşitlendirdik. Böylece, sadece bir
-                internet kafe
-                olmanın ötesine geçerek, sosyal etkileşim ve eğlence alanında da önemli bir rol oynamaya başladık.
-                <br><br>
-                6 Temmuz 2018 tarihinde, işletmemizin ismini "Dost Oyun Merkezi" olarak değiştirdik. Bu adım, bizim oyun
-                ve eğlence
-                sektöründeki konumumuzu güçlendirdi ve sunduğumuz hizmetlerin kalitesini artırdı. Yeni ismimizle
-                birlikte, çeşitli
-                oyun etkinlikleri, turnuvalar ve sosyal etkinliklerle zenginleşen bir atmosfer oluşturduk.
-                <br><br>
-                Sizlerin bize gösterdiği güven ve destek sayesinde, bugüne kadar önemli bir yol kat ettik. Geçmişten
-                gelen bu birikimle,
-                gelecekte de sizlere daha iyi hizmet sunmak için var gücümüzle çalışmaya devam edeceğiz. Bize verdiğiniz
-                destek için içtenlikle
-                teşekkür ederiz. Her zaman yanınızda olmak ve yeni deneyimler sunmak için buradayız!"
-            </p>
+            {% set found = false %}
+            {% for t in text %}
+                {% if not found and t.id_name == "hakkimizdap" %}
+                    <p>{{ t.text }}</p>
+                    {% set found = true %}
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="hakkMetin">
-            <img src="static/img/sliders/20.webp" alt="hakkimizda">
+            {% set found = false %}
+            {% for m in media %}
+                {% if not found and m.group_name == "hizmetler" and m.order_index == 0 and m.active == true %}
+                    <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                    {% set found = true %}
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 </section>

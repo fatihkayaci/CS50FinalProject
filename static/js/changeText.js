@@ -1,22 +1,21 @@
-function updateText() {
-    let formData = {};
-    
-    // form-data sınıfındaki tüm inputları topluyoruz
-    $(".form-data").each(function () {
-        formData[$(this).attr("id")] = $(this).val();
-    });
-    console.log(formData);
+$(document).ready(function () {
+    // Tüm input, textarea elementlerine change event'i bağlanır
+    $("input, textarea").on("change", function () {
+        let inputId = $(this).attr("id");
+        let inputValue = $(this).val();
 
-    // AJAX ile Flask sunucusuna veriyi gönderme
-    $.ajax({
-        url: "/indexa", // Flask endpointi
-        type: "POST",
-        data: formData, // Veri URL encoded formatında gönderilecek
-        success: function (response) {
-            alert("Başarıyla güncellendi: " + response.message);
-        },
-        error: function (error) {
-            console.log(error);
-        }
+        // AJAX ile Flask sunucusuna veriyi gönder
+        $.ajax({
+            url: "/indexa",  // Flask endpointi
+            type: "POST",
+            contentType: "application/json", // JSON formatında veri gönderimi
+            data: JSON.stringify({ id_name: inputId, value: inputValue }),
+            success: function (response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+            },
+            error: function (error) {
+                console.log("Hata: ", error);
+            }
+        });
     });
-}
+});

@@ -6,58 +6,70 @@
     <form action="/indexa" method="post">
 
         <div class="maintitle">
-            <form action="/indexa">
-                <label for="maintitle">ANASAYFA BAŞLIK</label>
-                <div class="form-group">
-                    {% for item in articles %}
-                        {% if item.group_name == "maintitle" %}
-                            <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
+            <label for="maintitle">ANASAYFA BAŞLIK</label>
+            <div class="form-group">
+                {% for item in articles %}
+                    {% if item.group_name == "maintitle" %}
+                        <label for="{{item.label}}">{{item.label}}</label>
+                        <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
+                    {% endif %}
+                {% endfor %}
+
+                <div class="photoandvideo">
+                    {% for m in media %}
+                        {% if m.group_name == "maintitle" %}
+                            <div class="changemedia">
+                                <img src="{{ m.path }}" class="mainpage" alt="Dost Oyun Merkezi">
+                            </div>
                         {% endif %}
                     {% endfor %}
-
-                    <div class="photoandvideo">
-                        {% for m in media %}
-                            {% if m.group_name == "maintitle" %}
-                                <div class="changemedia">
-                                    {% if m.type == "video" %}
-                                        <video autoplay muted loop playsinline>
-                                            <source src="{{ m.path }}" type="video/mp4">
-                                            Tarayıcınız video etiketini desteklemiyor.
-                                        </video>
-                                    {% elif m.type == "photo" %}
-                                        <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-
                 </div>
-            </form>
+
+            </div>
         </div>
       
         <div class="hizmettitle">
-            <form action="/indexa">
-                <label for="hizmetler">ANASAYFA HİZMETLER</label>
-                <div class="form-group">
-                    {% for item in articles %}
-                        {% if item.group_name == "hizmetler" %}
-                            <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
+            <label for="hizmetler">ANASAYFA HİZMETLER</label>
+            <div class="form-group">
+                {% for item in articles %}
+                    {% if item.group_name == "hizmetler" %}
+                        <label for="{{item.label}}">{{item.label}}</label>
+                        <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
+                    {% endif %}
+                {% endfor %}
+                <div class="photoandvideo">
+                    {% for m in media %}
+                        {% if m.group_name == "hizmetler" and m.active == true %}
+                            <div class="changemedia">
+                                <label for="{{m.label}}">{{m.label}}</label>
+                                <img src="{{ m.path }}" class="mainpage" alt="Dost Oyun Merkezi">
+                            </div>
                         {% endif %}
                     {% endfor %}
-                    <div class="photoandvideo">
-                        {% for m in media %}
-                            {% if m.group_name == "hizmetler" and m.active == true %}
-                                <div class="changemedia">
-                                    <img class="{{ loop.index0 }}" src="{{ m.path }}" alt="Dost Oyun Merkezi">
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
                 </div>
-            </form>
+            </div>
         </div>
-        <button class="btn btn-outline-primary" onclick="updateText()">Güncelle</button>
+        <div class="hakkimizda">
+            <label for="hizmetler">ANASAYFA HAKKIMIZDA</label>
+            <div class="form-group">
+                {% for item in articles %}
+                    {% if item.group_name == "hakkimizda" %}
+                        <label for="{{item.label}}">{{item.label}}</label>
+                        <textarea class="form-control" id="{{ item.id_name }}" rows="30" cols="100">{{ item.text if item.text }}</textarea>
+                    {% endif %}
+                {% endfor %}
+                <div class="photoandvideo">
+                    {% for m in media %}
+                        {% if m.group_name == "hakkimizda" and m.active == true %}
+                            <div class="changemedia mainpage">
+                                <label for="{{m.label}}">{{m.label}}</label>
+                                <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </form>
     <div class="popup-background" id="popup">
         <div class="popup-content">
@@ -74,9 +86,12 @@
                     </tr>
                     <tbody>
                         <td>
-                            <select name="" id="">
+                            <select name="imageSelect" id="imageSelect">
+                                <option disabled selected></option>
                                 {% for m in media %}
-                                    <option value="{{m.file_name}}">{{m.file_name}}</option>
+                                    {% if m.group_name == "hizmetler" and m.active == false%}
+                                        <option value="{{m.file_name}}">{{m.file_name}}</option>
+                                    {% endif %}
                                 {% endfor %}
                             </select>
                         </td>
@@ -94,62 +109,6 @@
 </header>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="../static/js/changeText.js"></script>
-<script>
-       // Popup elemanları
-        var popup = document.getElementById("popup");
-        var closePopup = document.getElementById("closePopup");
-        var imageInput = document.getElementById("imageInput");
-        var changemediaElements = document.querySelectorAll(".changemedia");
-
-        var currentImageBox; // Tıklanan resmi belirlemek için değişken
-        var order;
-        // Her resim kutusuna tıklama olayı ekle
-        changemediaElements.forEach(function (element) {
-            element.addEventListener('click', function () {
-                currentImageBox = element.querySelector("img"); // Tıklanan resmin img etiketi
-                order = element.querySelector("img").className; 
-                console.log(order)
-                popup.style.display = "flex";
-            });
-        });
-
-        // Popup kapatma işlemi
-        closePopup.addEventListener('click', function () {
-            popup.style.display = "none";
-        });
-
-       
-        function updateMedia() {
-            let formData = new FormData(); // FormData oluştur
-            
-            let imageInput = $("#imageInput")[0]; // Resim input elementi
-            let imageFile = imageInput.files[0]; // Seçilen dosya
-
-            if (imageFile) {
-                formData.append("image", imageFile); // Dosya içeriğini ekle
-                formData.append("imageName", imageFile.name); // Dosya adını ekle
-                formData.append("order", order);
-                console.log("Gönderilecek Dosya:", imageFile.name);
-            } else {
-                alert("Lütfen önce bir resim seçin.");
-                return;
-            }
-            // AJAX ile Flask'e gönder
-            $.ajax({
-                url: "/uploadmedia", // Flask endpoint
-                type: "POST",
-                data: formData,
-                contentType: false, // Otomatik olarak form-data ayarı yapılır
-                processData: false, // FormData için gerekli
-                success: function (response) {
-                    alert("Başarıyla yüklendi: " + response.message);
-                },
-                error: function (error) {
-                    console.error("Hata:", error);
-                }
-            });
-        }
-
-</script>
+<script src="../static/js/media.js"></script>
 
 {% endblock %}

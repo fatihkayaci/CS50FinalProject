@@ -1,0 +1,53 @@
+{% extends "adminlayout.html" %}
+
+{% block main %}
+<div class="upper-box">
+    <label for="inputFile">Dosya Yükle:</label>
+    <input type="file" id="inputFile" class="form-control">
+    
+    <label for="inputText">Metin Gir:</label>
+    <input type="text" id="inputText" class="form-control">
+    
+    <label for="inputDescription">Açıklama:</label>
+    <textarea id="inputDescription" class="form-control"></textarea>
+    
+    <button type="button" class="btn btn-primary">Ekle</button>
+</div>
+
+<div class="lower-box">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Dosya</th>
+                <th>Metin</th>
+                <th>Açıklama</th>
+                <th>Durum</th>
+                <th>İşlem</th>  <!-- Yeni sütunlar -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>dosya1.pdf</td>
+                <td>Metin örneği</td>
+                <td>Bu bir açıklamadır.</td>
+                <td>Aktif</td>
+                <td>  <!-- Butonlar -->
+                    <button class="btn btn-secondary btn-sm">Düzenle</button>
+                    <button class="btn btn-danger btn-sm">Sil</button>
+                </td>
+            </tr>
+            <tr>
+                <td>dosya2.jpg</td>
+                <td>Başka bir metin</td>
+                <td>Bir başka açıklama</td>
+                <td>Pasif</td>
+                <td>
+                    <button class="btn btn-secondary btn-sm">Düzenle</button>
+                    <button class="btn btn-danger btn-sm">Sil</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

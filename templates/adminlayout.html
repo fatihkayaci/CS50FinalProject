@@ -8,23 +8,25 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  
-      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css'>
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
     <link rel="stylesheet" href="static/css/admin/indexadmin.css">
 </head>
 
 <body>
     <div class="main">
         <div class="leftbar">
-            <button class="btn btn-outline-primary">ANASAYFA</button>
-            <button class="btn btn-outline-primary">HİZMETLER</button>
+            <ul>
+                <li class="nav-item"><a class="nav-link" href="/indexa">ANASAYFA</a></li>
+                <li class="nav-item"><a class="nav-link" href="/computerfiles">HİZMETLER</a></li>
+                <li class="nav-item"><a class="nav-link" href="/foodsadd">YEMEK EKLE</a></li>
+            </ul>
         </div>
         <div class="rightbar">
             {% block main %}{% endblock %}
         </div>
     </div>
+    <script src="../static/js/admin.js"></script>
 </body>
-
 </html>

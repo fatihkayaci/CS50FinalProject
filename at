@@ -1,3 +1,76 @@
-INSERT INTO media_tbl (group_name, path, file_name, active, order_index) VALUES('hizmetler', 'static/img/mainpage/03.webp', '03.webp', true, 0);
-INSERT INTO media_tbl (group_name, type, path) VALUES('hizmetler', 'photo', 'static/img/mainpage/games.jpg');
-INSERT INTO media_tbl (group_name, type, path) VALUES('hizmetler', 'photo', 'static/img/mainpage/speedtest.jpg');
+page_name = db.Column(db.String(50), unique=False, nullable=False, default='cafeattributepage')
+photopath = path = db.Column(db.String(50), unique=False, nullable=False, default='')
+label = db.Column(db.String(100), unique=False, nullable=True)
+text = db.Column(db.String(5000), unique=False, nullable=True)
+order_index = db.Column(db.Integer, unique=False, nullable=False, default=0 )
+
+INSERT INTO foods (page_name, photopath, label, text, order_index) VALUES('cafeattributepage', 'static/img/cafeattribute/foods/tost1.webp', 'Karışık Tost', 'bu var şu var böyle olmuş şöyle olmuş', 1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index, label, page_name) VALUES('vipgaming', 'static/img/cafeattribute/vip.webp', 'vip.webp', true, 0, 'Vip Resim', 'cafeattributepage');
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index, label, page_name) VALUES('goldgaming', 'static/img/cafeattribute/gold.webp', 'gold.webp', true, 1, 'Gold Resim', 'cafeattributepage');
+
+
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index, label, page_name) VALUES('hizmetler', 'static/img/mainpage/foods.webp', 'foods.webp', true, 2, 'Yemekler', 'mainpage');
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index, label, page_name) VALUES('hizmetler', 'static/img/mainpage/games.webp', 'games.webp', true, 3, 'Oyun', 'mainpage');
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index, label, page_name) VALUES('hizmetler', 'static/img/mainpage/speedtest.webp', 'speedtest.webp', true, 4, 'İnternet Hız', 'mainpage');
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index, label, page_name) VALUES('hizmetler', 'static/img/mainpage/bakim.webp', 'bakim.webp', true, 5, 'Bakım', 'mainpage');
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index, label, page_name) VALUES('hizmetler', 'static/img/mainpage/software.webp', 'software.webp', true, 6, 'Yazılım Geliştirme', 'mainpage');
+INSERT INTO media_tbl (group_name, path, file_name, active, order_index, label, page_name) VALUES('hakkimizda', 'static/img/mainpage/hakkimizda.webp', 'hakkimizda.webp', true, 0,'hakkımızda', 'mainpage');
+
+
+
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'maintitle', 'titlep', 'Başlık 3. Yazı', '1' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan1', 'bilgisayar alanı başlık', '2' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan2', 'ekran kartı:', '3' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan3', 'anakarat:', '4' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan4', 'soğutma:', '5' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan5', 'mouse:', '6' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan6', 'kulaklık:', '7' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan7', 'islemci:', '8' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan8', 'ram:', '9' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan9', 'ekran:', '10' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'vipgaming', 'vipgamingspan10', 'klavye:', '11' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan1', 'bilgisayar alanı başlık', '12' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan2', 'ekran kartı:', '13' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan3', 'anakarat:', '14' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan4', 'soğutma:', '15' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan5', 'mouse:', '16' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan6', 'kulaklık:', '17' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan7', 'islemci:', '18' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan8', 'ram:', '19' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan9', 'ekran:', '20' );
+INSERT INTO text_tbl (page_name, group_name, id_name, label, text) VALUES ('cafeattributepage', 'goldgaming', 'goldgamingspan10', 'klavye:', '21' );
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS 'text_tbl' (
+        id INTEGER NOT NULL,
+        group_name VARCHAR(50) NOT NULL,
+        id_name VARCHAR(50) NOT NULL,
+        text VARCHAR(5000), label VARCHAR(100), page_name VARCHAR(50),
+        PRIMARY KEY (id)
+    );
