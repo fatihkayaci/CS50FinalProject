@@ -67,6 +67,7 @@
     function closePopup() {
         document.getElementById("popup").style.display = "none";
     }
+    document.getElementById("closePopup").addEventListener("click", closePopup);
     function updateMedia() {
         var mediaSelect = document.getElementById('mediaSelect');
         var imageInput = document.getElementById('imageInput');
@@ -83,7 +84,6 @@
         }
         closePopup();
     }
-    document.getElementById("closePopup").addEventListener("click", closePopup);
     function updatefood()
     {   
         formData.append('id', id);

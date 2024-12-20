@@ -1,16 +1,15 @@
 {% extends "adminlayout.html" %}
 
 {% block main %}
-<div class="container mt-4">
-
+<div class="container-fluid mt-4">
     <!-- Üst Kısım: Yemek Ekleme Formu -->
     <div class="row mb-4">
         <div class="col-md-12">
             <h3 class="text-center">Oyun Ekle</h3>
             <form action="/gamesadd" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="gameName">Oyun İsmi</label>
-                    <input type="text" class="form-control" id="gameName" name="gameName" placeholder="Oyun İsmi" required>
+                    <label for="gamename">Oyun İsmi</label>
+                    <input type="text" class="form-control" id="gamename" name="gamename" placeholder="Oyun İsmi" required>
                 </div>
                 <div class="form-group">
                     <label for="gameImage">Oyun Resmi</label>
@@ -21,10 +20,10 @@
                     <input type="file" class="form-control" id="gameicon" name="gameicon" required>
                 </div>
                 <div class="form-group">
-                    <label for="gameText">Açıklama</label>
-                    <textarea class="form-control" id="oyunText" name="oyunText" rows="4" placeholder="Oyun Hakkında Bilgi" required></textarea>
+                    <label for="gametext">Açıklama</label>
+                    <textarea class="form-control" id="gametext" name="gametext" rows="4" placeholder="Oyun Hakkında Bilgi" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Oyun Ekle</button>
+                <a class="btn btn-primary" onclick="addgame()">Oyun Ekle</a>
             </form>
         </div>
     </div>
@@ -54,8 +53,8 @@
                         </td>
                         <td>{{ game.text }}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Düzenle</button>
-                            <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Sil</button>
+                            <a href="/updategame/{{game.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
+                            <button type="button" class="btn btn-sm btn-danger" data-id="{{ game.id }}"  onclick="deletegame(this)"><i class="fa fa-trash"></i> Sil</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -63,6 +62,69 @@
             </table>
         </div>
     </div>
-
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    let formData = new FormData();
+    var gamename = document.getElementById("gamename");
+    var gametext = document.getElementById("gametext");
+    
+    function addMedia() {
+        var gameImage = document.getElementById('gameImage');
+        var gameicon = document.getElementById('gameicon');
+        var selectedImage = gameImage.files[0];
+        var selectedicon = gameicon.files[0];
+
+        if (selectedImage) {
+            formData.append('image', selectedImage);
+        }
+        if (selectedicon) {
+            formData.append('icon', selectedicon);
+        }
+    }
+    function addgame()
+    {
+        formData.append('gamename', gamename.value);
+        formData.append('gametext', gametext.value);
+        addMedia();
+        console.log(formData.get('gamename'))
+        console.log(formData.get('gametext'))
+        console.log(formData.get('image'))
+        console.log(formData.get('icon'))
+        $.ajax({
+            url: "/gamesadd", 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+                location.reload();
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+    function deletegame(button)
+    {
+        let gameid = button.getAttribute('data-id');
+        formData.append('gameid', gameid);
+        console.log("Silinecek ID: ", gameid);
+        $.ajax({
+            url: "/deletegame", 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData ile çalışırken bu iki ayarı false yap
+            contentType: false,
+            success: function(response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+                location.reload();
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+</script>
 {% endblock %}

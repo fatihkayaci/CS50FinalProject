@@ -27,3 +27,6 @@ INSERT INTO tblmediaandtext (page_name, label, path, file_name, text1, text2) VA
 INSERT INTO tblmediaandtext (page_name, label, path, file_name, text1, text2) VALUES('mainpage', 'Hakkımızda', 'static/img/mainpage/hakkimizda.webp', 'hakkimizda.webp', 'Dost Oyun Merkezi', '1 Mart 2003 tarihinde "Dost İnternet Cafe"');
 
 INSERT INTO tblmediaandtext (page_name, label, path, file_name, text1, text2) VALUES('mainpage', '', 'static/img/noImage.jpg', '', '', '');
+
+
+

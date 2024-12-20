@@ -216,11 +216,103 @@ def updatefood(id):
     if foods is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
     return render_template("/updatepage/updatefood.html", foods=foods)
-    
-@app.route("/gamesadd")
+# games process
+def savefilegames(file, upload_folder, subfolder='games/'):
+    """Dosyayı güvenli bir şekilde kaydeder ve dosya yolu döner."""
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(upload_folder, subfolder, filename)
+    if not os.path.exists(file_path):
+        file.save(file_path)
+    return file_path
+
+@app.route("/gamesadd", methods=['GET', 'POST'])
 def gamesadd():
+    if request.method == "POST":
+        gamename = request.form.get('gamename')
+        gametext = request.form.get('gametext')
+        gameimage = request.files.get('image')
+        gameicon = request.files.get('icon')
+
+        if not gamename and not gametext and not gameimage and not gameicon:
+            return jsonify({"success": False, "message": "Hata oluştu: Lütfen tüm alanları doldurunuz"})
+        
+        # Yeni oyun kaydı oluştur
+        newgame = tblgames(gamename=gamename, text=gametext)
+
+        # Oyun resmi kontrolü ve kaydı
+        if gameimage and gameimage.filename and allowed_file(gameimage.filename):
+            newgame.photopath = savefilegames(gameimage, app.config['UPLOAD_FOLDER'])
+
+        # Oyun ikonu kontrolü ve kaydı
+        if gameicon and gameicon.filename and allowed_file(gameicon.filename):
+            newgame.iconpath = savefilegames(gameicon, app.config['UPLOAD_FOLDER'])
+
+        # Eğer hiç resim veya ikon eklenmediyse boş path'li bir kayıt ekle
+        if not newgame.photopath and not newgame.iconpath:
+            newgame.photopath = ""
+            newgame.iconpath = ""
+
+        db.session.add(newgame)
+        db.session.commit()
+
+        return jsonify({"success": True, "message": "Oyun başarıyla eklendi."})
     games = tblgames.query.all()
     return render_template("/gamesadd.html", games=games)
+
+@app.route("/deletegame", methods=['GET', 'POST'])
+def deletegame():
+    if request.method == "POST":
+        gameid = request.form.get('gameid')
+        if not gameid:  # foodid boşsa hata dön
+            return {'status': 'error', 'message': 'Food ID is missing'}, 400
+        print(gameid)
+        game_to_delete = tblgames.query.get(gameid)
+        if game_to_delete:
+            db.session.delete(game_to_delete)
+            db.session.commit()
+        return 'succesfull'
+    return 'str'
+
+@app.route("/updategame/<int:id>", methods=['GET', 'POST'])
+def updategame(id):
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'mainpage')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+        
+    if request.method == "POST":
+        id = request.form.get('id')
+        gamename = request.form.get('gamename')
+        gametext = request.form.get('gametext')
+        image = request.files.get('image')
+        icon = request.files.get('icon')
+        games = tblgames.query.filter_by(id = id).first()
+        if games:
+            games.gamename = gamename
+            games.gametext = gametext
+            if image:    
+                if allowed_file(image.filename):
+                    filename = secure_filename(image.filename)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/', filename)
+                    games.photopath = file_path
+                if not os.path.exists(file_path):
+                    image.save(file_path)
+            if icon:
+                if allowed_file(icon.filename):
+                    filename = secure_filename(icon.filename)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/icon/', filename)
+                    games.iconpath = file_path
+                if not os.path.exists(file_path):
+                    icon.save(file_path)
+
+        db.session.commit()
+        return render_template('/indexa.html')
+    
+    games = tblgames.query.filter_by(id = id).first()
+    if games is None:
+        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
+    return render_template("/updatepage/updategame.html", games=games)
 
 @app.route("/steamsadd")
 def steamsadd():

@@ -1,0 +1,164 @@
+{% extends "adminlayout.html" %}
+{% block main %}
+<div class="container-fluid mt-4">
+    <h3 class="mb-4">Veri Düzenle</h3>
+    <!-- Label -->
+    <div class="form-group">
+        <label for="gamename">Oyun İsmi</label>
+        <input type="text" name="gamename" id="gamename" class="form-control" value="{{ games.gamename }}">
+    </div>
+    
+    <div class="form-group">
+        <label for="gametext">Game Açıklama</label>
+        <textarea name="gametext" id="gametext" class="form-control" rows="4">{{ games.gamename }}</textarea>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="image">Mevcut Resim</label><br>
+            <img src="../{{ games.photopath if games.photopath else '../../static/img/noImage.jpg' }}" alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPhotoPopup()">
+        </div>
+        
+        <div class="form-group">
+            <label for="icon">Mevcut İcon</label><br>
+            <img src="../{{ games.iconpath if games.iconpath else '../../static/img/noImage.jpg' }}" alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showIconPopup()">
+        </div>
+    </div>
+    <button type="submit" onclick="updategame()" class="btn btn-success">Güncelle</button>
+    <a href="/gamesadd" class="btn btn-secondary">İptal</a>
+</div>
+
+<div class="popup-background" id="photoPopup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn kapat" id="closePhotoPopup"><h3>X</h3></button>
+        <div>
+            <h3>Media Seç</h3>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th><p>dosyadan seçme</p></th>
+                    <th><p>bilgisayardan seçme</p></th>
+                </tr>
+                <tbody>
+                    <td>
+                        <select name="" id="photoSelect">
+                            <option selected disabled></option>
+                            <option value=""></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" id="photoInput" accept="image/*">
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button class="guncelle-btn" onclick="updatePhoto()">Güncelle</button>
+        </div>
+    </div>
+</div>
+
+<div class="popup-background" id="iconPopup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn kapat" id="closeIconPopup"><h3>X</h3></button>
+        <div>
+            <h3>İcon Seç</h3>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th><p>dosyadan seçme</p></th>
+                    <th><p>bilgisayardan seçme</p></th>
+                </tr>
+                <tbody>
+                    <td>
+                        <select name="" id="iconSelect">
+                            <option selected disabled></option>
+                            <option value=""></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" id="iconInput" accept="image/*">
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button class="guncelle-btn" onclick="updateIcon()">Güncelle</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    let formData = new FormData();
+    var gamename = document.getElementById("gamename");
+    var gametext = document.getElementById("gametext");
+    var path = window.location.pathname;
+    var id = path.split('/')[2];
+
+    function showPhotoPopup() {
+        document.getElementById("photoPopup").style.display = "flex";
+    }
+    function closePhotoPopup() {
+        document.getElementById("photoPopup").style.display = "none";
+    }
+
+    function showIconPopup() {
+        document.getElementById("iconPopup").style.display = "flex";
+    }
+    function closeIconPopup() {
+        document.getElementById("iconPopup").style.display = "none";
+    }
+    
+    document.getElementById("closePhotoPopup").addEventListener("click", closePhotoPopup);
+
+    document.getElementById("closeIconPopup").addEventListener("click", closeIconPopup);
+
+    function updatePhoto() {
+        var photoInput = document.getElementById('photoInput');
+        
+        var selectedInput = photoInput.files[0];
+        // Eğer dosyadan bir media seçildiyse
+        if (selectedInput) {
+            formData.append('image', selectedInput);
+            console.log(formData.get('image'));
+        }
+        closePhotoPopup();
+    }
+
+    function updateIcon() {
+        var iconInput = document.getElementById('iconInput');
+        
+        var selectedIcon = iconInput.files[0];
+        // Eğer dosyadan bir media seçildiyse
+        if (selectedIcon) {
+            formData.append('icon', selectedIcon);
+            console.log(formData.get('icon'));
+        }
+        closeIconPopup();
+    }
+
+    function updategame()
+    {
+        
+        formData.append('id', id);
+        formData.append('gamename', gamename.value);
+        formData.append('gametext', gametext.value);
+        $.ajax({
+            url: "/updategame/" + id, 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+                location.reload();
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+
+</script>
+{% endblock %}
