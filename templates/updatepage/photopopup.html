@@ -1,0 +1,29 @@
+<div class="popup-background" id="popup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
+        <div>
+            <h3>Media Seç</h3>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th><p>dosyadan seçme</p></th>
+                    <th><p>bilgisayardan seçme</p></th>
+                </tr>
+                <tbody>
+                    <td>
+                        <select name="" id="mediaSelect">
+                            <option value="{{image}}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
+        </div>
+    </div>
+</div>

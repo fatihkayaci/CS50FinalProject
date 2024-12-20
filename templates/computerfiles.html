@@ -2,7 +2,6 @@
 
 {% block main %}
 <div class="container mt-4">
-    <h3 class="mb-4">Yeni Veri Tablosu</h3>
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
             <tr>
@@ -29,8 +28,7 @@
                         {% endif %}
                     {% endfor %}
                     <td>
-                        <button class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Edit</button>
-                        <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                        <a href="/updatecomputerfields/{{computer.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -201,5 +201,59 @@ def updatemainpage(id):
     return render_template("/updatepage/updatemainpage.html", mediawithtext=mediawithtext, all_images=all_images)
     
 
+@app.route("/updatecomputerfields/<int:id>", methods=['GET', 'POST'])
+def updatecomputerfiles(id):
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'computerfields')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+        
+    if request.method == "POST":
+        id = request.form.get('id')
+        label = request.form.get('label')
+        videocard = request.form.get('videocard')
+        mothercard = request.form.get('mothercard')
+        freez = request.form.get('freez')
+        mouse = request.form.get('mouse')
+        headphone = request.form.get('headphone')
+        processor = request.form.get('processor')
+        ram = request.form.get('ram')
+        screen = request.form.get('screen')
+        image = request.files.get('image')
+        keyboard = request.form.get('keyboard')
+
+        computerfields = tblcomputerfiles.query.filter_by(id = id).first()
+        if computerfields:
+            computerfields.label = label
+            computerfields.videocard = videocard
+            computerfields.mothercard = mothercard
+            computerfields.freez = freez
+            computerfields.mouse = mouse
+            computerfields.headphone = headphone
+            computerfields.processor = processor
+            computerfields.ram = ram
+            computerfields.screen = screen
+            computerfields.keyboard = keyboard
+            if image:    
+                if allowed_file(image.filename):
+                    filename = secure_filename(image.filename)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'computerfields/', filename)
+                if os.path.exists(file_path):
+                    computerfields.path = file_path
+                else:
+                    # Eğer dosya yoksa resmi kaydet
+                    image.save(file_path)
+                    computerfields.path = file_path  # Veritabanındaki path alanını güncelleyin
+                    print("Dosya başarıyla kaydedildi.")
+
+        db.session.commit()
+        return render_template('/indexa.html')
+
+    computerfields = tblcomputerfiles.query.filter_by(id = id).first()
+    if computerfields is None:
+        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
+    return render_template("/updatepage/updatecomputerfields.html", computerfields=computerfields)
+
 if __name__ == '__main__':
     app.run(debug=True)

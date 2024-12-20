@@ -1,0 +1,175 @@
+{% extends "adminlayout.html" %}
+{% block main %}
+<div class="container-fluid mt-4">
+    <h3 class="mb-4">Veri Düzenle</h3>
+    <form method="POST" enctype="multipart/form-data">
+        <!-- Label -->
+        <div class="form-group">
+            <label for="label">Label</label>
+            <input autocomplete="off" type="text" name="label" id="label" class="form-control" value="{{computerfields.label}}">
+        </div>
+        
+        <div class="form-group">
+            <label for="image">Mevcut Resim</label><br>
+            <img  src="../{{computerfields.path}}" 
+                 alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="videocard">Ekran Kartı</label>
+                <input autocomplete="off" type="text" name="videocard" id="videocard" class="form-control" value="{{computerfields.videocard}}">
+            </div>
+        
+            <div class="form-group col-md-6">
+                <label for="mothercard">Ana Kart</label>
+                <input autocomplete="off" type="text" name="mothercard" id="mothercard" class="form-control" value="{{computerfields.mothercard}}">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="freez">Soğutucu</label>
+                <input autocomplete="off" type="text" name="freez" id="freez" class="form-control" value="{{computerfields.freez}}">
+            </div>
+        
+            <div class="form-group col-md-6">
+                <label for="mouse">Mouse</label>
+                <input autocomplete="off" type="text" name="mouse" id="mouse" class="form-control" value="{{computerfields.mouse}}">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="headphone">Kulaklık</label>
+                <input autocomplete="off" type="text" name="headphone" id="headphone" class="form-control" value="{{computerfields.headphone}}">
+            </div>
+        
+            <div class="form-group col-md-6">
+                <label for="processor">İşlemci</label>
+                <input autocomplete="off" type="text" name="processor" id="processor" class="form-control" value="{{computerfields.processor}}">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="ram">Ram</label>
+                <input autocomplete="off" type="text" name="ram" id="ram" class="form-control" value="{{computerfields.ram}}">
+            </div>
+        
+            <div class="form-group col-md-6">
+                <label for="screen">Ekran</label>
+                <input autocomplete="off" type="text" name="screen" id="screen" class="form-control" value="{{computerfields.screen}}">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="keyboard">Klavye</label>
+                <input autocomplete="off" type="text" name="keyboard" id="keyboard" class="form-control" value="{{computerfields.keyboard}}">
+            </div>
+        </div>
+        
+        <!-- Submit Butonu -->
+        <button type="submit" onclick="updatetextandmedia()" class="btn btn-success">Güncelle</button>
+        <a href="/" class="btn btn-secondary">İptal</a>
+    </form>
+</div>
+<div class="popup-background" id="popup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
+        <div>
+            <h3>Media Seç</h3>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th><p>dosyadan seçme</p></th>
+                    <th><p>bilgisayardan seçme</p></th>
+                </tr>
+                <tbody>
+                    <td>
+                        <select name="" id="mediaSelect">
+                            <option value="{{image}}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    let formData = new FormData();
+    var label = document.getElementById("label");
+    var videocard = document.getElementById("videocard");
+    var mothercard = document.getElementById("mothercard");
+    var freez = document.getElementById("freez");
+    var mouse = document.getElementById("mouse");
+    var headphone = document.getElementById("headphone");
+    var Processor = document.getElementById("Processor");
+    var ram = document.getElementById("ram");
+    var screen = document.getElementById("screen");
+    var keyboard = document.getElementById("keyboard");
+    
+    var path = window.location.pathname;
+    var id = path.split('/')[2];
+
+    function showPopup() {
+        document.getElementById("popup").style.display = "flex";
+    }
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+    function updateMedia() {
+        var mediaSelect = document.getElementById('mediaSelect');
+        var imageInput = document.getElementById('imageInput');
+        
+        var selectedMedia = mediaSelect.value;
+        var selectedImage = imageInput.files[0];
+        // Eğer dosyadan bir media seçildiyse
+        if (selectedImage) {
+            formData.append('image', selectedImage);
+            console.log(formData.get('image'));
+        }else if (selectedMedia) {
+            formData.append('image', selectedMedia);
+            console.log(formData.get('image'));
+        }
+        closePopup();
+    }
+    document.getElementById("closePopup").addEventListener("click", closePopup);
+    function updatetextandmedia()
+    {   
+        formData.append('id', id);
+        formData.append('label', label.value);
+        formData.append('videocard', videocard.value);
+        formData.append('mothercard', mothercard.value);
+        formData.append('freez', freez.value);
+        formData.append('mouse', mouse.value);
+        formData.append('headphone', headphone.value);
+        formData.append('processor', processor.value);
+        formData.append('ram', ram.value);
+        formData.append('screen', screen.value);
+        formData.append('keyboard', keyboard.value);
+        $.ajax({
+            url: "/updatecomputerfields/" + id, 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+</script>
+{% endblock %}
