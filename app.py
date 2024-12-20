@@ -141,14 +141,82 @@ def indexa():
 @app.route("/computerfiles")
 def cafeattributea():
     computers = tblcomputerfiles.query.all()
-
     return render_template("/computerfiles.html", computers = computers)
 
-@app.route("/foodsadd")
+# foods process
+@app.route("/foodsadd", methods=['GET', 'POST'])
 def foodsadd():
+    if request.method == "POST":
+        foodname = request.form.get('foodName')
+        foodtext = request.form.get('foodText')
+        foodimage = request.files.get('image')
+        if not foodname and not foodtext and not foodimage:
+            return jsonify({"success": False, "message": f"Hata oluştu: hepsi boş kaldı doldurunuz"})
+        if foodimage and foodimage.filename:  
+            if allowed_file(foodimage.filename):
+                filename = secure_filename(foodimage.filename)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
+                newfood = tblfoods(path=file_path, label=foodname, text=foodtext)
+                db.session.add(newfood)
+            if not os.path.exists(file_path):
+                foodimage.save(file_path)
+        elif not foodimage :
+            newfood = tblfoods(path="", label=foodname, text=foodtext)
+            db.session.add(newfood)
+
+        db.session.commit()        
+        return render_template("/foodsadd.html")
     foods = tblfoods.query.all()
     return render_template("/foodsadd.html", foods=foods)
 
+# delete food
+@app.route("/deletefood", methods=['GET', 'POST'])
+def deletefood():
+    if request.method == "POST":
+        foodid = request.form.get('foodid')
+        if not foodid:  # foodid boşsa hata dön
+            return {'status': 'error', 'message': 'Food ID is missing'}, 400
+        print(foodid)
+        food_to_delete = tblfoods.query.get(foodid)
+        if food_to_delete:
+            db.session.delete(food_to_delete)
+            db.session.commit()
+        return 'succesfull'
+    return 'str'
+
+#update food
+@app.route("/updatefood/<int:id>", methods=['GET', 'POST'])
+def updatefood(id):
+    if request.method == "POST":
+        all_images = []
+        target_folder = os.path.join(UPLOAD_FOLDER, 'mainpage')
+        if os.path.exists(target_folder):
+            all_images = [file for file in os.listdir(target_folder) 
+                        if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+        id = request.form.get('id')
+        label = request.form.get("label")
+        text = request.form.get("text")
+        image = request.files.get('image')
+        foods = tblfoods.query.filter_by(id = id).first()
+        if foods:
+            foods.label = label
+            foods.text = text
+            if image:    
+                if allowed_file(image.filename):
+                    filename = secure_filename(image.filename)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
+                    foods.path = file_path
+                if not os.path.exists(file_path):
+                    image.save(file_path)
+
+        db.session.commit()
+        return render_template('/foodsadd.html')
+
+    foods = tblfoods.query.filter_by(id = id).first()
+    if foods is None:
+        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
+    return render_template("/updatepage/updatefood.html", foods=foods)
+    
 @app.route("/gamesadd")
 def gamesadd():
     games = tblgames.query.all()
@@ -158,8 +226,8 @@ def gamesadd():
 def steamsadd():
     steams = tblsteams.query.all()
     return render_template("/steamsadd.html", steams=steams)
-# düzenleme kısmı
 
+# düzenleme kısmı
 @app.route("/updatemainpage/<int:id>", methods=['GET', 'POST'])
 def updatemainpage(id):
     all_images = []
@@ -254,6 +322,7 @@ def updatecomputerfiles(id):
     if computerfields is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
     return render_template("/updatepage/updatecomputerfields.html", computerfields=computerfields)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,112 @@
+{% extends "adminlayout.html" %}
+{% block main %}
+<div class="container-fluid mt-4">
+    <h3 class="mb-4">Veri Düzenle</h3>
+    <!-- Label -->
+    <div class="form-group">
+        <label for="label">Yemek İsmi</label>
+        <input type="text" name="label" id="label" class="form-control" value="{{ foods.label }}">
+    </div>
+    
+    <div class="form-group">
+        <label for="image">Mevcut Resim</label><br>
+        <img  src="../{{ foods.path if foods.path else '../../static/img/noImage.jpg' }}" 
+                alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
+    </div>
+    
+    <div class="form-group">
+        <label for="text">Yemek Açıklama</label>
+        <textarea name="text" id="text" class="form-control" rows="4">{{ foods.text }}</textarea>
+    </div>
+    
+    <button type="submit" onclick="updatefood()" class="btn btn-success">Güncelle</button>
+    <a href="/foodsadd" class="btn btn-secondary">İptal</a>
+</div>
+
+<div class="popup-background" id="popup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
+        <div>
+            <h3>Media Seç</h3>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th><p>dosyadan seçme</p></th>
+                    <th><p>bilgisayardan seçme</p></th>
+                </tr>
+                <tbody>
+                    <td>
+                        <select name="" id="mediaSelect">
+                            <option selected disabled></option>
+                            <option value="{{image}}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    var label = document.getElementById("label");
+    var text = document.getElementById("text");
+    let formData = new FormData();
+    var path = window.location.pathname;
+    var id = path.split('/')[2];
+
+    function showPopup() {
+        document.getElementById("popup").style.display = "flex";
+    }
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+    function updateMedia() {
+        var mediaSelect = document.getElementById('mediaSelect');
+        var imageInput = document.getElementById('imageInput');
+        
+        var selectedMedia = mediaSelect.value;
+        var selectedImage = imageInput.files[0];
+        // Eğer dosyadan bir media seçildiyse
+        if (selectedImage) {
+            formData.append('image', selectedImage);
+            console.log(formData.get('image'));
+        }else if (selectedMedia) {
+            formData.append('image', selectedMedia);
+            console.log(formData.get('image'));
+        }
+        closePopup();
+    }
+    document.getElementById("closePopup").addEventListener("click", closePopup);
+    function updatefood()
+    {   
+        formData.append('id', id);
+        formData.append('label', label.value);
+        formData.append('text', text.value);
+        console.log(formData.get('label'));
+        console.log(formData.get('text'));
+        console.log(formData.get('id'));
+        $.ajax({
+            url: "/updatefood/" + id, 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+                location.reload();
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+
+</script>
+{% endblock %}

@@ -1,27 +1,25 @@
 {% extends "adminlayout.html" %}
 
 {% block main %}
-<div class="container mt-4">
+<div class="container-fluid mt-4">
 
     <!-- Üst Kısım: Yemek Ekleme Formu -->
     <div class="row mb-4">
         <div class="col-md-12">
             <h3 class="text-center">Yemek Ekle</h3>
-            <form action="/foodsadd" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="foodImage">Yemek Resmi</label>
-                    <input type="file" class="form-control" id="foodImage" name="foodImage" required>
-                </div>
-                <div class="form-group">
-                    <label for="foodName">Yemek İsmi</label>
-                    <input type="text" class="form-control" id="foodName" name="foodName" placeholder="Yemek İsmi" required>
-                </div>
-                <div class="form-group">
-                    <label for="foodText">Açıklama</label>
-                    <textarea class="form-control" id="foodText" name="foodText" rows="4" placeholder="Yemek Hakkında Bilgi" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Yemek Ekle</button>
-            </form>
+            <div class="form-group">
+                <label for="foodImage">Yemek Resmi</label>
+                <input type="file" class="form-control" id="foodImage" name="foodImage">
+            </div>
+            <div class="form-group">
+                <label for="foodName">Yemek İsmi</label>
+                <input type="text" class="form-control" id="foodName" name="foodName" placeholder="Yemek İsmi" required>
+            </div>
+            <div class="form-group">
+                <label for="foodText">Açıklama</label>
+                <textarea class="form-control" id="foodText" name="foodText" rows="4" placeholder="Yemek Hakkında Bilgi" required></textarea>
+            </div>
+            <a type="button" class="btn btn-primary" onclick="addfood()">Yemek Ekle</a>
         </div>
     </div>
 
@@ -40,17 +38,17 @@
                 </thead>
                 <tbody>
                     {% for food in foods %}
-                    <tr>
-                        <td>{{ food.label }}</td>
-                        <td>
-                            <img src="{{ food.path }}" alt="food image" class="img-thumbnail" style="width: 100px; height: 100px;">
-                        </td>
-                        <td>{{ food.text }}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Düzenle</button>
-                            <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Sil</button>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ food.label }}</td>
+                            <td>
+                                <img src="{{ food.path if food.path else '../../static/img/noImage.jpg' }}" alt="food image" class="img-thumbnail" style="width: 100px; height: 100px;">
+                            </td>
+                            <td>{{ food.text }}</td>
+                            <td>
+                                <a href="/updatefood/{{food.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
+                                <button type="button" class="btn btn-sm btn-danger" data-id="{{ food.id }}"  onclick="deletefood(this)"><i class="fa fa-trash"></i> Sil</button>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -58,4 +56,61 @@
     </div>
 
 </div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    var foodName = document.getElementById("foodName");
+    var foodText = document.getElementById("foodText");
+    let formData = new FormData();
+    
+    function addMedia() {
+        var foodImage = document.getElementById('foodImage');
+        var selectedImage = foodImage.files[0];
+
+        if (selectedImage) {
+            formData.append('image', selectedImage);
+        }
+    }
+    function addfood()
+    {
+        formData.append('foodName', foodName.value);
+        formData.append('foodText', foodText.value);
+        addMedia();
+
+        $.ajax({
+            url: "/foodsadd", 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+                location.reload();
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+    function deletefood(button)
+    {
+        let foodId = button.getAttribute('data-id');
+        formData.append('foodid', foodId);
+        console.log("Silinecek ID: ", foodId);
+        $.ajax({
+            url: "/deletefood", 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData ile çalışırken bu iki ayarı false yap
+            contentType: false,
+            success: function(response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+                location.reload();
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+</script>
 {% endblock %}
