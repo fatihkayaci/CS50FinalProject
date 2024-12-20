@@ -1,0 +1,61 @@
+{% extends "adminlayout.html" %}
+
+{% block main %}
+<div class="container mt-4">
+    <!-- Üst Kısım: Yemek Ekleme Formu -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h3 class="text-center">Steam Hesap Ekle</h3>
+            <form action="/steamsadd" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="gameName">Steam İsmi</label>
+                    <input type="text" class="form-control" id="steamname" name="steamname" placeholder="Steam İsmi" required>
+                </div>
+                <div class="form-group">
+                    <label for="gameName">Oyun İsmi</label>
+                    <input type="text" class="form-control" id="gameName" name="gameName" placeholder="Oyun İsmi" required>
+                </div>
+                <div class="form-group">
+                    <label for="gameicon">Oyun Icon</label>
+                    <input type="file" class="form-control" id="gameicon" name="gameicon" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Steam Hesap Ekle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Alt Kısım: Kayıtlı Yemekler Tablosu -->
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center mb-4">Kayıtlı Steamler</h3>
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Steam Hesap ismi</th>
+                        <th>Oyun İsmi</th>
+                        <th>Oyun İcon</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for steam in steams %}
+                    <tr>
+                        <td>{{ steam.steamname }}</td>
+                        <td>{{ steam.gamename }}</td>
+                        <td>
+                            <img src="{{ steam.iconpath }}" alt="{{steam.gamename}} icon" class="img-thumbnail" style="width: 100px; height: 100px;">
+                        </td>
+                        
+                        <td>
+                            <button class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Düzenle</button>
+                            <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Sil</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

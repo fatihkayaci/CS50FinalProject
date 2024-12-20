@@ -1,0 +1,68 @@
+{% extends "adminlayout.html" %}
+
+{% block main %}
+<div class="container mt-4">
+
+    <!-- Üst Kısım: Yemek Ekleme Formu -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h3 class="text-center">Oyun Ekle</h3>
+            <form action="/gamesadd" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="gameName">Oyun İsmi</label>
+                    <input type="text" class="form-control" id="gameName" name="gameName" placeholder="Oyun İsmi" required>
+                </div>
+                <div class="form-group">
+                    <label for="gameImage">Oyun Resmi</label>
+                    <input type="file" class="form-control" id="gameImage" name="gameImage" required>
+                </div>
+                <div class="form-group">
+                    <label for="gameicon">Oyun Icon</label>
+                    <input type="file" class="form-control" id="gameicon" name="gameicon" required>
+                </div>
+                <div class="form-group">
+                    <label for="gameText">Açıklama</label>
+                    <textarea class="form-control" id="oyunText" name="oyunText" rows="4" placeholder="Oyun Hakkında Bilgi" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Oyun Ekle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Alt Kısım: Kayıtlı Yemekler Tablosu -->
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center mb-4">Kayıtlı Oyunlar</h3>
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Oyun ismi</th>
+                        <th>Oyun Resim</th>
+                        <th>Oyun İcon</th>
+                        <th>Oyun Açıklama</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for game in games %}
+                    <tr>
+                        <td>{{ game.gamename }}</td>
+                        <td>
+                            <img src="{{ game.photopath }}" alt="{{game.gamename}} image" class="img-thumbnail" style="width: 100px; height: 100px;">
+                        </td>
+                        <td>
+                            <img src="{{ game.iconpath }}" alt="{{game.gamename}} icon" class="img-thumbnail" style="width: 100px; height: 100px;">
+                        </td>
+                        <td>{{ game.text }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Düzenle</button>
+                            <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Sil</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "adminlayout.html" %}
+{% block main %}
+<div class="container mt-4">
+    <h3 class="mb-4">Veri Düzenle</h3>
+    <form method="POST" enctype="multipart/form-data">
+        <!-- Label -->
+        <div class="form-group">
+            <label for="label">Label</label>
+            <input type="text" name="label" id="label" class="form-control" value="{{mediawithtext.label}}">
+        </div>
+        
+        <!-- Resim Yükleme -->
+        <div class="form-group">
+            <label for="image">Mevcut Resim</label><br>
+            <img  src="../{{ mediawithtext.path if mediawithtext.path else '../../static/img/noImage.jpg' }}" 
+                 alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
+        </div>
+        
+        <!-- Text 1 -->
+        <div class="form-group">
+            <label for="text1">Text 1</label>
+            <textarea name="text1" id="text1" class="form-control" rows="4">{{mediawithtext.text1}}</textarea>
+        </div>
+        
+        <!-- Text 2 -->
+        <div class="form-group">
+            <label for="text2">Text 2</label>
+            <textarea name="text2" id="text2" class="form-control" rows="4">{{mediawithtext.text2}}</textarea>
+        </div>
+        
+        <!-- Submit Butonu -->
+        <button type="submit" onclick="updatetextandmedia()" class="btn btn-success">Güncelle</button>
+        <a href="/" class="btn btn-secondary">İptal</a>
+    </form>
+</div>
+<div class="popup-background" id="popup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
+        <div>
+            <h3>Media Seç</h3>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th><p>dosyadan seçme</p></th>
+                    <th><p>bilgisayardan seçme</p></th>
+                </tr>
+                <tbody>
+                    <td>
+                        <select name="" id="mediaSelect">
+                            <option selected disabled></option>
+                            {% for image in all_images %}
+                                {% if image: %}
+                                    <option value="{{image}}">{{image}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    var label = document.getElementById("label");
+    var text1 = document.getElementById("text1");
+    var text2 = document.getElementById("text2");
+    let formData = new FormData();
+    var path = window.location.pathname;
+    var id = path.split('/')[2];
+
+    function showPopup() {
+        document.getElementById("popup").style.display = "flex";
+    }
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+    function updateMedia() {
+        var mediaSelect = document.getElementById('mediaSelect');
+        var imageInput = document.getElementById('imageInput');
+        
+        var selectedMedia = mediaSelect.value;
+        var selectedImage = imageInput.files[0];
+        // Eğer dosyadan bir media seçildiyse
+        if (selectedImage) {
+            formData.append('image', selectedImage);
+            console.log(formData.get('image'));
+        }else if (selectedMedia) {
+            formData.append('image', selectedMedia);
+            console.log(formData.get('image'));
+        }
+        closePopup();
+    }
+    document.getElementById("closePopup").addEventListener("click", closePopup);
+    function updatetextandmedia()
+    {   
+        formData.append('id', id);
+        formData.append('label', label.value);
+        formData.append('text1', text1.value);
+        formData.append('text2', text2.value);
+        console.log(formData.get('label'));
+        console.log(formData.get('text1'));
+        console.log(formData.get('text2'));
+        $.ajax({
+            url: "/updatemainpage/" + id, 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                console.log("Başarıyla güncellendi: ", response.message);
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+
+</script>
+{% endblock %}

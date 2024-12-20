@@ -1,114 +1,34 @@
-{% extends "adminlayout.html" %}
-
+{% extends "adminlayout.html" %} 
 {% block main %}
-
-<header>
-    <form action="/indexa" method="post">
-
-        <div class="maintitle">
-            <label for="maintitle">ANASAYFA BAŞLIK</label>
-            <div class="form-group">
-                {% for item in articles %}
-                    {% if item.group_name == "maintitle" %}
-                        <label for="{{item.label}}">{{item.label}}</label>
-                        <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
-                    {% endif %}
-                {% endfor %}
-
-                <div class="photoandvideo">
-                    {% for m in media %}
-                        {% if m.group_name == "maintitle" %}
-                            <div class="changemedia">
-                                <img src="{{ m.path }}" class="mainpage" alt="Dost Oyun Merkezi">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-            </div>
-        </div>
-      
-        <div class="hizmettitle">
-            <label for="hizmetler">ANASAYFA HİZMETLER</label>
-            <div class="form-group">
-                {% for item in articles %}
-                    {% if item.group_name == "hizmetler" %}
-                        <label for="{{item.label}}">{{item.label}}</label>
-                        <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
-                    {% endif %}
-                {% endfor %}
-                <div class="photoandvideo">
-                    {% for m in media %}
-                        {% if m.group_name == "hizmetler" and m.active == true %}
-                            <div class="changemedia">
-                                <label for="{{m.label}}">{{m.label}}</label>
-                                <img src="{{ m.path }}" class="mainpage" alt="Dost Oyun Merkezi">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <div class="hakkimizda">
-            <label for="hizmetler">ANASAYFA HAKKIMIZDA</label>
-            <div class="form-group">
-                {% for item in articles %}
-                    {% if item.group_name == "hakkimizda" %}
-                        <label for="{{item.label}}">{{item.label}}</label>
-                        <textarea class="form-control" id="{{ item.id_name }}" rows="30" cols="100">{{ item.text if item.text }}</textarea>
-                    {% endif %}
-                {% endfor %}
-                <div class="photoandvideo">
-                    {% for m in media %}
-                        {% if m.group_name == "hakkimizda" and m.active == true %}
-                            <div class="changemedia mainpage">
-                                <label for="{{m.label}}">{{m.label}}</label>
-                                <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </form>
-    <div class="popup-background" id="popup">
-        <div class="popup-content">
-            <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
-            <div>
-                <h3>Media Seç</h3>
-            </div>
-            <div>
-                
-                <table>
-                    <tr>
-                        <th><p>dosyadan seçme</p></th>
-                        <th><p>bilgisayardan seçme</p></th>
-                    </tr>
-                    <tbody>
-                        <td>
-                            <select name="imageSelect" id="imageSelect">
-                                <option disabled selected></option>
-                                {% for m in media %}
-                                    {% if m.group_name == "hizmetler" and m.active == false%}
-                                        <option value="{{m.file_name}}">{{m.file_name}}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <input type="file" id="imageInput" accept="image/*">
-                        </td>
-                    </tbody>
-                </table>
-            </div>
-            <div>
-                <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
-            </div>
-        </div>
-    </div>
-</header>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="../static/js/changeText.js"></script>
-<script src="../static/js/media.js"></script>
-
+<div class="container mt-4"> 
+    <h3 class="mb-4">Veri Tablosu</h3> 
+    <table class="table table-bordered table-striped"> 
+        <thead class="thead-dark"> 
+            <tr> 
+                <th>Label</th> 
+                <th>Photo</th> 
+                <th>Text</th> 
+                <th>Actions</th> 
+            </tr> 
+        </thead> 
+        <tbody> 
+            {% for mt in mediawithtext %}
+                <tr>
+                    <td>{{ mt.label }}</td>
+                    <td>
+                        <img src=" {% if mt.path:%}{{ mt.path}} {% else:%} ../static/img/noImage.jpg {% endif %}" alt="photo" class="img-thumbnail" style="width: 100px; height: 100px;">
+                    </td>
+                    <td>
+                        {{ mt.text1 }}
+                        <hr> <br>
+                        {{ mt.text2 }}
+                    </td>
+                    <td>
+                        <a href="/updatemainpage/{{mt.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody> 
+    </table> 
+</div>
 {% endblock %}

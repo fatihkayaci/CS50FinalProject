@@ -1,109 +1,40 @@
 {% extends "adminlayout.html" %}
 
 {% block main %}
-<form action="/cafeattributea" method="post">
-    <div class="maintitle">
-        <label for="maintitle">HİZMETLER BAŞLIK</label>
-        <div class="form-group">
-            <div class="textfield">
-                {% for item in articles %}
-                    {% if item.group_name == "maintitle" %}
-                        <div class="textandlabel">
-                            <label for="{{item.label}}">{{item.label}}</label>
-                            <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
-                        </div>
+<div class="container mt-4">
+    <h3 class="mb-4">Yeni Veri Tablosu</h3>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                {% for column in computers[0].__table__.columns %}
+                    {% if column.key != 'id' %}
+                        <th>{{ column.key | capitalize }}</th>
                     {% endif %}
                 {% endfor %}
-            </div>
-        </div>
-    </div>
-  
-    <div class="hizmettitle">
-        <label for="hizmetler">BİLGİSAYAR PARÇALARI</label>
-        <div class="form-group">
-            <div class="photoandvideo">
-                {% for m in media %}
-                    {% if m.group_name == "vipgaming" %}
-                        <div class="changemedia">
-                            <img src="{{ m.path }}" alt="Dost Oyun Merkezi">
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div class="textfield">
-                {% for item in articles %}
-                    {% if item.group_name == "vipgaming" %}
-                        <div class="textandlabel">
-                            <label for="{{item.label}}">{{item.label}}</label>
-                            <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="hakkimizda">
-        <label for="hizmetler"></label>
-        <div class="form-group">
-            <div class="photoandvideo">
-                {% for m in media %}
-                    {% if m.group_name == "goldgaming" %}
-                        <div class="changemedia">
-                            <img src="{{ m.path }}" class="mainpage" alt="Dost Oyun Merkezi">
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div class="textfield">
-                {% for item in articles %}
-                    {% if item.group_name == "goldgaming" %}
-                        <div class="textandlabel">
-                            <label for="{{item.label}}">{{item.label}}</label>
-                            <input type="text" autocomplete="off" class="form-control" id="{{ item.id_name }}" value="{{ item.text if item.text }}">
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</form>
-<div class="popup-background" id="popup">
-    <div class="popup-content">
-        <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
-        <div>
-            <h3>Media Seç</h3>
-        </div>
-        <div>
-            
-            <table>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for computer in computers %}
                 <tr>
-                    <th><p>dosyadan seçme</p></th>
-                    <th><p>bilgisayardan seçme</p></th>
+                    {% for column in computer.__table__.columns %}
+                        {% if column.key != 'id' %}
+                            {% if column.key == 'path' %}
+                                <td>
+                                    <img src="{{ computer.path }}" alt="food image" class="img-thumbnail" style="width: 100px; height: 100px;">
+                                </td>
+                            {% else %}
+                                <td>{{ computer[column.name] }}</td> <!-- column.name ile sütun adını alıyoruz -->
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    <td>
+                        <button class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Edit</button>
+                        <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                    </td>
                 </tr>
-                <tbody>
-                    <td>
-                        <select name="imageSelect" id="imageSelect">
-                            <option disabled selected></option>
-                            {% for m in media %}
-                                {% if m.group_name == "hizmetler" and m.active == false%}
-                                    <option value="{{m.file_name}}">{{m.file_name}}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td>
-                        <input type="file" id="imageInput" accept="image/*">
-                    </td>
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
-        </div>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="../static/js/changeText.js"></script>
-<script src="../static/js/media.js"></script>
-
 {% endblock %}
