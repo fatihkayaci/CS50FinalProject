@@ -89,12 +89,18 @@
                 </tr>
                 <tbody>
                     <td>
-                        <select name="" id="mediaSelect">
-                            <option value="{{image}}"></option>
+                        <select name="" id="photoSelect">
+                            <option selected disabled></option>
+                            {% for image in all_images %}
+                            
+                                {% if image: %}
+                                    <option value="{{image}}">{{ image }}</option>
+                                {% endif %}
+                            {% endfor %}
                         </select>
                     </td>
                     <td>
-                        <input type="file" id="imageInput" accept="image/*">
+                        <input type="file" id="photoInput" accept="image/*">
                     </td>
                 </tbody>
             </table>
@@ -107,6 +113,11 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     let formData = new FormData();
+    var popup = document.getElementById("popup");
+    var closePopup = document.getElementById("closePopup");
+    var photoSelect = document.getElementById('photoSelect');
+    var photoInput = document.getElementById('photoInput');
+    
     var label = document.getElementById("label");
     var videocard = document.getElementById("videocard");
     var mothercard = document.getElementById("mothercard");
@@ -121,29 +132,32 @@
     var path = window.location.pathname;
     var id = path.split('/')[2];
 
+    
     function showPopup() {
-        document.getElementById("popup").style.display = "flex";
+        popup.style.display = "flex";
     }
-    function closePopup() {
-        document.getElementById("popup").style.display = "none";
+    function offPopup() {
+        popup.style.display = "none";
     }
+    closePopup.addEventListener("click", offPopup);
     function updateMedia() {
-        var mediaSelect = document.getElementById('mediaSelect');
-        var imageInput = document.getElementById('imageInput');
-        
-        var selectedMedia = mediaSelect.value;
-        var selectedImage = imageInput.files[0];
-        // Eğer dosyadan bir media seçildiyse
-        if (selectedImage) {
-            formData.append('image', selectedImage);
-            console.log(formData.get('image'));
-        }else if (selectedMedia) {
-            formData.append('image', selectedMedia);
-            console.log(formData.get('image'));
+        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
+
+        if (photoSelect.value) {
+            formData.delete('image_name');
+            formData.append('image_name', photoSelect.value);
+            previewImage.src = "../../static/img/computerfields/" + photoSelect.value;
+        } else if (photoInput.files[0]) {
+            formData.delete('image_file');
+            formData.append('image_file', photoInput.files[0]);
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                previewImage.src = event.target.result;
+            };
+            fileReader.readAsDataURL(photoInput.files[0]);
         }
-        closePopup();
+        offPopup();
     }
-    document.getElementById("closePopup").addEventListener("click", closePopup);
     function updatetextandmedia()
     {   
         formData.append('id', id);
@@ -164,10 +178,16 @@
             processData: false,  // FormData kullanıldığı için veri işlenmez
             contentType: false,  // ContentType otomatik olarak ayarlanır
             success: function(response) {
-                console.log("Başarıyla güncellendi: ", response.message);
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "/computerfields";
+                } else {
+                    alert(response.message);
+                }
             },
             error: function(error) {
                 console.log("Hata: ", error);
+                alert("Bir hata oluştu.");
             }
         });
     }

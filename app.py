@@ -56,18 +56,113 @@ def login():
         # profiles = users.query.all()
     return render_template("/login.html")
 
-
-
 @app.route("/indexa", methods=["GET", "POST"])
 def indexa():                   
     mediawithtext = tblmediaandtext.query.filter_by(page_name = "mainpage").all()
     return render_template("indexa.html", mediawithtext=mediawithtext)
 
+@app.route("/updatemainpage/<int:id>", methods=['GET', 'POST'])
+def updatemainpage(id):        
+    if request.method == "POST":
+        id = request.form.get('id')
+        label = request.form.get('label')
+        text1 = request.form.get('text1')
+        text2 = request.form.get('text2')
+        image_file = request.files.get('image_file')
+        image_name = request.form.get('image_name')
+        mediawithtext = tblmediaandtext.query.filter_by(id = id).first()
+        if mediawithtext:
+            mediawithtext.label = label
+            mediawithtext.text1 = text1
+            mediawithtext.text2 = text2
+            if image_file:
+                if allowed_file(image_file.filename):
+                    filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'mainpage/', filename)
+                    mediawithtext.path = file_path
+                if not os.path.exists(file_path):
+                    image_file.save(file_path)
+            elif image_name:
+                if allowed_file(image_name):
+                    filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'mainpage/', filename)
+                    mediawithtext.path = file_path
+        db.session.commit()
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
 
-@app.route("/computerfiles")
-def cafeattributea():
+
+    mediawithtext = tblmediaandtext.query.filter_by(id = id).first()
+    if mediawithtext is None:
+        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
+    
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'mainpage')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+        
+    return render_template("/updatepage/updatemainpage.html", mediawithtext=mediawithtext, all_images=all_images)
+    
+# computer fields process
+@app.route("/computerfields")
+def computerfields():
     computers = tblcomputerfiles.query.all()
-    return render_template("/computerfiles.html", computers = computers)
+    return render_template("/computerfields.html", computers = computers)
+
+@app.route("/updatecomputerfields/<int:id>", methods=['GET', 'POST'])
+def updatecomputerfields(id):        
+    if request.method == "POST":
+        id = request.form.get('id')
+        label = request.form.get('label')
+        videocard = request.form.get('videocard')
+        mothercard = request.form.get('mothercard')
+        freez = request.form.get('freez')
+        mouse = request.form.get('mouse')
+        headphone = request.form.get('headphone')
+        processor = request.form.get('processor')
+        ram = request.form.get('ram')
+        screen = request.form.get('screen')
+        keyboard = request.form.get('keyboard')
+        image_file = request.files.get('image')
+        image_name = request.form.get('image_name')
+        computerfields = tblcomputerfiles.query.filter_by(id = id).first()
+        if computerfields:
+            computerfields.label = label
+            computerfields.videocard = videocard
+            computerfields.mothercard = mothercard
+            computerfields.freez = freez
+            computerfields.mouse = mouse
+            computerfields.headphone = headphone
+            computerfields.processor = processor
+            computerfields.ram = ram
+            computerfields.screen = screen
+            computerfields.keyboard = keyboard
+            if image_file:
+                if allowed_file(image_file.filename):
+                    filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'computerfields/', filename)
+                    computerfields.path = file_path
+                if not os.path.exists(file_path):
+                    image_file.save(file_path)
+            elif image_name:
+                if allowed_file(image_name):
+                    filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'computerfields/', filename)
+                    computerfields.path = file_path
+        db.session.commit()
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
+
+    computerfields = tblcomputerfiles.query.filter_by(id = id).first()
+    if computerfields is None:
+        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
+
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'computerfields')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    return render_template("/updatepage/updatecomputerfields.html", computerfields=computerfields, all_images=all_images)
+
 
 # foods process
 @app.route("/foodsadd", methods=['GET', 'POST'])
@@ -246,104 +341,6 @@ def steamsadd():
     return render_template("/steamsadd.html", steams=steams)
 
 # düzenleme kısmı
-@app.route("/updatemainpage/<int:id>", methods=['GET', 'POST'])
-def updatemainpage(id):        
-    if request.method == "POST":
-        id = request.form.get('id')
-        label = request.form.get('label')
-        text1 = request.form.get('text1')
-        text2 = request.form.get('text2')
-        image_file = request.files.get('image_file')
-        image_name = request.form.get('image_name')  
-        print(image_name)
-        print(image_file)
-        mediawithtext = tblmediaandtext.query.filter_by(id = id).first()
-        if mediawithtext:
-            mediawithtext.label = label
-            mediawithtext.text1 = text1
-            mediawithtext.text2 = text2
-            if image_file:
-                if allowed_file(image_file.filename):
-                    filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'mainpage/', filename)
-                    mediawithtext.path = file_path
-                if not os.path.exists(file_path):
-                    image_file.save(file_path)
-            elif image_name:
-                if allowed_file(image_name):
-                    filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'mainpage/', filename)
-                    mediawithtext.path = file_path
-        db.session.commit()
-        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
-
-    mediawithtext = tblmediaandtext.query.filter_by(id = id).first()
-    if mediawithtext is None:
-        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
-    
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'mainpage')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
-        
-    return render_template("/updatepage/updatemainpage.html", mediawithtext=mediawithtext, all_images=all_images)
-    
-
-@app.route("/updatecomputerfields/<int:id>", methods=['GET', 'POST'])
-def updatecomputerfiles(id):
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'computerfields')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
-        
-    if request.method == "POST":
-        id = request.form.get('id')
-        label = request.form.get('label')
-        videocard = request.form.get('videocard')
-        mothercard = request.form.get('mothercard')
-        freez = request.form.get('freez')
-        mouse = request.form.get('mouse')
-        headphone = request.form.get('headphone')
-        processor = request.form.get('processor')
-        ram = request.form.get('ram')
-        screen = request.form.get('screen')
-        image = request.files.get('image')
-        keyboard = request.form.get('keyboard')
-
-        computerfields = tblcomputerfiles.query.filter_by(id = id).first()
-        if computerfields:
-            computerfields.label = label
-            computerfields.videocard = videocard
-            computerfields.mothercard = mothercard
-            computerfields.freez = freez
-            computerfields.mouse = mouse
-            computerfields.headphone = headphone
-            computerfields.processor = processor
-            computerfields.ram = ram
-            computerfields.screen = screen
-            computerfields.keyboard = keyboard
-            if image:    
-                if allowed_file(image.filename):
-                    filename = secure_filename(image.filename)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'computerfields/', filename)
-                if os.path.exists(file_path):
-                    computerfields.path = file_path
-                else:
-                    # Eğer dosya yoksa resmi kaydet
-                    image.save(file_path)
-                    computerfields.path = file_path  # Veritabanındaki path alanını güncelleyin
-                    print("Dosya başarıyla kaydedildi.")
-
-        db.session.commit()
-        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
-
-
-    computerfields = tblcomputerfiles.query.filter_by(id = id).first()
-    if computerfields is None:
-        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
-    return render_template("/updatepage/updatecomputerfields.html", computerfields=computerfields)
 
 
 if __name__ == '__main__':

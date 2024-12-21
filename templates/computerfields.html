@@ -5,12 +5,18 @@
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
             <tr>
-                {% for column in computers[0].__table__.columns %}
-                    {% if column.key != 'id' %}
-                        <th>{{ column.key | capitalize }}</th>
-                    {% endif %}
-                {% endfor %}
-                <th>Actions</th>
+                <th>Başlık</th>
+                <th>Resim</th>
+                <th>Ekran Kartı</th>
+                <th>Ana Kart</th>
+                <th>Soğutucu</th>
+                <th>Fare</th>
+                <th>Kulaklık</th>
+                <th>İşlemci</th>
+                <th>RAM</th>
+                <th>Ekran</th>
+                <th>Klavye</th>
+                <th>İşlemler</th>
             </tr>
         </thead>
         <tbody>
