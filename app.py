@@ -254,56 +254,63 @@ def updatefood(id):
 
 # ------------------------------------------------------foods process end------------------------------------------------------
 
-
-# games process
-def savefilegames(file, upload_folder, subfolder='games/'):
-    """Dosyayı güvenli bir şekilde kaydeder ve dosya yolu döner."""
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(upload_folder, subfolder, filename)
-    if not os.path.exists(file_path):
-        file.save(file_path)
-    return file_path
-
+# ------------------------------------------------------ games process start ------------------------------------------------------
 @app.route("/gamesadd", methods=['GET', 'POST'])
 def gamesadd():
     if request.method == "POST":
         gamename = request.form.get('gamename')
         gametext = request.form.get('gametext')
-        gameimage = request.files.get('image')
-        gameicon = request.files.get('icon')
-
-        if not gamename and not gametext and not gameimage and not gameicon:
-            return jsonify({"success": False, "message": "Hata oluştu: Lütfen tüm alanları doldurunuz"})
+        image_file = request.files.get('image_file')
+        image_name = request.form.get('image_name')
+        icon_file = request.files.get('icon_files')
+        icon_name = request.form.get('icon_name')
+        if not gamename and not gametext and not (image_file or image_name) and not (icon_file or icon_name):
+            return jsonify({"success": False, "message": "Hata oluştu: Tüm alanlar boş bırakılamaz. Lütfen doldurunuz."})
+        image_path=''
+        icon_path=''
+        if image_file and allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/images/', filename)
+            if not os.path.exists(image_path):
+                image_file.save(image_path)
+        elif image_name and allowed_file(image_name):
+            filename = secure_filename(image_name)
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/images/', filename)
         
-        # Yeni oyun kaydı oluştur
-        newgame = tblgames(gamename=gamename, text=gametext)
+        if icon_file and allowed_file(icon_file.filename):
+            filename = secure_filename(icon_file.filename)
+            icon_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/icon/', filename)
+            if not os.path.exists(icon_path):
+                image_file.save(icon_path)
+        elif icon_name and allowed_file(icon_name):
+            filename = secure_filename(icon_name)
+            icon_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/icon/', filename)
 
-        # Oyun resmi kontrolü ve kaydı
-        if gameimage and gameimage.filename and allowed_file(gameimage.filename):
-            newgame.photopath = savefilegames(gameimage, app.config['UPLOAD_FOLDER'])
-
-        # Oyun ikonu kontrolü ve kaydı
-        if gameicon and gameicon.filename and allowed_file(gameicon.filename):
-            newgame.iconpath = savefilegames(gameicon, app.config['UPLOAD_FOLDER'])
-
-        # Eğer hiç resim veya ikon eklenmediyse boş path'li bir kayıt ekle
-        if not newgame.photopath and not newgame.iconpath:
-            newgame.photopath = ""
-            newgame.iconpath = ""
-
+        newgame = tblgames(photopath = image_path, iconpath = icon_path, gamename=gamename, text=gametext)
         db.session.add(newgame)
-        db.session.commit()
+        db.session.commit()        
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
 
-        return jsonify({"success": True, "message": "Oyun başarıyla eklendi."})
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'games/images')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+        
+    all_icon = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'games/icon')
+    if os.path.exists(target_folder):
+        all_icon = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     games = tblgames.query.all()
-    return render_template("/gamesadd.html", games=games)
+    return render_template("/gamesadd.html", games=games, all_icon=all_icon, all_images=all_images)
 
 @app.route("/deletegame", methods=['GET', 'POST'])
 def deletegame():
     if request.method == "POST":
         gameid = request.form.get('gameid')
         if not gameid:  # foodid boşsa hata dön
-            return {'status': 'error', 'message': 'Food ID is missing'}, 400
+            return {'status': 'error', 'message': 'Game ID is missing'}, 400
         print(gameid)
         game_to_delete = tblgames.query.get(gameid)
         if game_to_delete:
@@ -314,44 +321,64 @@ def deletegame():
 
 @app.route("/updategame/<int:id>", methods=['GET', 'POST'])
 def updategame(id):
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'mainpage')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
-        
     if request.method == "POST":
         id = request.form.get('id')
         gamename = request.form.get('gamename')
         gametext = request.form.get('gametext')
-        image = request.files.get('image')
-        icon = request.files.get('icon')
+        image_name = request.form.get('image_name')
+        image_file = request.files.get('image_file')
+        icon_name = request.form.get('icon_name')
+        icon_file = request.files.get('icon_file')
         games = tblgames.query.filter_by(id = id).first()
         if games:
             games.gamename = gamename
-            games.gametext = gametext
-            if image:    
-                if allowed_file(image.filename):
-                    filename = secure_filename(image.filename)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/', filename)
-                    games.photopath = file_path
+            games.text = gametext
+            if image_name and allowed_file(image_name):
+                filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/images/', filename)
+                games.photopath = file_path
                 if not os.path.exists(file_path):
-                    image.save(file_path)
-            if icon:
-                if allowed_file(icon.filename):
-                    filename = secure_filename(icon.filename)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/icon/', filename)
-                    games.iconpath = file_path
+                    image_name.save(file_path)
+            elif image_file and allowed_file(image_file.filename):
+                filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/images/', filename)
+                games.photopath = file_path
                 if not os.path.exists(file_path):
-                    icon.save(file_path)
+                    image_name.save(file_path)
+
+            if icon_name and allowed_file(icon_name):
+                filename = secure_filename(icon_name)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/icon/', filename)
+                games.iconpath = file_path
+                if not os.path.exists(file_path):
+                    icon_name.save(file_path)
+            elif icon_file and allowed_file(icon_file.filename):
+                filename = secure_filename(icon_file.filename)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/icon/', filename)
+                games.iconpath = file_path
+                if not os.path.exists(file_path):
+                    image_name.save(file_path)
 
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'games/images')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+        
+    all_icon = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'games/icon')
+    if os.path.exists(target_folder):
+        all_icon = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    
     games = tblgames.query.filter_by(id = id).first()
     if games is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
-    return render_template("/updatepage/updategame.html", games=games)
+
+    return render_template("/updatepage/updategame.html", games=games, all_images=all_images, all_icon=all_icon)
 
 @app.route("/steamsadd")
 def steamsadd():

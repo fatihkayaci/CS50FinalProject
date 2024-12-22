@@ -1,7 +1,7 @@
 {% extends "adminlayout.html" %}
 {% block main %}
 <div class="container-fluid mt-4">
-    <h3 class="mb-4">Veri Düzenle</h3>
+    <h3 class="mb-4">Oyunu Düzenle</h3>
     <!-- Label -->
     <div class="form-group">
         <label for="gamename">Oyun İsmi</label>
@@ -10,28 +10,28 @@
     
     <div class="form-group">
         <label for="gametext">Game Açıklama</label>
-        <textarea name="gametext" id="gametext" class="form-control" rows="4">{{ games.gamename }}</textarea>
+        <textarea name="gametext" id="gametext" class="form-control" rows="4">{{ games.text }}</textarea>
     </div>
     <div class="form-row">
         <div class="form-group">
             <label for="image">Mevcut Resim</label><br>
-            <img src="../{{ games.photopath if games.photopath else '../../static/img/noImage.jpg' }}" alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPhotoPopup()">
+            <img src="../{{ games.photopath if games.photopath else '../../static/img/noImage.jpg' }}" alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showImagePopup()">
         </div>
         
         <div class="form-group">
             <label for="icon">Mevcut İcon</label><br>
-            <img src="../{{ games.iconpath if games.iconpath else '../../static/img/noImage.jpg' }}" alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showIconPopup()">
+            <img src="../{{ games.iconpath if games.iconpath else '../../static/img/noImage.jpg' }}" alt="photo" class="img-thumbnail icon mb-3" style="width: 150px; height: 150px;" onclick="showIconPopup()">
         </div>
     </div>
     <button type="submit" onclick="updategame()" class="btn btn-success">Güncelle</button>
     <a href="/gamesadd" class="btn btn-secondary">İptal</a>
 </div>
 
-<div class="popup-background" id="photoPopup" style="display: none;">
+<div class="popup-background" id="imagePopup" style="display: none;">
     <div class="popup-content">
-        <button class="close-btn kapat" id="closePhotoPopup"><h3>X</h3></button>
+        <button class="close-btn kapat" id="closeImagePopup"><h3>X</h3></button>
         <div>
-            <h3>Media Seç</h3>
+            <h3>Resim Seç</h3>
         </div>
         <div>
             <table>
@@ -41,23 +41,27 @@
                 </tr>
                 <tbody>
                     <td>
-                        <select name="" id="photoSelect">
+                        <select name="" id="imageSelect">
                             <option selected disabled></option>
-                            <option value=""></option>
+                            {% for image in all_images %}
+                                {% if image: %}
+                                    <option value="{{image}}">{{image}}</option>
+                                {% endif %}
+                            {% endfor %}
                         </select>
                     </td>
                     <td>
-                        <input type="file" id="photoInput" accept="image/*">
+                        <input type="file" id="imageInput" accept="image/*">
                     </td>
                 </tbody>
             </table>
         </div>
         <div>
-            <button class="guncelle-btn" onclick="updatePhoto()">Güncelle</button>
+            <button class="guncelle-btn" onclick="updateImage()">Güncelle</button>
         </div>
     </div>
 </div>
-
+<!-- icon popup -->
 <div class="popup-background" id="iconPopup" style="display: none;">
     <div class="popup-content">
         <button class="close-btn kapat" id="closeIconPopup"><h3>X</h3></button>
@@ -74,7 +78,11 @@
                     <td>
                         <select name="" id="iconSelect">
                             <option selected disabled></option>
-                            <option value=""></option>
+                            {% for icon in all_icon %}
+                                {% if icon: %}
+                                    <option value="{{icon}}">{{icon}}</option>
+                                {% endif %}
+                            {% endfor %}
                         </select>
                     </td>
                     <td>
@@ -93,57 +101,87 @@
     let formData = new FormData();
     var gamename = document.getElementById("gamename");
     var gametext = document.getElementById("gametext");
+
+    // image popup and input select
+    var imageInput = document.getElementById("imageInput");
+    var imageSelect = document.getElementById("imageSelect");
+    var imagePopup = document.getElementById("imagePopup");
+    var closeImagePopup = document.getElementById("closeImagePopup");
+
+    // icon popup and input select
+    var iconInput = document.getElementById("iconInput");
+    var iconSelect = document.getElementById("iconSelect");
+    var iconPopup = document.getElementById("iconPopup");
+    var closeIconPopup = document.getElementById("closeIconPopup");
+
+    
     var path = window.location.pathname;
     var id = path.split('/')[2];
-
-    function showPhotoPopup() {
-        document.getElementById("photoPopup").style.display = "flex";
+    // method for image
+    function showImagePopup() {
+        imagePopup.style.display = "flex";
     }
-    function closePhotoPopup() {
-        document.getElementById("photoPopup").style.display = "none";
+    function offImagePopup() {
+        imagePopup.style.display = "none";
     }
+    closeImagePopup.addEventListener("click", offImagePopup);
 
+    // method for icon
     function showIconPopup() {
-        document.getElementById("iconPopup").style.display = "flex";
+        iconPopup.style.display = "flex";
     }
-    function closeIconPopup() {
-        document.getElementById("iconPopup").style.display = "none";
+    function offIconPopup() {
+        iconPopup.style.display = "none";
     }
-    
-    document.getElementById("closePhotoPopup").addEventListener("click", closePhotoPopup);
+    closeIconPopup.addEventListener("click", offIconPopup);
 
-    document.getElementById("closeIconPopup").addEventListener("click", closeIconPopup);
-
-    function updatePhoto() {
-        var photoInput = document.getElementById('photoInput');
-        
-        var selectedInput = photoInput.files[0];
-        // Eğer dosyadan bir media seçildiyse
-        if (selectedInput) {
-            formData.append('image', selectedInput);
-            console.log(formData.get('image'));
+    function updateImage() {
+        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
+        console.log(imageSelect.value)
+        if (imageSelect.value) {
+            // all image get before update method
+            formData.delete('image_name');
+            formData.append('image_name', imageSelect.value);
+            previewImage.src = "../../static/img/games/images/" + imageSelect.value;
+        } else if (imageInput.files[0]) {
+            formData.delete('image_file');
+            formData.append('image_file', imageInput.files[0]);
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                previewImage.src = event.target.result;
+            };
+            fileReader.readAsDataURL(imageInput.files[0]);
         }
-        closePhotoPopup();
+        
+        offImagePopup();
     }
-
     function updateIcon() {
-        var iconInput = document.getElementById('iconInput');
-        
-        var selectedIcon = iconInput.files[0];
-        // Eğer dosyadan bir media seçildiyse
-        if (selectedIcon) {
-            formData.append('icon', selectedIcon);
-            console.log(formData.get('icon'));
-        }
-        closeIconPopup();
-    }
+        const previewIcon = document.querySelector(".icon"); // Önizleme resmi
 
+        if (iconSelect.value) {
+            // all image get before update method
+            formData.delete('icon_name');
+            formData.append('icon_name', iconSelect.value);
+            previewIcon.src = "../../static/img/games/icon/" + iconSelect.value;
+        } else if (iconInput.files[0]) {
+            formData.delete('icon_file');
+            formData.append('icon_file', iconInput.files[0]);
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                previewIcon.src = event.target.result;
+            };
+            fileReader.readAsDataURL(iconInput.files[0]);
+        }
+        
+        offIconPopup();
+    }
     function updategame()
     {
-        
         formData.append('id', id);
         formData.append('gamename', gamename.value);
         formData.append('gametext', gametext.value);
+        updateImage();
+        updateIcon();
         $.ajax({
             url: "/updategame/" + id, 
             type: "POST",
@@ -151,8 +189,12 @@
             processData: false,  // FormData kullanıldığı için veri işlenmez
             contentType: false,  // ContentType otomatik olarak ayarlanır
             success: function(response) {
-                console.log("Başarıyla güncellendi: ", response.message);
-                location.reload();
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "/gamesadd";
+                } else {
+                    alert(response.message);
+                }
             },
             error: function(error) {
                 console.log("Hata: ", error);

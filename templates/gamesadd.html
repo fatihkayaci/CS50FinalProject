@@ -6,28 +6,30 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h3 class="text-center">Oyun Ekle</h3>
-            <form action="/gamesadd" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
                 <div class="form-group">
-                    <label for="gamename">Oyun İsmi</label>
-                    <input type="text" class="form-control" id="gamename" name="gamename" placeholder="Oyun İsmi" required>
+                    <label for="image">Seçilen Resim</label><br>
+                    <img src="../../static/img/noImage.jpg" 
+                    alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showImagePopup()">
                 </div>
                 <div class="form-group">
-                    <label for="gameImage">Oyun Resmi</label>
-                    <input type="file" class="form-control" id="gameImage" name="gameImage" required>
+                    <label for="image">Seçilen İcon</label><br>
+                    <img src="../../static/img/noImage.jpg" 
+                    alt="photo" class="img-thumbnail icon mb-3" style="width: 150px; height: 150px;" onclick="showIconPopup()">
                 </div>
-                <div class="form-group">
-                    <label for="gameicon">Oyun Icon</label>
-                    <input type="file" class="form-control" id="gameicon" name="gameicon" required>
-                </div>
-                <div class="form-group">
-                    <label for="gametext">Açıklama</label>
-                    <textarea class="form-control" id="gametext" name="gametext" rows="4" placeholder="Oyun Hakkında Bilgi" required></textarea>
-                </div>
-                <a class="btn btn-primary" onclick="addgame()">Oyun Ekle</a>
-            </form>
+            </div>
+            <div class="form-group">
+                <label for="gamename">Oyun İsmi</label>
+                <input type="text" class="form-control" id="gamename" name="gamename" placeholder="Oyun İsmi" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="gametext">Açıklama</label>
+                <textarea class="form-control" id="gametext" name="gametext" rows="4" placeholder="Oyun Hakkında Bilgi" required></textarea>
+            </div>
+            <a class="btn btn-primary" onclick="addgame()">Oyun Ekle</a>
         </div>
     </div>
-
     <!-- Alt Kısım: Kayıtlı Yemekler Tablosu -->
     <div class="row">
         <div class="col-md-12">
@@ -43,23 +45,93 @@
                 </thead>
                 <tbody>
                     {% for game in games %}
-                    <tr>
-                        <td>{{ game.gamename }}</td>
-                        <td>
-                            <img src="{{ game.photopath }}" alt="{{game.gamename}} image" class="img-thumbnail" style="width: 100px; height: 100px;">
-                        </td>
-                        <td>
-                            <img src="{{ game.iconpath }}" alt="{{game.gamename}} icon" class="img-thumbnail" style="width: 100px; height: 100px;">
-                        </td>
-                        <td>{{ game.text }}</td>
-                        <td>
-                            <a href="/updategame/{{game.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
-                            <button type="button" class="btn btn-sm btn-danger" data-id="{{ game.id }}"  onclick="deletegame(this)"><i class="fa fa-trash"></i> Sil</button>
-                        </td>
-                    </tr>
+                        <tr id="game-{{ game.id }}">
+                            <td>{{ game.gamename }}</td>
+                            <td>
+                                <img src="{{ game.photopath if game.photopath else '../../static/img/noImage.jpg' }}" alt="{{game.gamename}} image" class="img-thumbnail" style="width: 100px; height: 100px;">
+                            </td>
+                            <td>
+                                <img src="{{ game.iconpath if game.iconpath else '../../static/img/noImage.jpg' }}" alt="{{game.gamename}} icon" class="img-thumbnail" style="width: 100px; height: 100px;">
+                            </td>
+                            <td>{{ game.text }}</td>
+                            <td>
+                                <a href="/updategame/{{game.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
+                                <button type="button" class="btn btn-sm btn-danger" data-id="{{ game.id }}"  onclick="deletegame(this)"><i class="fa fa-trash"></i> Sil</button>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+    <!-- image popup -->
+    <div class="popup-background" id="imagePopup" style="display: none;">
+        <div class="popup-content">
+            <button class="close-btn kapat" id="closeImagePopup"><h3>X</h3></button>
+            <div>
+                <h3>Media Seç</h3>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <th><p>dosyadan seçme</p></th>
+                        <th><p>bilgisayardan seçme</p></th>
+                    </tr>
+                    <tbody>
+                        <td>
+                            <select name="" id="imageSelect">
+                                <option selected disabled></option>
+                                {% for image in all_images %}
+                                    {% if image: %}
+                                        <option value="{{image}}">{{image}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="file" id="imageInput" accept="image/*">
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <button class="guncelle-btn" onclick="addImage()">Güncelle</button>
+            </div>
+        </div>
+    </div>
+    <!-- icon popup -->
+    <div class="popup-background" id="iconPopup" style="display: none;">
+        <div class="popup-content">
+            <button class="close-btn kapat" id="closeIconPopup"><h3>X</h3></button>
+            <div>
+                <h3>Media Seç</h3>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <th><p>dosyadan seçme</p></th>
+                        <th><p>bilgisayardan seçme</p></th>
+                    </tr>
+                    <tbody>
+                        <td>
+                            <select name="" id="iconSelect">
+                                <option selected disabled></option>
+                                {% for icon in all_icon %}
+                                    {% if icon: %}
+                                        <option value="{{icon}}">{{icon}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="file" id="iconInput" accept="image/*">
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <button class="guncelle-btn" onclick="addIcon()">Güncelle</button>
+            </div>
         </div>
     </div>
 </div>
@@ -68,29 +140,82 @@
     let formData = new FormData();
     var gamename = document.getElementById("gamename");
     var gametext = document.getElementById("gametext");
-    
-    function addMedia() {
-        var gameImage = document.getElementById('gameImage');
-        var gameicon = document.getElementById('gameicon');
-        var selectedImage = gameImage.files[0];
-        var selectedicon = gameicon.files[0];
 
-        if (selectedImage) {
-            formData.append('image', selectedImage);
+    // image popup and input select
+    var imageInput = document.getElementById("imageInput");
+    var imageSelect = document.getElementById("imageSelect");
+    var imagePopup = document.getElementById("imagePopup");
+    var closeImagePopup = document.getElementById("closeImagePopup");
+
+    // icon popup and input select
+    var iconInput = document.getElementById("iconInput");
+    var iconSelect = document.getElementById("iconSelect");
+    var iconPopup = document.getElementById("iconPopup");
+    var closeIconPopup = document.getElementById("closeIconPopup");
+    // method for image
+    function showImagePopup() {
+        imagePopup.style.display = "flex";
+    }
+    function offImagePopup() {
+        imagePopup.style.display = "none";
+    }
+    closeImagePopup.addEventListener("click", offImagePopup);
+
+    // method for icon
+    function showIconPopup() {
+        iconPopup.style.display = "flex";
+    }
+    function offIconPopup() {
+        iconPopup.style.display = "none";
+    }
+    closeIconPopup.addEventListener("click", offIconPopup);
+
+    function addImage() {
+        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
+        console.log(imageSelect.value)
+        if (imageSelect.value) {
+            // all image get before update method
+            formData.delete('image_name');
+            formData.append('image_name', imageSelect.value);
+            previewImage.src = "../../static/img/games/images/" + imageSelect.value;
+        } else if (imageInput.files[0]) {
+            formData.delete('image_file');
+            formData.append('image_file', imageInput.files[0]);
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                previewImage.src = event.target.result;
+            };
+            fileReader.readAsDataURL(imageInput.files[0]);
         }
-        if (selectedicon) {
-            formData.append('icon', selectedicon);
+        
+        offImagePopup();
+    }
+    function addIcon() {
+        const previewIcon = document.querySelector(".icon"); // Önizleme resmi
+
+        if (iconSelect.value) {
+            // all image get before update method
+            formData.delete('icon_name');
+            formData.append('icon_name', iconSelect.value);
+            previewIcon.src = "../../static/img/games/icon/" + iconSelect.value;
+        } else if (iconInput.files[0]) {
+            formData.delete('icon_file');
+            formData.append('icon_file', iconInput.files[0]);
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                previewIcon.src = event.target.result;
+            };
+            fileReader.readAsDataURL(iconInput.files[0]);
         }
+        
+        offIconPopup();
     }
     function addgame()
     {
         formData.append('gamename', gamename.value);
         formData.append('gametext', gametext.value);
-        addMedia();
-        console.log(formData.get('gamename'))
-        console.log(formData.get('gametext'))
-        console.log(formData.get('image'))
-        console.log(formData.get('icon'))
+        addImage();
+        addIcon();
         $.ajax({
             url: "/gamesadd", 
             type: "POST",
@@ -98,19 +223,26 @@
             processData: false,  // FormData kullanıldığı için veri işlenmez
             contentType: false,  // ContentType otomatik olarak ayarlanır
             success: function(response) {
-                console.log("Başarıyla güncellendi: ", response.message);
-                location.reload();
+                if (response.status === "success") {
+                    alert(response.message);
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
             },
             error: function(error) {
                 console.log("Hata: ", error);
             }
         });
     }
+    
     function deletegame(button)
     {
-        let gameid = button.getAttribute('data-id');
-        formData.append('gameid', gameid);
-        console.log("Silinecek ID: ", gameid);
+        let gameId = button.getAttribute('data-id');
+        let row = document.getElementById('game-' + gameId);
+        let formData = new FormData();
+        formData.append('gameid', gameId);
+        console.log("Silinecek ID: ", gameId);
         $.ajax({
             url: "/deletegame", 
             type: "POST",
@@ -118,8 +250,8 @@
             processData: false,  // FormData ile çalışırken bu iki ayarı false yap
             contentType: false,
             success: function(response) {
-                console.log("Başarıyla güncellendi: ", response.message);
-                location.reload();
+                row.remove();
+                alert("Oyun Başarıyla Silindi.");
             },
             error: function(error) {
                 console.log("Hata: ", error);
