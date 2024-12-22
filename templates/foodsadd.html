@@ -118,7 +118,7 @@
         if (imageSelect.value) {
             formData.delete('image_name');
             formData.append('image_name', imageSelect.value);
-            previewImage.src = "../../static/img/mainpage/" + imageSelect.value;
+            previewImage.src = "../../static/img/foods/" + imageSelect.value;
         } else if (imageInput.files[0]) {
             formData.delete('image_file');
 

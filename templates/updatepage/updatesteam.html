@@ -1,0 +1,126 @@
+{% extends "adminlayout.html" %}
+{% block main %}
+<div class="container-fluid mt-4">
+    <h3 class="mb-4">Steam Düzenle</h3>
+    <!-- Label -->
+    <div class="form-group">
+        <label for="steamname">Steam İsmi</label>
+        <input type="text" name="steamname" id="steamname" class="form-control" value="{{ steam.steamname }}">
+    </div>
+    
+    <div class="form-group">
+        <label for="image">Mevcut İcon</label><br>
+        <img  src="../{{ steam.iconpath if steam.iconpath else '../../static/img/noImage.jpg' }}" 
+                alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
+    </div>
+    
+    <div class="form-group">
+        <label for="gamename">Oyun İsmi</label>
+        <input type="text" name="gamename" id="gamename" class="form-control" value="{{ steam.gamename }}">
+    </div>
+    
+    <button type="submit" onclick="updatefood()" class="btn btn-success">Güncelle</button>
+    <a href="/steamsadd" class="btn btn-secondary">İptal</a>
+</div>
+
+<div class="popup-background" id="popup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
+        <div>
+            <h3>Media Seç</h3>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th><p>dosyadan seçme</p></th>
+                    <th><p>bilgisayardan seçme</p></th>
+                </tr>
+                <tbody>
+                    <td>
+                        <select name="" id="imageSelect">
+                            <option selected disabled></option>
+                            {% for image in all_images %}
+                                {% if image: %}
+                                    <option value="{{image}}">{{image}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    var popup = document.getElementById("popup");
+    var closePopup = document.getElementById("closePopup");
+    var imageSelect = document.getElementById("imageSelect");
+    var imageInput = document.getElementById("imageInput");
+    var steamname = document.getElementById("steamname");
+    var gamename = document.getElementById("steamname");
+    let formData = new FormData();
+    var path = window.location.pathname;
+    var id = path.split('/')[2];
+
+    function showPopup() {
+        document.getElementById("popup").style.display = "flex";
+    }
+    function offPopup() {
+        popup.style.display = "none";
+    }
+    closePopup.addEventListener("click", offPopup);
+    function updateMedia() {
+        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
+
+        if (imageSelect.value) {
+            formData.delete('image_name');
+            formData.append('image_name', imageSelect.value);
+            previewImage.src = "../../static/img/foods/" + imageSelect.value;
+        } else if (imageInput.files[0]) {
+            formData.delete('image_file');
+
+            formData.append('image_file', imageInput.files[0]);
+            
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                previewImage.src = event.target.result;
+            };
+            fileReader.readAsDataURL(imageInput.files[0]);
+        }
+        offPopup();
+    }
+
+    function updatefood()
+    {   
+        formData.append('id', id);
+        formData.append('steamname', steamname.value);
+        formData.append('gamename', gamename.value);
+        $.ajax({
+            url: "/updatesteam/" + id, 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "/steamsadd";
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+
+</script>
+{% endblock %}
