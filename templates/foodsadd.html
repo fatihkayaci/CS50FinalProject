@@ -7,10 +7,13 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h3 class="text-center">Yemek Ekle</h3>
+            
             <div class="form-group">
-                <label for="foodImage">Yemek Resmi</label>
-                <input type="file" class="form-control" id="foodImage" name="foodImage">
+                <label for="image">Seçilen Resim</label><br>
+                <img src="../../static/img/noImage.jpg" 
+                        alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
             </div>
+            
             <div class="form-group">
                 <label for="foodName">Yemek İsmi</label>
                 <input type="text" class="form-control" id="foodName" name="foodName" placeholder="Yemek İsmi" required>
@@ -38,7 +41,7 @@
                 </thead>
                 <tbody>
                     {% for food in foods %}
-                        <tr>
+                        <tr id="food-{{ food.id }}">
                             <td>{{ food.label }}</td>
                             <td>
                                 <img src="{{ food.path if food.path else '../../static/img/noImage.jpg' }}" alt="food image" class="img-thumbnail" style="width: 100px; height: 100px;">
@@ -55,22 +58,82 @@
         </div>
     </div>
 
+    <!-- image select popup -->
+    <div class="popup-background" id="popup" style="display: none;">
+        <div class="popup-content">
+            <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
+            <div>
+                <h3>Media Seç</h3>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <th><p>dosyadan seçme</p></th>
+                        <th><p>bilgisayardan seçme</p></th>
+                    </tr>
+                    <tbody>
+                        <td>
+                            <select name="" id="imageSelect">
+                                <option selected disabled></option>
+                                {% for image in all_images %}
+                                    {% if image: %}
+                                        <option value="{{image}}">{{image}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="file" id="imageInput" accept="image/*">
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <button class="guncelle-btn" onclick="addMedia()">Güncelle</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     var foodName = document.getElementById("foodName");
     var foodText = document.getElementById("foodText");
+    var imageInput = document.getElementById("imageInput");
+    var imageSelect = document.getElementById("imageSelect");
+    var popup = document.getElementById("popup");
+    var closePopup = document.getElementById("closePopup");
     let formData = new FormData();
     
-    function addMedia() {
-        var foodImage = document.getElementById('foodImage');
-        var selectedImage = foodImage.files[0];
-
-        if (selectedImage) {
-            formData.append('image', selectedImage);
-        }
+    function showPopup() {
+        popup.style.display = "flex";
     }
+    function offPopup() {
+        popup.style.display = "none";
+    }
+    closePopup.addEventListener("click", offPopup);
+    function addMedia() {
+        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
+
+        if (imageSelect.value) {
+            formData.delete('image_name');
+            formData.append('image_name', imageSelect.value);
+            previewImage.src = "../../static/img/mainpage/" + imageSelect.value;
+        } else if (imageInput.files[0]) {
+            formData.delete('image_file');
+
+            formData.append('image_file', imageInput.files[0]);
+            
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                previewImage.src = event.target.result;
+            };
+            fileReader.readAsDataURL(imageInput.files[0]);
+        }
+        
+        offPopup();
+    }
+    
     function addfood()
     {
         formData.append('foodName', foodName.value);
@@ -84,17 +147,25 @@
             processData: false,  // FormData kullanıldığı için veri işlenmez
             contentType: false,  // ContentType otomatik olarak ayarlanır
             success: function(response) {
-                console.log("Başarıyla güncellendi: ", response.message);
-                location.reload();
+                if (response.status === "success") {
+                    alert(response.message);
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
             },
             error: function(error) {
                 console.log("Hata: ", error);
+                alert("Bir hata oluştu.");
             }
         });
     }
+
     function deletefood(button)
     {
         let foodId = button.getAttribute('data-id');
+        let row = document.getElementById('food-' + foodId);
+        let formData = new FormData();
         formData.append('foodid', foodId);
         console.log("Silinecek ID: ", foodId);
         $.ajax({
@@ -104,8 +175,9 @@
             processData: false,  // FormData ile çalışırken bu iki ayarı false yap
             contentType: false,
             success: function(response) {
-                console.log("Başarıyla güncellendi: ", response.message);
-                location.reload();
+                row.remove();
+                alert("Yemek başarıyla silindi.");
+
             },
             error: function(error) {
                 console.log("Hata: ", error);

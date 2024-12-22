@@ -163,32 +163,39 @@ def updatecomputerfields(id):
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     return render_template("/updatepage/updatecomputerfields.html", computerfields=computerfields, all_images=all_images)
 
-
+# ------------------------------------------------------foods process start------------------------------------------------------
 # foods process
 @app.route("/foodsadd", methods=['GET', 'POST'])
 def foodsadd():
     if request.method == "POST":
         foodname = request.form.get('foodName')
         foodtext = request.form.get('foodText')
-        foodimage = request.files.get('image')
-        if not foodname and not foodtext and not foodimage:
-            return jsonify({"success": False, "message": f"Hata oluştu: hepsi boş kaldı doldurunuz"})
-        if foodimage and foodimage.filename:  
-            if allowed_file(foodimage.filename):
-                filename = secure_filename(foodimage.filename)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
-                newfood = tblfoods(path=file_path, label=foodname, text=foodtext)
-                db.session.add(newfood)
+        image_file = request.files.get('image_file')
+        image_name = request.form.get('image_name')
+        if not foodname and not foodtext and not (image_name or image_file):
+            return jsonify({"success": False, "message": "Hata oluştu: Tüm alanlar boş bırakılamaz. Lütfen doldurunuz."})
+        file_path=''
+        if image_file and allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
             if not os.path.exists(file_path):
-                foodimage.save(file_path)
-        elif not foodimage :
-            newfood = tblfoods(path="", label=foodname, text=foodtext)
-            db.session.add(newfood)
+                image_file.save(file_path)
+        elif image_name and allowed_file(image_name):
+            filename = secure_filename(image_name)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
+        newfood = tblfoods(path = file_path, label=foodname, text=foodtext)
+        db.session.add(newfood)
 
         db.session.commit()        
-        return render_template("/foodsadd.html")
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
+    
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'foods')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     foods = tblfoods.query.all()
-    return render_template("/foodsadd.html", foods=foods)
+    return render_template("/foodsadd.html", foods=foods, all_images=all_images)
 
 # delete food
 @app.route("/deletefood", methods=['GET', 'POST'])
@@ -209,34 +216,45 @@ def deletefood():
 @app.route("/updatefood/<int:id>", methods=['GET', 'POST'])
 def updatefood(id):
     if request.method == "POST":
-        all_images = []
-        target_folder = os.path.join(UPLOAD_FOLDER, 'mainpage')
-        if os.path.exists(target_folder):
-            all_images = [file for file in os.listdir(target_folder) 
-                        if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
         id = request.form.get('id')
         label = request.form.get("label")
         text = request.form.get("text")
-        image = request.files.get('image')
+        image_file = request.files.get('image_file')
+        image_name = request.form.get('image_name')
         foods = tblfoods.query.filter_by(id = id).first()
         if foods:
             foods.label = label
             foods.text = text
-            if image:    
-                if allowed_file(image.filename):
-                    filename = secure_filename(image.filename)  # Dosya adını güvenli hale getir
+            if image_file:    
+                if allowed_file(image_file.filename):
+                    filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
                     file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
                     foods.path = file_path
                 if not os.path.exists(file_path):
-                    image.save(file_path)
-
+                    image_file.save(file_path)
+            elif image_name:
+                if allowed_file(image_name):
+                    filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
+                    foods.path = file_path
+        
         db.session.commit()
-        return render_template('/foodsadd.html')
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
 
     foods = tblfoods.query.filter_by(id = id).first()
     if foods is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
-    return render_template("/updatepage/updatefood.html", foods=foods)
+        
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'foods')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    return render_template("/updatepage/updatefood.html", foods=foods, all_images=all_images)
+
+# ------------------------------------------------------foods process end------------------------------------------------------
+
+
 # games process
 def savefilegames(file, upload_folder, subfolder='games/'):
     """Dosyayı güvenli bir şekilde kaydeder ve dosya yolu döner."""
