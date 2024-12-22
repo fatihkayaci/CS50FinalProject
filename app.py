@@ -1,7 +1,7 @@
 import os
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask.templating import render_template
-from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams
+from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice
 from flask_migrate import Migrate, migrate
 from werkzeug.utils import secure_filename
 
@@ -469,6 +469,91 @@ def updatesteam(id):
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     return render_template("/updatepage/updatesteam.html", steam=steam, all_images=all_images)
 # ------------------------------------------------------ steam process end ------------------------------------------------------
+
+# ------------------------------------------------------ service process start ------------------------------------------------------
+@app.route("/service", methods=['GET', 'POST'])
+def service():
+    if request.method == "POST":
+        servicename = request.form.get('servicename')
+        image_file = request.files.get('image_file')
+        image_name = request.form.get('image_name')
+        
+        if not servicename and not (image_name or image_file):
+            return jsonify({"success": False, "message": "Hata oluştu: Tüm alanlar boş bırakılamaz. Lütfen doldurunuz."})
+        
+        file_path=''
+        if image_file and allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'service/', filename)
+            if not os.path.exists(file_path):
+                image_file.save(file_path)
+        elif image_name and allowed_file(image_name):
+            filename = secure_filename(image_name)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'service/', filename)
+        newservice = tblservice(imagepath = file_path, name=servicename)
+        db.session.add(newservice)
+        db.session.commit()        
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
+    
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'service')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    
+    services = tblservice.query.all()
+    return render_template("/service.html", services=services, all_images=all_images)
+
+@app.route("/deleteservice", methods=['GET', 'POST'])
+def deleteservice():
+    if request.method == "POST":
+        serviceid = request.form.get('serviceid')
+        if not serviceid:  # foodid boşsa hata dön
+            return {'status': 'error', 'message': 'Game ID is missing'}, 400
+        delete = tblservice.query.get(serviceid)
+        if delete:
+            db.session.delete(delete)
+            db.session.commit()
+        return 'succesfull'
+    return 'str'
+
+@app.route("/updateservice/<int:id>", methods=['GET', 'POST'])
+def updateservice(id):
+    if request.method == "POST":
+        id = request.form.get('id')
+        servicename = request.form.get("servicename")
+        image_file = request.files.get('image_file')
+        image_name = request.form.get('image_name')
+        service = tblservice.query.filter_by(id = id).first()
+        if service:
+            service.name = servicename
+            if image_file and allowed_file(image_file.filename):
+                filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'service/', filename)
+                service.imagepath = file_path
+                if not os.path.exists(file_path):
+                    image_file.save(file_path)
+            elif image_name and allowed_file(image_name):
+                filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'service/', filename)
+                service.imagepath = file_path
+        
+        db.session.commit()
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
+
+    service = tblservice.query.filter_by(id = id).first()
+
+    if service is None:
+        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
+        
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'service')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+        
+    return render_template("/updatepage/updateservice.html", service=service, all_images=all_images)
+# ------------------------------------------------------ service process end ------------------------------------------------------
 
 
 

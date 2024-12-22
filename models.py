@@ -54,3 +54,7 @@ class tblsteams(db.Model):
     gamename = db.Column(db.String(100), unique=False, nullable=True)
     steamname = db.Column(db.String(100), unique=False, nullable=True)
 
+class tblservice(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    imagepath = db.Column(db.String(50), unique=False, nullable=True)
+    name = db.Column(db.String(100), unique=False, nullable=True)
