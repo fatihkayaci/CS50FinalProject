@@ -61,13 +61,13 @@ def login():
 # ------------------------------------------------------login end------------------------------------------------------
 # ------------------------------------------------------Mainpage process start------------------------------------------------------
 @app.route("/indexa", methods=["GET", "POST"])
-##@login_required
+@login_required
 def indexa():                   
     mediawithtext = tblmediaandtext.query.all()
     return render_template("indexa.html", mediawithtext=mediawithtext)
 
 @app.route("/updatemainpage/<int:id>", methods=['GET', 'POST'])
-##@login_required
+@login_required
 def updatemainpage(id):        
     if request.method == "POST":
         id = request.form.get('id')
@@ -112,13 +112,13 @@ def updatemainpage(id):
 # ------------------------------------------------------computer fields process start------------------------------------------------------
 
 @app.route("/computerfields")
-##@login_required
+@login_required
 def computerfields():
     computers = tblcomputerfiles.query.all()
     return render_template("/computerfields.html", computers = computers)
 
 @app.route("/updatecomputerfields/<int:id>", methods=['GET', 'POST'])
-##@login_required
+@login_required
 def updatecomputerfields(id):        
     if request.method == "POST":
         id = request.form.get('id')
@@ -175,7 +175,7 @@ def updatecomputerfields(id):
 # ------------------------------------------------------foods process start------------------------------------------------------
 # foods process
 @app.route("/foodsadd", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def foodsadd():
     if request.method == "POST":
         foodname = request.form.get('foodName')
@@ -224,7 +224,7 @@ def deletefood():
 
 #update food
 @app.route("/updatefood/<int:id>", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def updatefood(id):
     if request.method == "POST":
         id = request.form.get('id')
@@ -267,7 +267,7 @@ def updatefood(id):
 
 # ------------------------------------------------------ games process start ------------------------------------------------------
 @app.route("/gamesadd", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def gamesadd():
     if request.method == "POST":
         gamename = request.form.get('gamename')
@@ -332,7 +332,7 @@ def deletegame():
     return 'str'
 
 @app.route("/updategame/<int:id>", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def updategame(id):
     if request.method == "POST":
         id = request.form.get('id')
@@ -396,7 +396,7 @@ def updategame(id):
 
 # ------------------------------------------------------ steam process start ------------------------------------------------------
 @app.route("/steamsadd", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def steamsadd():
     if request.method == "POST":
         steamname = request.form.get('steamName')
@@ -445,7 +445,7 @@ def deletesteam():
     return 'str'
 
 @app.route("/updatesteam/<int:id>", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def updatesteam(id):
     if request.method == "POST":
         id = request.form.get('id')
@@ -487,7 +487,7 @@ def updatesteam(id):
 
 # ------------------------------------------------------ service process start ------------------------------------------------------
 @app.route("/service", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def service():
     if request.method == "POST":
         servicename = request.form.get('servicename')
@@ -534,7 +534,7 @@ def deleteservice():
     return 'str'
 
 @app.route("/updateservice/<int:id>", methods=['GET', 'POST'])
-##@login_required
+@login_required
 def updateservice(id):
     if request.method == "POST":
         id = request.form.get('id')
@@ -573,7 +573,7 @@ def updateservice(id):
 # ------------------------------------------------------ service process end ------------------------------------------------------
 # ------------------------------------------------------ settings process start ------------------------------------------------------
 @app.route("/settings", methods=['GET', 'POST'])
-##@login_required
+@login_required
 def settings():
     all_images = []
     target_folder = os.path.join(UPLOAD_FOLDER, 'generalsettings')
@@ -585,7 +585,7 @@ def settings():
     return render_template("/settings.html", all_images=all_images, setting=setting, user=user)
 
 @app.route("/updatesettings", methods=['GET', 'POST'])
-##@login_required
+@login_required
 def updatesettings():
     if request.method == "POST":   
         id = session['user_id']
@@ -630,7 +630,10 @@ def updatesettings():
     return 'str'
 # ------------------------------------------------------ settings process end ------------------------------------------------------
 # ------------------------------------------------------ logut process end ------------------------------------------------------
-
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
 
 if __name__ == '__main__':
     app.run(debug=True)
