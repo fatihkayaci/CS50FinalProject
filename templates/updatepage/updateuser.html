@@ -1,0 +1,54 @@
+{% extends "adminlayout.html" %}
+{% block main %}
+<div class="container-fluid mt-4">
+    <h3 class="mb-4">Kullanıcı Düzenle</h3>
+    <!-- Label -->
+    <div class="form-group">
+        <label for="username">Kullancı İsmi</label>
+        <input type="text" name="username" id="username" class="form-control" value="{{ user.user_name }}">
+    </div>
+    
+    <div class="form-group">
+        <label for="password">Yemek Açıklama</label>
+        <input type="text" name="password" id="password" class="form-control" value="{{ user.password }}">
+    </div>
+
+    <button type="submit" onclick="updateuser()" class="btn btn-success">Güncelle</button>
+    <a href="/useradd" class="btn btn-secondary">İptal</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    
+    var username = document.getElementById("username");
+    var password = document.getElementById("password");
+    let formData = new FormData();
+    var path = window.location.pathname;
+    var id = path.split('/')[2];
+
+    function updateuser()
+    {   
+        formData.append('id', id);
+        formData.append('username', username.value);
+        formData.append('password', password.value);
+        $.ajax({
+            url: "/updateuser/" + id, 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "/useradd";
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+
+</script>
+{% endblock %}

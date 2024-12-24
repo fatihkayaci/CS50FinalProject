@@ -1,0 +1,118 @@
+{% extends "adminlayout.html" %}
+
+{% block main %}
+<div class="container-fluid mt-4">
+
+    <!-- Üst Kısım: Yemek Ekleme Formu -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h3 class="text-center">Kullanıcı Ekle</h3>
+
+            <div class="form-group">
+                <label for="username">Kullanıcı Adı</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Kullanıcı Adı" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Şifre</label>
+                <input type="text" class="form-control" id="password" name="password" placeholder="Şifre Giriniz" required>
+            </div>
+            <div class="form-group">
+                <label for="passwordagain">Şifre Tekrarı</label>
+                <input type="text" class="form-control" id="passwordagain" name="passwordagain" placeholder="Şifreyi Tekrar Giriniz" required>
+            </div>
+            <a type="button" class="btn btn-primary" onclick="addUser()">Kullanıcı Ekle</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center mb-4">Kayıtlı Kullanıcılar</h3>
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Kullanıcı İsmi</th>
+                        <th>Şifre</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr id="food-{{ user.id }}">
+                            <td>{{ user.user_name }}</td>
+                            <td>{{ user.password }}</td>
+                            <td>
+                                <a href="/updateuser/{{user.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
+                                <button type="button" class="btn btn-sm btn-danger" data-id="{{ user.id }}"  onclick="deleteuser(this)"><i class="fa fa-trash"></i> Sil</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    var username = document.getElementById("username");
+    var password = document.getElementById("password");
+    var passwordagain = document.getElementById("passwordagain");
+
+    let formData = new FormData();
+
+    function addUser()
+    {
+        if (password.value != passwordagain.value)
+        {
+            alert("şifreler aynı değil");
+        }
+        else
+        {
+            formData.append('username', username.value);
+            formData.append('password', password.value);
+        }
+        
+        $.ajax({
+            url: "/useradd", 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+                alert("Bir hata oluştu.");
+            }
+        });
+    }
+
+    function deleteuser(button)
+    {
+        let userid = button.getAttribute('data-id');
+        let row = document.getElementById('user-' + userid);
+        let formData = new FormData();
+        formData.append('userid', userid);
+        $.ajax({
+            url: "/deleteuser", 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData ile çalışırken bu iki ayarı false yap
+            contentType: false,
+            success: function(response) {
+                row.remove();
+                alert("Kullanıcı başarıyla silindi.");
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -629,11 +629,71 @@ def updatesettings():
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     return 'str'
 # ------------------------------------------------------ settings process end ------------------------------------------------------
-# ------------------------------------------------------ logut process end ------------------------------------------------------
+# ------------------------------------------------------ users process start ------------------------------------------------------
+@app.route("/useradd", methods=['GET', 'POST'])
+@login_required
+def useradd():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        
+        if not username or not password:
+            return jsonify({"message": "Kullanıcı Kaydedilemedi: Eksik Bilgi.", "status": "error"}), 400
+        
+        existing_user = tblusers.query.filter_by(user_name=username).first()
+        if existing_user:
+            return jsonify({"message": "Kullanıcı Zaten Mevcut.", "status": "error"}), 400
+        
+        # Yeni kullanıcı oluşturma
+        new_user = tblusers(user_name=username, password=password)
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            return jsonify({"message": "Kullanıcı Başarıyla Kaydedildi.", "status": "success"}), 201
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"message": f"Hata: {str(e)}", "status": "error"}), 500
+    users = tblusers.query.filter(tblusers.id != session['user_id']).all()
+    return render_template("useradd.html", users=users)
+
+@app.route("/deleteuser", methods=['GET', 'POST'])
+def deleteuser():
+    if request.method == "POST":
+        userid = request.form.get('userid')
+        if not userid:
+            return {'status': 'error', 'message': 'Game ID is missing'}, 400
+        delete = tblusers.query.get(userid)
+        if delete:
+            db.session.delete(delete)
+            db.session.commit()
+        return 'succesfull'
+    return 'str'
+
+@app.route("/updateuser/<int:id>", methods=['GET', 'POST'])
+@login_required
+def updateuser(id):
+    if request.method == "POST":   
+        id = request.form.get("id")
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if not username or not password :return jsonify({"message": "Bütün alanlar boş kaldı lütfen doldurunuz", "status": "error"}), 400
+        if not id: return jsonify({"message": "Kullanıcıyı Kontrol ediniz.", "status": "error"}), 400
+        
+        user = tblusers.query.filter_by(id = id).first()
+        if user:
+            user.user_name = username
+            user.password = password
+
+        db.session.commit()
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
+    user = tblusers.query.filter_by(id = id).first()
+    return render_template("/updatepage/updateuser.html", user=user)
+# ------------------------------------------------------ logut process start ------------------------------------------------------
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/login")
+# ------------------------------------------------------ logut process end ------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)
