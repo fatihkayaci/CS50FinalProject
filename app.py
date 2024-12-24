@@ -1,10 +1,10 @@
 import os
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask.templating import render_template
-from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice
+from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings
 from flask_migrate import Migrate, migrate
 from werkzeug.utils import secure_filename
-
+from helpers import login_required
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -34,14 +34,16 @@ def cafeattribute():
     return render_template("cafeattribute.html")
 
 # admin paneli
+# ------------------------------------------------------login start------------------------------------------------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    session.clear()
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
         if not username:
             flash("Kullanıcı Adı Giriniz!")
-            return render_template("/login.html") 
+            return render_template("/login.html")
 
         if not password:
             flash("Şifrenizi Giriniz!")
@@ -49,19 +51,23 @@ def login():
         
         user = tblusers.query.filter_by(user_name = username).first()
         if user and user.password == password:
-            return render_template("/indexa.html", user = user)
+            session["user_id"] = user.id
+            mediawithtext = tblmediaandtext.query.all()
+            return render_template("/indexa.html", mediawithtext=mediawithtext)
         else:
             return render_template("/login.html")
         
-        # profiles = users.query.all()
     return render_template("/login.html")
-
+# ------------------------------------------------------login end------------------------------------------------------
+# ------------------------------------------------------Mainpage process start------------------------------------------------------
 @app.route("/indexa", methods=["GET", "POST"])
+##@login_required
 def indexa():                   
-    mediawithtext = tblmediaandtext.query.filter_by(page_name = "mainpage").all()
+    mediawithtext = tblmediaandtext.query.all()
     return render_template("indexa.html", mediawithtext=mediawithtext)
 
 @app.route("/updatemainpage/<int:id>", methods=['GET', 'POST'])
+##@login_required
 def updatemainpage(id):        
     if request.method == "POST":
         id = request.form.get('id')
@@ -102,14 +108,17 @@ def updatemainpage(id):
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
         
     return render_template("/updatepage/updatemainpage.html", mediawithtext=mediawithtext, all_images=all_images)
-    
-# computer fields process
+# ------------------------------------------------------Mainpage process end------------------------------------------------------
+# ------------------------------------------------------computer fields process start------------------------------------------------------
+
 @app.route("/computerfields")
+##@login_required
 def computerfields():
     computers = tblcomputerfiles.query.all()
     return render_template("/computerfields.html", computers = computers)
 
 @app.route("/updatecomputerfields/<int:id>", methods=['GET', 'POST'])
+##@login_required
 def updatecomputerfields(id):        
     if request.method == "POST":
         id = request.form.get('id')
@@ -162,10 +171,11 @@ def updatecomputerfields(id):
         all_images = [file for file in os.listdir(target_folder) 
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     return render_template("/updatepage/updatecomputerfields.html", computerfields=computerfields, all_images=all_images)
-
+# ------------------------------------------------------computer fields process end------------------------------------------------------
 # ------------------------------------------------------foods process start------------------------------------------------------
 # foods process
 @app.route("/foodsadd", methods=['GET', 'POST'])
+#@login_required
 def foodsadd():
     if request.method == "POST":
         foodname = request.form.get('foodName')
@@ -214,6 +224,7 @@ def deletefood():
 
 #update food
 @app.route("/updatefood/<int:id>", methods=['GET', 'POST'])
+#@login_required
 def updatefood(id):
     if request.method == "POST":
         id = request.form.get('id')
@@ -256,6 +267,7 @@ def updatefood(id):
 
 # ------------------------------------------------------ games process start ------------------------------------------------------
 @app.route("/gamesadd", methods=['GET', 'POST'])
+#@login_required
 def gamesadd():
     if request.method == "POST":
         gamename = request.form.get('gamename')
@@ -320,6 +332,7 @@ def deletegame():
     return 'str'
 
 @app.route("/updategame/<int:id>", methods=['GET', 'POST'])
+#@login_required
 def updategame(id):
     if request.method == "POST":
         id = request.form.get('id')
@@ -383,6 +396,7 @@ def updategame(id):
 
 # ------------------------------------------------------ steam process start ------------------------------------------------------
 @app.route("/steamsadd", methods=['GET', 'POST'])
+#@login_required
 def steamsadd():
     if request.method == "POST":
         steamname = request.form.get('steamName')
@@ -431,6 +445,7 @@ def deletesteam():
     return 'str'
 
 @app.route("/updatesteam/<int:id>", methods=['GET', 'POST'])
+#@login_required
 def updatesteam(id):
     if request.method == "POST":
         id = request.form.get('id')
@@ -472,6 +487,7 @@ def updatesteam(id):
 
 # ------------------------------------------------------ service process start ------------------------------------------------------
 @app.route("/service", methods=['GET', 'POST'])
+#@login_required
 def service():
     if request.method == "POST":
         servicename = request.form.get('servicename')
@@ -518,6 +534,7 @@ def deleteservice():
     return 'str'
 
 @app.route("/updateservice/<int:id>", methods=['GET', 'POST'])
+##@login_required
 def updateservice(id):
     if request.method == "POST":
         id = request.form.get('id')
@@ -554,7 +571,65 @@ def updateservice(id):
         
     return render_template("/updatepage/updateservice.html", service=service, all_images=all_images)
 # ------------------------------------------------------ service process end ------------------------------------------------------
+# ------------------------------------------------------ settings process start ------------------------------------------------------
+@app.route("/settings", methods=['GET', 'POST'])
+##@login_required
+def settings():
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, 'generalsettings')
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    setting = tblsettings.query.first()
+    user = tblusers.query.filter_by(id = session['user_id']).first()
+    return render_template("/settings.html", all_images=all_images, setting=setting, user=user)
 
+@app.route("/updatesettings", methods=['GET', 'POST'])
+##@login_required
+def updatesettings():
+    if request.method == "POST":   
+        id = session['user_id']
+        username = request.form.get("username")
+        password = request.form.get("password")
+        passwordagain = request.form.get("passwordagain")
+
+        companyname = request.form.get("companyname")
+        image_file = request.files.get('image_file')
+        image_name = request.form.get('image_name')
+        phonenumber = request.form.get("phonenumber")
+        email = request.form.get("mail")
+        adress = request.form.get("address")
+
+        if password != passwordagain: return jsonify({"message": "Şifreler Aynı Değil Lütfen Tekrar Kontrol Ediniz.", "status": "error"}), 400
+        if not companyname and not (image_file or image_name) and not phonenumber and not email and not adress and not username:return jsonify({"message": "Bütün alanlar boş kaldı lütfen doldurunuz", "status": "error"}), 400
+        if not id: return jsonify({"message": "Kullanıcıyı Kontrol ediniz.", "status": "error"}), 400
+        
+        user = tblusers.query.filter_by(id = id).first()
+        if user:
+            user.user_name = username
+            if password == passwordagain:user.password = password
+        settings = tblsettings.query.first()
+        if settings:
+            settings.name = companyname
+            settings.number = phonenumber
+            settings.mail = email
+            settings.adress = adress
+            if image_file and allowed_file(image_file.filename):
+                filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'generalsettings/', filename)
+                settings.logopath = file_path
+                if not os.path.exists(file_path):
+                    image_file.save(file_path)
+            elif image_name and allowed_file(image_name):
+                filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'generalsettings/', filename)
+                settings.logopath = file_path
+        
+        db.session.commit()
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
+    return 'str'
+# ------------------------------------------------------ settings process end ------------------------------------------------------
+# ------------------------------------------------------ logut process end ------------------------------------------------------
 
 
 if __name__ == '__main__':

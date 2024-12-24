@@ -1,0 +1,230 @@
+{% extends "adminlayout.html" %}
+
+{% block main %}
+
+<ul class="nav nav-tabs" id="settingsTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="genel-tab" data-bs-toggle="tab" data-bs-target="#genel" type="button" role="tab" aria-controls="genel" aria-selected="true">Site Genel Ayarlar</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="iletisim-tab" data-bs-toggle="tab" data-bs-target="#iletisim" type="button" role="tab" aria-controls="iletisim" aria-selected="false">İletişim Ayarları</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="kullanici-tab" data-bs-toggle="tab" data-bs-target="#kullanici" type="button" role="tab" aria-controls="kullanici" aria-selected="false">Kullanıcı Ayarları</button>
+    </li>
+</ul>
+
+<div class="tab-content mt-3" id="settingsTabContent">
+    <div class="tab-pane fade show active" id="genel" role="tabpanel" aria-labelledby="genel-tab">
+        <h3>Site Genel Ayarlar</h3>
+        <div class="form-group">
+            <label for="companyname">İsim</label>
+            <input type="text" class="form-control" id="companyname" name="companyname" placeholder="Dükkan İsmi" value="{{setting.name}}">
+        </div>
+        <div class="form-group">
+            <label for="image">Seçilen Logo</label><br>
+            
+            <img src="{{ setting.logopath if setting.logopath else '../../static/img/noImage.jpg' }}"
+            alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
+        </div>
+    </div>
+    <div class="tab-pane fade" id="iletisim" role="tabpanel" aria-labelledby="iletisim-tab">
+        <h3>İletişim Ayarları</h3>
+        <div class="form-group">
+            <label for="phonenumber">İletişim Numarası</label>
+            <input type="number" class="form-control" id="phonenumber" name="phonenumber" placeholder="İletişim Numarası" value="{{setting.number}}" min="0">
+        </div>
+        <div class="form-group">
+            <label for="mail">E-Mail</label>
+            <input type="text" class="form-control" id="mail" name="mail" value="{{setting.mail}}" placeholder="Email Adress Giriniz">
+        </div>
+        <div class="form-group">
+            <label for="address">Adres</label>
+            <input type="text" class="form-control" id="address" name="address" value="{{setting.adress}}" placeholder="Adres Giriniz">
+        </div>
+    </div>
+    <div class="tab-pane fade" id="kullanici" role="tabpanel" aria-labelledby="kullanici-tab">
+        <h3>Kullanıcı Ayarları</h3>
+        <div class="form-group">
+            <label for="username">Kullanıcı Adı</label>
+            <input type="text" class="form-control" id="username" name="username" value="{{user.user_name}}" placeholder="Kullanıcı Adı">
+        </div>
+        <div class="form-group">
+            <label for="password">Şifre</label>
+            <input type="password" class="form-control" id="password" name="password" value="{{user.password}}" placeholder="Şifrenizi Giriniz">
+        </div>
+        <div class="form-group">
+            <label for="passwordagain">Şifre Tekrarı</label>
+            <input type="password" class="form-control" id="passwordagain" name="passwordagain" value="{{user.password}}" placeholder="Şifrenizi Tekrar Giriniz">
+        </div>
+    </div>
+    <a type="button" class="btn btn-primary" onclick="updateSettings()">Ayarları Güncelle</a>
+</div>
+
+<div class="popup-background" id="popup" style="display: none;">
+    <div class="popup-content">
+        <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
+        <div>
+            <h3>Media Seç</h3>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th><p>dosyadan seçme</p></th>
+                    <th><p>bilgisayardan seçme</p></th>
+                </tr>
+                <tbody>
+                    <td>
+                        <select name="" id="imageSelect">
+                            <option selected disabled></option>
+                            {% for image in all_images %}
+                                {% if image: %}
+                                    <option value="{{image}}">{{image}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button class="guncelle-btn" onclick="addMedia()">Güncelle</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Script -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    var companyname = document.getElementById("companyname");
+    var imageInput = document.getElementById("imageInput");
+    var imageSelect = document.getElementById("imageSelect");
+    var number = document.getElementById("number");
+    var mail = document.getElementById("mail");
+    var address = document.getElementById("address");
+    var username = document.getElementById("username");
+    var password = document.getElementById("password");
+    var passwordagain = document.getElementById("passwordagain");
+    var popup = document.getElementById("popup");
+    var closePopup = document.getElementById("closePopup");
+    let formData = new FormData();
+    
+    function showPopup() {
+        popup.style.display = "flex";
+    }
+    function offPopup() {
+        popup.style.display = "none";
+    }
+    closePopup.addEventListener("click", offPopup);
+    function addMedia() {
+        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
+
+        if (imageSelect.value) {
+            formData.delete('image_name');
+            formData.append('image_name', imageSelect.value);
+            previewImage.src = "../../static/img/generalsettings/" + imageSelect.value;
+        } else if (imageInput.files[0]) {
+            formData.delete('image_file');
+
+            formData.append('image_file', imageInput.files[0]);
+            
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                previewImage.src = event.target.result;
+            };
+            fileReader.readAsDataURL(imageInput.files[0]);
+        }
+        
+        offPopup();
+    }
+    
+    function updateSettings()
+    {
+        if (password.value != passwordagain.value)
+        {
+            alert("Lütfen Şifreler eşleşmiyor eşleştirelim!")      
+        }
+        else
+        {
+            formData.append('companyname', companyname.value);
+            formData.append('phonenumber', phonenumber.value);
+            formData.append('mail', mail.value);
+            formData.append('address', address.value);
+            formData.append('username', username.value);
+            formData.append('password', password.value);
+            formData.append('passwordagain', passwordagain.value);
+            addMedia();
+            $.ajax({
+                url: "/updatesettings", 
+                type: "POST",
+                data: formData,
+                processData: false,  
+                contentType: false,  
+                success: function(response) {
+                    if (response.status === "success") {
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(error) {
+                    console.log("Hata: ", error);
+                    alert("Bir hata oluştu.");
+                }
+            });
+        }
+    }
+
+    function deletefood(button)
+    {
+        let foodId = button.getAttribute('data-id');
+        let row = document.getElementById('food-' + foodId);
+        let formData = new FormData();
+        formData.append('foodid', foodId);
+        console.log("Silinecek ID: ", foodId);
+        $.ajax({
+            url: "/deletefood", 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData ile çalışırken bu iki ayarı false yap
+            contentType: false,
+            success: function(response) {
+                row.remove();
+                alert("Yemek başarıyla silindi.");
+
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+            }
+        });
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll("#settingsTab .nav-link");
+        const tabPanes = document.querySelectorAll(".tab-pane");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                // Tüm sekmeleri pasif hale getir
+                tabs.forEach(t => t.classList.remove("active"));
+                tabPanes.forEach(pane => pane.classList.remove("show", "active"));
+
+                // Seçilen sekmeyi aktif hale getir
+                this.classList.add("active");
+                const targetPane = document.querySelector(this.dataset.bsTarget);
+                targetPane.classList.add("show", "active");
+            });
+        });
+    });
+</script>
+
+{% endblock %}

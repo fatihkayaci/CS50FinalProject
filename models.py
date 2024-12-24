@@ -58,3 +58,11 @@ class tblservice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     imagepath = db.Column(db.String(50), unique=False, nullable=True)
     name = db.Column(db.String(100), unique=False, nullable=True)
+
+class tblsettings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=False, nullable=False, default="Dost Oyun Merkezi")
+    logopath = db.Column(db.String(50), unique=False, nullable=False, default="img/generalsettings/logo.webp")
+    number = db.Column(db.String(100), unique=False, nullable=False, default="05302090732")
+    mail = db.Column(db.String(100), unique=False, nullable=False, default="posta@teknikdost.com")
+    adress = db.Column(db.String(100), unique=False, nullable=False, default="Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul")

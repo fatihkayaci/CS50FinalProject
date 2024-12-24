@@ -1,9 +1,15 @@
 
+
+
+-- settings
+INSERT INTO tblsettings (name, logopath, number, mail, adress) VALUES('Dost Oyun Merkezi', 'img/generalsettings/logo.webp', '05302090732', 'posta@teknikdost.com', 'Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul');
+
+-- users
+INSERT INTO tblusers (user_name, password) VALUES('admin', 'admin');
+
+--steam
 INSERT INTO tblsteams (gamename, iconpath, steamname) VALUES('Tomb Raider', 'static/img/games/tombraidericon.png', 'dostcafe1');
 
-icon
-gamename
-steamname
 --games
 INSERT INTO tblgames (gamename, iconpath, photopath, text) VALUES('Tomb Raider', 'static/img/games/tombraidericon.png', 'static/img/games/tombraiderphoto.jpg', 'Çok güzel oyun');
 
