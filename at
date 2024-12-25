@@ -1,6 +1,5 @@
 
 
-
 -- settings
 INSERT INTO tblsettings (name, logopath, number, mail, adress) VALUES('Dost Oyun Merkezi', 'img/generalsettings/logo.webp', '05302090732', 'posta@teknikdost.com', 'Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul');
 

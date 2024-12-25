@@ -1,6 +1,4 @@
-{% extends "layout.html" %}
-
-
+{%extends "users/layout.html" %}
 {% block main %}
     <main>
         <div class="mainHizmet">
@@ -25,130 +23,69 @@
             <h2><span>Bilgisayar</span></h2>
         </div>
         <div class="hakkInside">
-            <div class="hakkMetin">
-                <img src="static/img/hizmetPage/cyan.webp" alt="Bilgisayarlar">
-                <div class="vip-gaming-container">
-                    <div class="row-vip">
-                        <div class="vip-title">
-                            <span class="vipclr">VIP GAMING</span>
+            
+            {% for computer in computerfields %}
+                <div class="hakkMetin">
+                    <img src="{{ computer.path if computer.path else '../../static/img/noImage.jpg' }}"  alt="Bilgisayarlar">
+                    <div class="vip-gaming-container">
+                        <div class="row-vip">
+                            <div class="vip-title">
+                                <span class="vipclr">{{ computer.label }}</span>
+                            </div>
                         </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="vipclr">Ekran Kartı:</span>
-                            <span>NVIDIA GeForce RTX 4070</span>
+                    
+                        <div class="row-vip specs">
+                            <div class="spec-item">
+                                <span class="vipclr">Ekran Kartı:</span>
+                                <span>{{ computer.videocard }}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="vipclr">İşlemci:</span>
+                                <span>{{ computer.processor }}</span>
+                            </div>
                         </div>
-                        <div class="spec-item">
-                            <span class="vipclr">İşlemci:</span>
-                            <span>i7 12700F</span>
+                        
+                        <div class="row-vip specs">
+                            <div class="spec-item">
+                                <span class="vipclr">Ana Kart:</span>
+                                <span>{{ computer.mothercard }}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="vipclr">RAM:</span>
+                                <span>{{ computer.ram }}</span>
+                            </div>
                         </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="vipclr">Ana Kart:</span>
-                            <span>ASUS PRO</span>
+                    
+                        <div class="row-vip specs">
+                            <div class="spec-item">
+                                <span class="vipclr">Soğutma:</span>
+                                <span>{{ computer.freez }}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="vipclr">Ekran:</span>
+                                <span>{{ computer.screen }}</span>
+                            </div>
                         </div>
-                        <div class="spec-item">
-                            <span class="vipclr">RAM:</span>
-                            <span>32GB</span>
+                        <div class="row-vip specs">
+                            <div class="spec-item">
+                                <span class="vipclr">Mouse:</span>
+                                <span>{{ computer.mouse }}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="vipclr">Klavye:</span>
+                                <span>{{ computer.keyboard }}</span>
+                            </div>
                         </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="vipclr">Soğutma:</span>
-                            <span>Sıvı Soğutma</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="vipclr">Ekran:</span>
-                            <span>AUC 240HZ</span>
-                        </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="vipclr">Mouse:</span>
-                            <span>Zowie</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="vipclr">Klavye:</span>
-                            <span>ASUS ROG Mekanik</span>
-                        </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="vipclr">Kulaklık:</span>
-                            <span>7+1 bas ve titreşimli</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hakkMetin">
-                
-                <img src="static/img/hizmetPage/imagegold.webp" alt="Bilgisayarlar">
-
-                <div class="vip-gaming-container">
-                    <div class="row-vip">
-                        <div class="vip-title">
-                            <span class="mainclr">GOLD GAMING</span>
-                        </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="mainclr">Ekran Kartı:</span>
-                            <span>NVIDIA GeForce RTX 3060</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="mainclr">İşlemci:</span>
-                            <span>AMD RYZEN 5 7600X</span>
-                        </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="mainclr">Ana Kart:</span>
-                            <span>MSI PRO A620M-E</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="mainclr">RAM:</span>
-                            <span>16GB DDR5</span>
-                        </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="mainclr">Soğutma:</span>
-                            <span>Kule Tipi HYPER 212</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="mainclr">Ekran:</span>
-                            <span>AUC 165HZ</span>
-                        </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="mainclr">Mouse:</span>
-                            <span>ASUS ROG</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="mainclr">Klavye:</span>
-                            <span>RYZER</span>
-                        </div>
-                    </div>
-                
-                    <div class="row-vip specs">
-                        <div class="spec-item">
-                            <span class="mainclr">Kulaklık:</span>
-                            <span>RANGER 7+1 bas ve titreşimli</span>
+                    
+                        <div class="row-vip specs">
+                            <div class="spec-item">
+                                <span class="vipclr">Kulaklık:</span>
+                                <span>{{ computer.headphone }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>     
     </section>
 
@@ -194,162 +131,18 @@
         <div class="hakkInside">
             <div class="hakkMetin w-100">
                 <div class="tableArea clrbgblue">
-                    
                     <div class="rowx">
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost3.webp" alt="Tost Lezzet Pınarı"> 
-                            <div class="yicekYenitext">
-                                <h2>Tost Lezzet Pınarı Double</h2>
-                                <ul>
-                                    <li>280 gram özel yapım tandır ekmeği</li>
-                                    <li>2 adet yumurta</li>
-                                    <li>200 gram kızarmış patates</li>
-                                    <li>50 gram sucuk</li>
-                                    <li>60 gram kaşar peynir</li>
-                                    <li>ketçap veyahut domates</li>
-                                    <li>yeşil biber(isteğe bağlı)</li>
-                                    <li>kornişon biber turşusu(ister içine ister dışına)</li>
-                                    <li>yağ terciğimiz doğal tereyağdır</li>
-                                </ul>
+                        {% for food in foods %}
+                            <div class="yicekYeni">
+                                <img src="{{ food.path if food.path else '../../static/img/noImage.jpg' }}" alt="{{food.label}}"> 
+                                <div class="yicekYenitext">
+                                    <h2>{{food.label}}</h2>
+                                    <ul>
+                                        {{food.text}}
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost3.webp" alt="Tost Lezzet Pınarı Double"> 
-                            <div class="yicekYenitext">
-                                <h2>Tost Lezzet Pınarı</h2>
-                                <ul>
-                                    <li>140 gram özel yapım tandır ekmeği</li>
-                                    <li>1 adet yumurta</li>
-                                    <li>100 gram kızarmış patates</li>
-                                    <li>25 gram sucuk</li>
-                                    <li>30 gram kaşar peynir</li>
-                                    <li>ketçap veyahut domates</li>
-                                    <li>yeşil biber(isteğe bağlı)</li>
-                                    <li>kornişon biber turşusu(ister içine ister dışına)</li>
-                                    <li>yağ terciğimiz doğal tereyağdır</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost2.webp" alt="Patates Tost"> 
-                            <div class="yicekYenitext">
-                                <h2>Patates Tost Double</h2>
-                                <ul>
-                                    <li>280 gram özel yapım tandır ekmeği</li>
-                                    <li>200 gram kızarmış patates</li>
-                                    <li>60 gram kaşar peynir</li>
-                                    <li>ketçap ve mayonez</li>
-                                    <li>kornişon biber turşusu(dışına)</li>
-                                    <li>yağ terciğimiz doğal tereyağdır</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost5.webp" alt="Patates Tost Double"> 
-                            <div class="yicekYenitext">
-                                <h2>Patates Tost Double</h2>
-                                <ul>
-                                    <li>140 gram özel yapım tandır ekmeği</li>
-                                    <li>100 gram kızarmış patates</li>
-                                    <li>30 gram kaşar peynir</li>
-                                    <li>ketçap ve mayonez</li>
-                                    <li>kornişon biber turşusu(dışına)</li>
-                                    <li>yağ terciğimiz doğal tereyağdır</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost4.webp" alt="Patates"> 
-                            <div class="yicekYenitext">
-                                <h2>Yumurtalı Double Tost</h2>
-                                <ul>
-                                    <li>280 gram özel yapım tandır ekmeği</li>
-                                    <li>1 adet yumurta</li>
-                                    <li>45 - 70 gram sucuk</li>
-                                    <li>45 gram kaşar peynir</li>
-                                    <li>ketçap ve mayonez</li>
-                                    <li>kornişon biber turşusu(dışına)</li>
-                                    <li>yağ terciğimiz doğal tereyağdır</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost10.webp" alt="Tost"> 
-                            <div class="yicekYenitext">
-                                <h2>Yumurtalı Tost</h2>
-                                <ul>
-                                    <li>140 gram özel yapım tandır ekmeği</li>
-                                    <li>1 adet yumurta</li>
-                                    <li>25 - 35 gram sucuk</li>
-                                    <li>30 gram kaşar peynir</li>
-                                    <li>ketçap ve mayonez</li>
-                                    <li>kornişon biber turşusu(dışına)</li>
-                                    <li>yağ terciğimiz doğal tereyağdır</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost4.webp" alt="Patates">
-                            <div class="yicekYenitext">
-                                <h2>Double Tost</h2>
-                                <ul>
-                                    <li>280 gram özel yapım tandır ekmeği</li>
-                                    <li>45 - 70 gram sucuk</li>
-                                    <li>45 gram kaşar peynir</li>
-                                    <li>ketçap ve mayonez</li>
-                                    <li>kornişon biber turşusu(dışına)</li>
-                                    <li>yağ terciğimiz doğal tereyağdır</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost10.webp" alt="Tost"> 
-                            <div class="yicekYenitext">
-                                <h2>Tost</h2>
-                                <ul>
-                                    <li>140 gram özel yapım tandır ekmeği</li>
-                                    <li>25 - 35 gram sucuk</li>
-                                    <li>30 gram kaşar peynir</li>
-                                    <li>ketçap ve mayonez</li>
-                                    <li>kornişon biber turşusu(dışına)</li>
-                                    <li>yağ terciğimiz doğal tereyağdır</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/tost8.webp" alt="Patates Kızartması"> 
-                            <div class="yicekYenitext">
-                                <h2>Patates Kızartması</h2>
-                                <ul>
-                                    <li>yağsız patates kızartması(airfray)</li>
-                                    <li>250 gram özel patates</li>
-                                    <li>özel bizzat kendi hazırlamış olduğumuz 11 çeşit baharatlı mükemmel bir tat</li>
-                                    <li>ketçap mayonez</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/soganHalkasi.webp" alt="Soğan Halkası"> 
-                            <div class="yicekYenitext">
-                                <h2>Soğan Halkası</h2>
-                                <ul>
-                                    <li>yağsız soğan halkası kızartması(airfray)</li>
-                                    <li>özel bizzat kendi hazırlamış olduğumuz 11 çeşit baharatlı mükemmel bir tat</li>
-                                    <li>ketçap mayonez</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="yicekYeni">
-                            <img src="static/img/hizmetPage/yemek/noodle.webp" alt="Noodle Sebzeli"> 
-                            <div class="yicekYenitext">
-                                <h2>Noodle Çeşitlerimiz</h2>
-                                <ul>
-                                    <li>75 gram nodel çeşitleri</li>
-                                </ul>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
                 
@@ -379,287 +172,27 @@
         <div class="hakkInside">
             <div class="hakkMetin w-100">
                 <div class="button-container">
-                    <button class="btnOyunOzel" data-target="1">
-                        <img src="static/img/oyunlar/ButtonImage/gta5.webp" alt="gta5">Gta 5
-                    </button>
-                    <button class="btnOyunOzel" data-target="2">
-                        <img src="static/img/oyunlar/ButtonImage/call-of-duty.webp" alt="call-of-duty">Call Of Duty WW2
-                    </button>
-                    <button class="btnOyunOzel" data-target="3">
-                        <img src="static/img/oyunlar/ButtonImage/conquest.webp" alt="conquest">The Lord Of Conquest
-                    </button>
-                    <button class="btnOyunOzel" data-target="4">
-                        <img src="static/img/oyunlar/ButtonImage/cs-1.3.webp" alt="cs1.3">Counter Strike
-                    </button>
-                    <button class="btnOyunOzel" data-target="5">
-                        <img src="static/img/oyunlar/ButtonImage/earth.webp" alt="earth">The Battle For Middle Earth
-                    </button>
-                    <button class="btnOyunOzel" data-target="6">
-                        <img src="static/img/oyunlar/ButtonImage/euro-truck.webp" alt="euro-truck">Euro Truck Simulator 2
-                    </button>
-                    <button class="btnOyunOzel" data-target="7">
-                        <img src="static/img/oyunlar/ButtonImage/fifa07.webp" alt="fifa07">Fifa 2007
-                    </button>
-                    <button class="btnOyunOzel" data-target="8">
-                        <img src="static/img/oyunlar/ButtonImage/fotball-life.webp" alt="football-life">Football Life 2024
-                    </button>
-                    <button class="btnOyunOzel" data-target="9">
-                        <img src="static/img/oyunlar/ButtonImage/human-fall-flat.webp" alt="human-fall-flat">Human Fall Flatt
-                    </button>
-                    <button class="btnOyunOzel" data-target="10">
-                        <img src="static/img/oyunlar/ButtonImage/internet-cafe.webp" alt="internet-cafe">Internet Cafe And Market Simulator
-                    </button>
-                    <button class="btnOyunOzel" data-target="11">
-                        <img src="static/img/oyunlar/ButtonImage/watch-dog.webp" alt="watch-dog">Watch Dog Series
-                    </button>
-                    <button class="btnOyunOzel" data-target="12">
-                        <img src="static/img/oyunlar/ButtonImage/god-of-war-photo.webp" alt="god-of-war">God Of War Ragnarok
-                    </button>
-                    <button class="btnOyunOzel" data-target="13">
-                        <img src="static/img/oyunlar/ButtonImage/black-ops-icon.webp" alt="black-ops">Call Of Duty Black Ops 2
-                    </button>
+                    {% for game in games %}
+                        <button class="btnOyunOzel" data-target="{{game.id}}">
+                            <img src="{{ game.iconpath if game.iconpath else '../../static/img/noImage.jpg' }}" alt="{{game.label}}">{{game.label}}
+                        </button>
+                    {% endfor %}
                 </div>
-            
                 <div class="contentOyun">
-                    <div class="dataOzel" data-groups="1">
-                        <img src="static/img/oyunlar/extra/gta5.webp" alt="gta5">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>GTA 5</h2>
-                                <p>Değerli Müşterilerimiz,</p>
-                                <p>GTA 5 için sunmuş olduğumuz mod paketimizle oyun deneyiminizi daha da zenginleştirin. Aşağıda modların özellikleri ve kullanım bilgileri yer almaktadır:</p>
-                                <br>
-                                <h3>Mod Özellikleri:</h3>
-                                <ul>
-                                    <li>GTA Modlu Başlatma ve GTA Hikaye Modu eklendi.</li>
-                                    <li>LAN'dan oynama desteği ile sürüm güncellendi; LAN ve online birleştirildi.</li>
-                                    <li>Sesli konuşma özelliği eklendi; LAN'dan oynarken sesli iletişim kurabilirsiniz.</li>
-                                    <li>Otomatik monitör ayarları; hem tam ekran hem de pencere modunda çalışır.</li>
-                                    <li>F12 tuşu ile kostüm değiştirme eklendi.</li>
-                                    <li>2025 yılına kadar çıkan 3000 adet araç seçeneği.</li>
-                                    <li>Modları aktifleştirmek için <span class="important">Ctrl + N</span> tuşuna basın.</li>
-                                    <li>6 Kahraman Modu:
-                                        <ul>
-                                            <li>Superman</li>
-                                            <li>Hulk</li>
-                                            <li>İron Man</li>
-                                            <li>Thor</li>
-                                            <li>Thanos</li>
-                                            <li>Flash</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <br>
-                                <h3>Sesli Konuşma:</h3>
-                                <p>LAN'dan oynama sırasında sesli konuşma yapmak için <span class="important">N</span> tuşuna basın.</p>
-                            
-                                <p>GTA 5'in modları ile keyifli ve eğlenceli bir deneyim yaşamanız dileğiyle!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="2">
-                        <img src="static/img/oyunlar/extra/call-of-duty-ww2-shadow-war-deluxe-edition.webp" alt="ww2">
-                        <div class="dataText">
-                        
-                            <div class="modlar">
-                                <h2>Call of Duty WW2</h2>
-
-                                <p>Değerli Müşterilerimiz,</p>
-                                <p>Call of Duty WW2 için sunmuş olduğumuz mod paketimizle oyun deneyiminizi daha da zenginleştirin. Aşağıda modların özellikleri ve kullanım bilgileri yer almaktadır:</p>
-                                <br>
-                                <h3>Mod Özellikleri:</h3>
-                                <ul>
-                                    <li><strong>Single Player:</strong> Türkçe yaması ile birlikte.</li>
-                                    <li><strong>Multiplayer:</strong> İngilizce ve zombi modu ile desteklenmektedir.</li>
-                                    <li>LAN'dan oynama desteği ile bilgisayar adınız kullanıcı adınız olur.</li>
-                                    <li>Oyun, son sürümü ile sunulmaktadır.</li>
-                                </ul>
-                                <br>
-                                <p>Call of Duty WW2 modları ile keyifli ve eğlenceli bir deneyim yaşamanız dileğiyle!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="3">
-                        <img src="static/img/oyunlar/extra/the-lord-of-rings-conquest.webp" alt="conquest">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>The Lord Of The Rings Conquest</h2>
-
-                                <p>Değerli Müşterilerimiz,</p>
-                                <p>The Lord Of The Rings Conquest için sunmuş olduğumuz mod paketimizle oyun deneyiminizi 
-                                    daha da zenginleştirin. Aşağıda modların özellikleri ve kullanım bilgileri yer almaktadır:</p>
-                                <br>
-                                <h3>Mod Özellikleri:</h3>
-                                <ul>
-                                    <li><strong>Son Sürüm:</strong> 1920x1080 ayarları ile birlikte.</li>
-                                    <li>Otomatik profil oluşturma özelliği; manuel olarak da girebilirsiniz.</li>
-                                    <li>LAN Multiplayer desteği mevcuttur.</li>
-                                </ul>
-                                <br>
-                                <p>The Lord Of The Rings Conquest modları ile keyifli ve eğlenceli bir deneyim yaşamanız dileğiyle!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="4">
-                        <img src="static/img/oyunlar/extra/counter-strike-1.3.webp" alt="cs1.3">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>Counter Strike 1.3 1.5 1.6 </h2>
-                                <div>
-                                    <p>Değerli Müşterilerimiz,</p>
-                                    <p>Counter Strike için sunmuş olduğumuz mod paketimizle oyun deneyiminizi daha da zenginleştirin. Aşağıda modların özellikleri ve kullanım bilgileri yer almaktadır:</p>
-                                    <br>
-                                    <h3>Mod Özellikleri:</h3>
-                                    <ul>
-                                        <li><strong>Sürümler:</strong> 1.3, 1.5, 1.6.</li>
-                                        <li>Otomatik key girme özelliği; bilgisayar adının son hanesine göre mevcut bilgisayarın keyi yoksa rastgele bir key girer.</li>
-                                        <li>Monitor Hz 60; <code>hlayar.ini</code> dosyasından istediğiniz Hz ayarını yapabilirsiniz.</li>
-                                        <li>2 tür reg ekleme; <code>reg</code> klasöründe istediğiniz ayarları yapabilirsiniz.</li>
-                                        <li><code>hlayar.ini</code> içinden çalışacak uygulamanın adını ya da çalıştırılacak kodlarını girebilirsiniz. Uyumlu çalışması için XP, Win7, Win8 yazıp uyumlulukla çalıştırabilirsiniz.</li>
-                                    </ul>
-                                    <br>
-                                    <p>Counter Strike modları ile keyifli ve eğlenceli bir deneyim yaşamanız dileğiyle!</p>
+                    {% for game in games %}
+                        <div class="dataOzel" data-groups="{{game.id}}">
+                            <img src="{{ game.photopath if game.photopath else '../../static/img/noImage.jpg' }}" alt="{{game.label}}">
+                            <div class="dataText">
+                                <div class="modlar">
+                                    {{game.text}}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="dataOzel" data-groups="5">
-                        <img src="static/img/oyunlar/extra/the-battle-of-middle-earth.webp" alt="earth">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>The Battle Of Middle Earth</h2>
-                                <p>Değerli Müşterilerimiz,</p>
-                                <p>The Battle Of Middle Earth için sunmuş olduğumuz mod paketimizle oyun deneyiminizi daha da zenginleştirin. Aşağıda modların özellikleri ve kullanım bilgileri yer almaktadır:</p>
-                                <br>
-                                <h3>Mod Özellikleri:</h3>
-                                <ul>
-                                    <li><strong>BFE2:</strong> Katılımsız LAN multiplayer desteği.</li>
-                                    <li>İstediğiniz haritaları indirip oyun dizininde kullanabilirsiniz.</li>
-                                </ul>
-                                <br>
-                                <p>The Battle Of Middle Earth modları ile keyifli ve eğlenceli bir deneyim yaşamanız dileğiyle!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="6">
-                        <img src="static/img/oyunlar/extra/euro-truck-simulator-2.webp" alt="euro-truck-simulator-2">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>Euro Truck Simulator 2</h2>
-                                <div>
-                                    <p>Değerli Müşterilerimiz,
-                                        Euro Truck Simulator 2 için özel olarak derlenmiş mod paketimizle oyun deneyiminizi bir üst seviyeye taşıyın!
-                                        1.50 sürümü için güncel modlarımızla daha keyifli ve zengin bir oyun deneyimi sizi bekliyor.</p>
-                                        <br>
-                                    <strong>Mod İçeriği:</strong>
-                                    <ol>
-                                        <li><strong>Oyunucuyuzbis 1.3</strong> - Oyun deneyiminizi geliştiren bu mod ile daha fazla eğlence sizi bekliyor.</li>
-                                        <li><strong>2k24 Türkiye Haritası 1.50</strong> - Türkiye'yi keşfetmek ve çeşitli güzergahlarda sürüş yapmak için bu haritayı mutlaka deneyin.</li>
-                                        <li><strong>Promod 2.70 1.50</strong> -  Gelişmiş harita modları ile daha fazla yol ve yeni keşifler için ideal bir seçenek.</li>
-                                    </ol>
-                                    <br>
-                                    <strong>Güncelleme Bilgisi:</strong>
-                                    <p>Tüm güncel modlar eklenmiştir ve mod olmayan sürümler de dahil edilmiştir.</p>
-                                    <br>
-                                    <strong>Online Oynama:</strong>
-                                    <p>Tüm güncel modlar eklenmiştir ve mod olmayan sürümlerde de kullanılabilir. Modların ana dizine 
-                                        açılması yeterlidir. Lütfen bu işlemi müşteri olarak kendiniz yapın; sunucu üzerinden bu işlemi gerçekleştirmeyiniz.</p>
-    
-                                    <div>
-                                        <br>
-                                        <strong>Mod Kullanımı:</strong>
-                                        <ul>
-                                            <li>Müşterilerimiz istedikleri araç modunu indirip, mod klasörüne atarak kolaylıkla 
-                                                kullanabilirler. Modlar, oyun dizinindeki <strong>Save</strong> yol kısmında yer alacaktır.</li>
-                                            <li><strong>Otobüs Modu</strong> 2k24 ve Promod için eklenmiştir.</li>
-                                            <li><strong>Tır Modu</strong> ise sadece Promod için mevcuttur.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="7">
-                        <img src="static/img/oyunlar/extra/fifa-07.webp" alt="fifa-07">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>Fifa 2007</h2>
-                                <p><strong>Türkçe + Türkçe Spiker + HD 1920x1080 + 2024 Oyuncu Listesi Güncel</strong></p>
-                                <p>FIFA 07 ile nostalji dolu bir futbol deneyimi yaşayın! Güncel 2024 oyuncu listesi ve Türkçe spiker desteği ile maçlarınızı daha da keyifli hale getirin.</p>
-                                <p class="note">Not: İşlemci seçer, biliyorsunuzdur her işlemcide çalışmaz.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="8">
-                        <img src="static/img/oyunlar/extra/football-life-2024.webp" alt="football-life">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>Football Life 2024</h2>
-                                <p><strong>En son Sürüm: 15.10.2024</strong></p>
-                                <p>Takım düzenlendi, Türk stadyumlar eklendi. Takıma göre otomatik seçer ya da oyundan boşluk tuşu ile siz değiştirebilirsiniz.</p>
-                                <p>Güncel transferler ve güncel arayüzler ile PES 2021 deneyiminizi daha da zenginleştirin!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="9">
-                        <img src="static/img/oyunlar/extra/human-fall-flat.webp" alt="human-fall-flat">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>Human Fall Flatt</h2>
-                                <p><strong>Türkçe Son Sürüm: v15834889</strong></p>
-                                <p>Steam sürümüyle aynı özelliklere sahiptir. Ağdan oynamak için "Oyna" > "Çevrimiçi" > "Oyun Kur" demeniz yeterlidir.</p>
-                                <p>Bağlanacak kişi, "Oyna" > "Çevrimiçi" bölümünde kuran kişiyi görür.</p>
-                                <p>Oyunda <strong>Shift + Tab</strong> tuşuyla açılan ekranda "Settings" yazan yerden oyuncu adınızı değiştirebilirsiniz.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="10">
-                        <img src="static/img/oyunlar/extra/internet-cafe-and-market-simulator.webp" alt="internet-cafe-and-market-simulator">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>Internet Cafe And Market Simulator</h2>
-                                <p><strong>Türkçe Sürüm!</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="11">
-                        <img src="static/img/oyunlar/extra/watch-dogs.webp" alt="watch-dog">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>Watch Dogs Serisi</h2>
-    
-                                <h3>Watch Dogs 1</h3>
-                                <p><strong>Türkçe + Güncel</strong></p>
-                                <br>
-                                <h3>Watch Dogs 2</h3>
-                                <p><strong>Türkçe + Güncel</strong></p>
-                                <br>
-                                <h3>Watch Dogs Legion</h3>
-                                <p><strong>Türkçe + Güncel</strong></p>
-                                <br>
-                            </div>
-                        </div>
-                       
-                    </div>
-                    <div class="dataOzel" data-groups="12">
-                        <img src="static/img/oyunlar/extra/god-of-war.webp" alt="internet-cafe-and-market-simulator">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>God Of War Ragnarok</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dataOzel" data-groups="13">
-                        <img src="static/img/oyunlar/extra/black-ops-photo.webp" alt="watch-dog">
-                        <div class="dataText">
-                            <div class="modlar">
-                                <h2>Call Of Duty Black Ops 2</h2>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
-        </div>     
+        </div>
+        
         <div class="baslik">
             <h2><span>Steam</span> Hesapları</h2>
         </div>
@@ -1227,4 +760,6 @@
             <img src="static/img/sliders/21.webp" alt="">
         </div>
     </section>
+    
+    <script src="../../static/js/oyunHesap.js"></script>
 {% endblock %}

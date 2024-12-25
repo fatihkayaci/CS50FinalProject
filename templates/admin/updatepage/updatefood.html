@@ -1,31 +1,28 @@
-{% extends "adminlayout.html" %}
+{% extends "admin/adminlayout.html" %} 
 {% block main %}
 <div class="container-fluid mt-4">
-    <h3 class="mb-4">Veriyi Güncelle</h3>
-
+    <h3 class="mb-4">Veri Düzenle</h3>
+    <!-- Label -->
     <div class="form-group">
-        <label for="label">Başlık</label>
-        <input autocomplete="off" autofocus type="text" name="label" id="label" class="form-control" value="{{mediawithtext.label}}">
-    </div>
-
-    <div class="form-group">
-        <label for="text1">Yazı 1</label>
-        <textarea autocomplete="off" name="text1" id="text1" class="form-control" rows="4">{{mediawithtext.text1}}</textarea>
+        <label for="label">Yemek İsmi</label>
+        <input type="text" name="label" id="label" class="form-control" value="{{ foods.label }}">
     </div>
     
     <div class="form-group">
-        <label for="text2">Yazı 2</label>
-        <textarea autocomplete="off" name="text2" id="text2" class="form-control" rows="4">{{mediawithtext.text2}}</textarea>
-    </div>
-
-    <div class="form-group">
         <label for="image">Mevcut Resim</label><br>
-        <img  src="../{{ mediawithtext.path if mediawithtext.path else '../../static/img/noImage.jpg' }}" 
+        <img  src="../{{ foods.path if foods.path else '../../static/img/noImage.jpg' }}" 
                 alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
     </div>
-    <a onclick="updatetextandmedia()" class="btn btn-success">Güncelle</button>
-    <a href="/indexa" class="btn btn-secondary">İptal</a>
+    
+    <div class="form-group">
+        <label for="text">Yemek Açıklama</label>
+        <textarea name="text" id="text" class="form-control" rows="4">{{ foods.text }}</textarea>
+    </div>
+    
+    <button type="submit" onclick="updatefood()" class="btn btn-success">Güncelle</button>
+    <a href="/foodsadd" class="btn btn-secondary">İptal</a>
 </div>
+
 <div class="popup-background" id="popup" style="display: none;">
     <div class="popup-content">
         <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
@@ -64,18 +61,16 @@
 <script>
     var popup = document.getElementById("popup");
     var closePopup = document.getElementById("closePopup");
-    var label = document.getElementById("label");
-    var text1 = document.getElementById("text1");
-    var text2 = document.getElementById("text2");
     var photoSelect = document.getElementById('photoSelect');
     var photoInput = document.getElementById('photoInput');
+    var label = document.getElementById("label");
+    var text = document.getElementById("text");
     let formData = new FormData();
-    
     var path = window.location.pathname;
     var id = path.split('/')[2];
 
     function showPopup() {
-        popup.style.display = "flex";
+        document.getElementById("popup").style.display = "flex";
     }
     function offPopup() {
         popup.style.display = "none";
@@ -87,7 +82,7 @@
         if (photoSelect.value) {
             formData.delete('image_name');
             formData.append('image_name', photoSelect.value);
-            previewImage.src = "../../static/img/mainpage/" + photoSelect.value;
+            previewImage.src = "../../static/img/foods/" + photoSelect.value;
         } else if (photoInput.files[0]) {
             formData.delete('image_file');
 
@@ -102,14 +97,16 @@
         offPopup();
     }
 
-    function updatetextandmedia()
+    function updatefood()
     {   
         formData.append('id', id);
         formData.append('label', label.value);
-        formData.append('text1', text1.value);
-        formData.append('text2', text2.value);
+        formData.append('text', text.value);
+        console.log(formData.get('label'));
+        console.log(formData.get('text'));
+        console.log(formData.get('id'));
         $.ajax({
-            url: "/updatemainpage/" + id, 
+            url: "/updatefood/" + id, 
             type: "POST",
             data: formData,
             processData: false,  // FormData kullanıldığı için veri işlenmez
@@ -117,14 +114,13 @@
             success: function(response) {
                 if (response.status === "success") {
                     alert(response.message);
-                    window.location.href = "/indexa";
+                    window.location.href = "/foodsadd";
                 } else {
                     alert(response.message);
                 }
             },
             error: function(error) {
                 console.log("Hata: ", error);
-                alert("Bir hata oluştu.");
             }
         });
     }

@@ -27,11 +27,16 @@ migrate = Migrate(app, db)
 
 @app.route("/")
 def indexp():
-    return render_template("indexp.html")
+    return render_template("users/indexp.html")
 
 @app.route("/cafeattribute")
 def cafeattribute():
-    return render_template("cafeattribute.html")
+    # burası düzeltilecek veritabanı unutma
+    computerfields= tblcomputerfiles.query.all()
+    foods = tblfoods.query.all()
+    games = tblgames.query.all()
+    steams = tblsteams.query.all()
+    return render_template("users/cafeattribute.html", computerfields=computerfields, foods=foods, games=games, steams=steams)
 
 # admin paneli
 # ------------------------------------------------------login start------------------------------------------------------
@@ -43,28 +48,28 @@ def login():
         password = request.form.get("password")
         if not username:
             flash("Kullanıcı Adı Giriniz!")
-            return render_template("/login.html")
+            return render_template("admin/login.html")
 
         if not password:
             flash("Şifrenizi Giriniz!")
-            return render_template("/login.html")
+            return render_template("admin/login.html")
         
         user = tblusers.query.filter_by(user_name = username).first()
         if user and user.password == password:
             session["user_id"] = user.id
             mediawithtext = tblmediaandtext.query.all()
-            return render_template("/indexa.html", mediawithtext=mediawithtext)
+            return render_template("admin/indexa.html", mediawithtext=mediawithtext)
         else:
-            return render_template("/login.html")
+            return render_template("admin/login.html")
         
-    return render_template("/login.html")
+    return render_template("admin/login.html")
 # ------------------------------------------------------login end------------------------------------------------------
 # ------------------------------------------------------Mainpage process start------------------------------------------------------
 @app.route("/indexa", methods=["GET", "POST"])
 @login_required
 def indexa():                   
     mediawithtext = tblmediaandtext.query.all()
-    return render_template("indexa.html", mediawithtext=mediawithtext)
+    return render_template("admin/indexa.html", mediawithtext=mediawithtext)
 
 @app.route("/updatemainpage/<int:id>", methods=['GET', 'POST'])
 @login_required
@@ -107,7 +112,7 @@ def updatemainpage(id):
         all_images = [file for file in os.listdir(target_folder) 
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
         
-    return render_template("/updatepage/updatemainpage.html", mediawithtext=mediawithtext, all_images=all_images)
+    return render_template("admin/updatepage/updatemainpage.html", mediawithtext=mediawithtext, all_images=all_images)
 # ------------------------------------------------------Mainpage process end------------------------------------------------------
 # ------------------------------------------------------computer fields process start------------------------------------------------------
 
@@ -115,7 +120,7 @@ def updatemainpage(id):
 @login_required
 def computerfields():
     computers = tblcomputerfiles.query.all()
-    return render_template("/computerfields.html", computers = computers)
+    return render_template("admin/computerfields.html", computers = computers)
 
 @app.route("/updatecomputerfields/<int:id>", methods=['GET', 'POST'])
 @login_required
@@ -170,7 +175,7 @@ def updatecomputerfields(id):
     if os.path.exists(target_folder):
         all_images = [file for file in os.listdir(target_folder) 
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
-    return render_template("/updatepage/updatecomputerfields.html", computerfields=computerfields, all_images=all_images)
+    return render_template("/admin/updatepage/updatecomputerfields.html", computerfields=computerfields, all_images=all_images)
 # ------------------------------------------------------computer fields process end------------------------------------------------------
 # ------------------------------------------------------foods process start------------------------------------------------------
 # foods process
@@ -205,7 +210,7 @@ def foodsadd():
         all_images = [file for file in os.listdir(target_folder) 
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     foods = tblfoods.query.all()
-    return render_template("/foodsadd.html", foods=foods, all_images=all_images)
+    return render_template("/admin/foodsadd.html", foods=foods, all_images=all_images)
 
 # delete food
 @app.route("/deletefood", methods=['GET', 'POST'])
@@ -261,7 +266,7 @@ def updatefood(id):
     if os.path.exists(target_folder):
         all_images = [file for file in os.listdir(target_folder) 
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
-    return render_template("/updatepage/updatefood.html", foods=foods, all_images=all_images)
+    return render_template("/admin/updatepage/updatefood.html", foods=foods, all_images=all_images)
 
 # ------------------------------------------------------foods process end------------------------------------------------------
 
@@ -315,7 +320,7 @@ def gamesadd():
         all_icon = [file for file in os.listdir(target_folder) 
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     games = tblgames.query.all()
-    return render_template("/gamesadd.html", games=games, all_icon=all_icon, all_images=all_images)
+    return render_template("/admin/gamesadd.html", games=games, all_icon=all_icon, all_images=all_images)
 
 @app.route("/deletegame", methods=['GET', 'POST'])
 def deletegame():
@@ -391,7 +396,7 @@ def updategame(id):
     if games is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
 
-    return render_template("/updatepage/updategame.html", games=games, all_images=all_images, all_icon=all_icon)
+    return render_template("/admin/updatepage/updategame.html", games=games, all_images=all_images, all_icon=all_icon)
 # ------------------------------------------------------ games process end ------------------------------------------------------
 
 # ------------------------------------------------------ steam process start ------------------------------------------------------
@@ -429,7 +434,7 @@ def steamsadd():
     if steams is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
 
-    return render_template("/steamsadd.html", steams=steams, all_images=all_images)
+    return render_template("/admin/steamsadd.html", steams=steams, all_images=all_images)
 
 @app.route("/deletesteam", methods=['GET', 'POST'])
 def deletesteam():
@@ -482,7 +487,7 @@ def updatesteam(id):
     if os.path.exists(target_folder):
         all_images = [file for file in os.listdir(target_folder) 
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
-    return render_template("/updatepage/updatesteam.html", steam=steam, all_images=all_images)
+    return render_template("/admin/updatepage/updatesteam.html", steam=steam, all_images=all_images)
 # ------------------------------------------------------ steam process end ------------------------------------------------------
 
 # ------------------------------------------------------ service process start ------------------------------------------------------
@@ -518,7 +523,7 @@ def service():
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     
     services = tblservice.query.all()
-    return render_template("/service.html", services=services, all_images=all_images)
+    return render_template("/admin/service.html", services=services, all_images=all_images)
 
 @app.route("/deleteservice", methods=['GET', 'POST'])
 def deleteservice():
@@ -569,7 +574,7 @@ def updateservice(id):
         all_images = [file for file in os.listdir(target_folder) 
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
         
-    return render_template("/updatepage/updateservice.html", service=service, all_images=all_images)
+    return render_template("/admin/updatepage/updateservice.html", service=service, all_images=all_images)
 # ------------------------------------------------------ service process end ------------------------------------------------------
 # ------------------------------------------------------ arsive process end ------------------------------------------------------
 @app.route("/arsive", methods=['GET', 'POST'])
@@ -589,7 +594,7 @@ def arsive():
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     
     arsives = tblarsive.query.all()
-    return render_template("/arsive.html", arsives=arsives)
+    return render_template("/admin/arsive.html", arsives=arsives)
 
 @app.route("/deletearsive", methods=['GET', 'POST'])
 def deletearsive():
@@ -615,7 +620,7 @@ def settings():
                     if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     setting = tblsettings.query.first()
     user = tblusers.query.filter_by(id = session['user_id']).first()
-    return render_template("/settings.html", all_images=all_images, setting=setting, user=user)
+    return render_template("/admin/settings.html", all_images=all_images, setting=setting, user=user)
 
 @app.route("/updatesettings", methods=['GET', 'POST'])
 @login_required
@@ -687,7 +692,7 @@ def useradd():
             db.session.rollback()
             return jsonify({"message": f"Hata: {str(e)}", "status": "error"}), 500
     users = tblusers.query.filter(tblusers.id != session['user_id']).all()
-    return render_template("useradd.html", users=users)
+    return render_template("admin/useradd.html", users=users)
 
 @app.route("/deleteuser", methods=['GET', 'POST'])
 def deleteuser():
@@ -720,7 +725,7 @@ def updateuser(id):
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     user = tblusers.query.filter_by(id = id).first()
-    return render_template("/updatepage/updateuser.html", user=user)
+    return render_template("/admin/updatepage/updateuser.html", user=user)
 # ------------------------------------------------------ logut process start ------------------------------------------------------
 @app.route("/logout")
 def logout():

@@ -1,55 +1,44 @@
-{% extends "adminlayout.html" %}
-
+{% extends "admin/adminlayout.html" %} 
 {% block main %}
 <div class="container-fluid mt-4">
-
     <!-- Üst Kısım: Yemek Ekleme Formu -->
     <div class="row mb-4">
         <div class="col-md-12">
-            <h3 class="text-center">Yemek Ekle</h3>
-            
+            <h3 class="text-center">Servis Ekle</h3>
             <div class="form-group">
                 <label for="image">Seçilen Resim</label><br>
                 <img src="../../static/img/noImage.jpg" 
                         alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
             </div>
-            
             <div class="form-group">
-                <label for="foodName">Yemek İsmi</label>
-                <input type="text" class="form-control" id="foodName" name="foodName" placeholder="Yemek İsmi" required>
+                <label for="servicename">Servis İsmi</label>
+                <input type="text" class="form-control" id="servicename" name="servicename" placeholder="Bakım İsmi">
             </div>
-            <div class="form-group">
-                <label for="foodText">Açıklama</label>
-                <textarea class="form-control" id="foodText" name="foodText" rows="4" placeholder="Yemek Hakkında Bilgi" required></textarea>
-            </div>
-            <a type="button" class="btn btn-primary" onclick="addfood()">Yemek Ekle</a>
+            <a type="button" class="btn btn-primary" onclick="addservice()">Servis Ekle</a>
         </div>
     </div>
 
     <!-- Alt Kısım: Kayıtlı Yemekler Tablosu -->
     <div class="row">
         <div class="col-md-12">
-            <h3 class="text-center mb-4">Kayıtlı Yemekler</h3>
+            <h3 class="text-center mb-4">Kayıtlı Servisler</h3>
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th>Yemek İsmi</th>
-                        <th>Resim</th>
-                        <th>Açıklama</th>
-                        <th>Actions</th>
+                        <th>Servis İsmi</th>
+                        <th>Servis İcon</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for food in foods %}
-                        <tr id="food-{{ food.id }}">
-                            <td>{{ food.label }}</td>
+                    {% for service in services %}
+                        <tr id="service-{{ service.id }}">
+                            <td>{{ service.name }}</td>
                             <td>
-                                <img src="{{ food.path if food.path else '../../static/img/noImage.jpg' }}" alt="food image" class="img-thumbnail" style="width: 100px; height: 100px;">
+                                <img src="{{ service.imagepath if service.imagepath else '../../static/img/noImage.jpg' }}" alt="{{service.name}} resim" class="img-thumbnail" style="width: 100px; height: 100px;">
                             </td>
-                            <td>{{ food.text }}</td>
                             <td>
-                                <a href="/updatefood/{{food.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
-                                <button type="button" class="btn btn-sm btn-danger" data-id="{{ food.id }}"  onclick="deletefood(this)"><i class="fa fa-trash"></i> Sil</button>
+                                <a href="/updateservice/{{service.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
+                                <button type="button" class="btn btn-sm btn-danger" data-id="{{ service.id }}"  onclick="deleteservice(this)"><i class="fa fa-trash"></i> Sil</button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -57,13 +46,11 @@
             </table>
         </div>
     </div>
-
-    <!-- image select popup -->
     <div class="popup-background" id="popup" style="display: none;">
         <div class="popup-content">
             <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
             <div>
-                <h3>Media Seç</h3>
+                <h3>Resim Seç</h3>
             </div>
             <div>
                 <table>
@@ -94,13 +81,12 @@
         </div>
     </div>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-    var foodName = document.getElementById("foodName");
-    var foodText = document.getElementById("foodText");
-    var imageInput = document.getElementById("imageInput");
+    var servicename = document.getElementById("servicename");
     var imageSelect = document.getElementById("imageSelect");
+    var imageInput = document.getElementById("imageInput");
+    
     var popup = document.getElementById("popup");
     var closePopup = document.getElementById("closePopup");
     let formData = new FormData();
@@ -112,13 +98,14 @@
         popup.style.display = "none";
     }
     closePopup.addEventListener("click", offPopup);
+
     function addMedia() {
         const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
 
         if (imageSelect.value) {
             formData.delete('image_name');
             formData.append('image_name', imageSelect.value);
-            previewImage.src = "../../static/img/foods/" + imageSelect.value;
+            previewImage.src = "../../static/img/service/" + imageSelect.value;
         } else if (imageInput.files[0]) {
             formData.delete('image_file');
 
@@ -134,14 +121,13 @@
         offPopup();
     }
     
-    function addfood()
+    function addservice()
     {
-        formData.append('foodName', foodName.value);
-        formData.append('foodText', foodText.value);
+        formData.append('servicename', servicename.value);
         addMedia();
-
+        console.log(formData.get('servicename'))
         $.ajax({
-            url: "/foodsadd", 
+            url: "/service", 
             type: "POST",
             data: formData,
             processData: false,  // FormData kullanıldığı için veri işlenmez
@@ -161,23 +147,21 @@
         });
     }
 
-    function deletefood(button)
+    function deleteservice(button)
     {
-        let foodId = button.getAttribute('data-id');
-        let row = document.getElementById('food-' + foodId);
+        let serviceId = button.getAttribute('data-id');
+        let row = document.getElementById('service-' + serviceId);
         let formData = new FormData();
-        formData.append('foodid', foodId);
-        console.log("Silinecek ID: ", foodId);
+        formData.append('serviceid', serviceId);
         $.ajax({
-            url: "/deletefood", 
+            url: "/deleteservice", 
             type: "POST",
             data: formData,
             processData: false,  // FormData ile çalışırken bu iki ayarı false yap
             contentType: false,
             success: function(response) {
                 row.remove();
-                alert("Yemek başarıyla silindi.");
-
+                alert("Steam başarıyla silindi.");
             },
             error: function(error) {
                 console.log("Hata: ", error);

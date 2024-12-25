@@ -1,26 +1,26 @@
-{% extends "adminlayout.html" %}
+{% extends "admin/adminlayout.html" %} 
 {% block main %}
 <div class="container-fluid mt-4">
-    <h3 class="mb-4">Veri Düzenle</h3>
+    <h3 class="mb-4">Steam Düzenle</h3>
     <!-- Label -->
     <div class="form-group">
-        <label for="label">Yemek İsmi</label>
-        <input type="text" name="label" id="label" class="form-control" value="{{ foods.label }}">
+        <label for="steamname">Steam İsmi</label>
+        <input type="text" name="steamname" id="steamname" class="form-control" value="{{ steam.steamname }}">
     </div>
     
     <div class="form-group">
-        <label for="image">Mevcut Resim</label><br>
-        <img  src="../{{ foods.path if foods.path else '../../static/img/noImage.jpg' }}" 
+        <label for="image">Mevcut İcon</label><br>
+        <img  src="../{{ steam.iconpath if steam.iconpath else '../../static/img/noImage.jpg' }}" 
                 alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
     </div>
     
     <div class="form-group">
-        <label for="text">Yemek Açıklama</label>
-        <textarea name="text" id="text" class="form-control" rows="4">{{ foods.text }}</textarea>
+        <label for="gamename">Oyun İsmi</label>
+        <input type="text" name="gamename" id="gamename" class="form-control" value="{{ steam.gamename }}">
     </div>
     
     <button type="submit" onclick="updatefood()" class="btn btn-success">Güncelle</button>
-    <a href="/foodsadd" class="btn btn-secondary">İptal</a>
+    <a href="/steamsadd" class="btn btn-secondary">İptal</a>
 </div>
 
 <div class="popup-background" id="popup" style="display: none;">
@@ -37,7 +37,7 @@
                 </tr>
                 <tbody>
                     <td>
-                        <select name="" id="photoSelect">
+                        <select name="" id="imageSelect">
                             <option selected disabled></option>
                             {% for image in all_images %}
                                 {% if image: %}
@@ -47,7 +47,7 @@
                         </select>
                     </td>
                     <td>
-                        <input type="file" id="photoInput" accept="image/*">
+                        <input type="file" id="imageInput" accept="image/*">
                     </td>
                 </tbody>
             </table>
@@ -61,10 +61,10 @@
 <script>
     var popup = document.getElementById("popup");
     var closePopup = document.getElementById("closePopup");
-    var photoSelect = document.getElementById('photoSelect');
-    var photoInput = document.getElementById('photoInput');
-    var label = document.getElementById("label");
-    var text = document.getElementById("text");
+    var imageSelect = document.getElementById("imageSelect");
+    var imageInput = document.getElementById("imageInput");
+    var steamname = document.getElementById("steamname");
+    var gamename = document.getElementById("steamname");
     let formData = new FormData();
     var path = window.location.pathname;
     var id = path.split('/')[2];
@@ -79,20 +79,20 @@
     function updateMedia() {
         const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
 
-        if (photoSelect.value) {
+        if (imageSelect.value) {
             formData.delete('image_name');
-            formData.append('image_name', photoSelect.value);
-            previewImage.src = "../../static/img/foods/" + photoSelect.value;
-        } else if (photoInput.files[0]) {
+            formData.append('image_name', imageSelect.value);
+            previewImage.src = "../../static/img/foods/" + imageSelect.value;
+        } else if (imageInput.files[0]) {
             formData.delete('image_file');
 
-            formData.append('image_file', photoInput.files[0]);
+            formData.append('image_file', imageInput.files[0]);
             
             const fileReader = new FileReader();
             fileReader.onload = function(event) {
                 previewImage.src = event.target.result;
             };
-            fileReader.readAsDataURL(photoInput.files[0]);
+            fileReader.readAsDataURL(imageInput.files[0]);
         }
         offPopup();
     }
@@ -100,13 +100,10 @@
     function updatefood()
     {   
         formData.append('id', id);
-        formData.append('label', label.value);
-        formData.append('text', text.value);
-        console.log(formData.get('label'));
-        console.log(formData.get('text'));
-        console.log(formData.get('id'));
+        formData.append('steamname', steamname.value);
+        formData.append('gamename', gamename.value);
         $.ajax({
-            url: "/updatefood/" + id, 
+            url: "/updatesteam/" + id, 
             type: "POST",
             data: formData,
             processData: false,  // FormData kullanıldığı için veri işlenmez
@@ -114,7 +111,7 @@
             success: function(response) {
                 if (response.status === "success") {
                     alert(response.message);
-                    window.location.href = "/foodsadd";
+                    window.location.href = "/steamsadd";
                 } else {
                     alert(response.message);
                 }
