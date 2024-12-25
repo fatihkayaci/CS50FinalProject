@@ -1,7 +1,7 @@
 import os
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask.templating import render_template
-from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings
+from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings, tblarsive
 from flask_migrate import Migrate, migrate
 from werkzeug.utils import secure_filename
 from helpers import login_required
@@ -571,6 +571,39 @@ def updateservice(id):
         
     return render_template("/updatepage/updateservice.html", service=service, all_images=all_images)
 # ------------------------------------------------------ service process end ------------------------------------------------------
+# ------------------------------------------------------ arsive process end ------------------------------------------------------
+@app.route("/arsive", methods=['GET', 'POST'])
+@login_required
+def arsive():
+    if request.method == "POST":
+        image_file = request.files.get('image_file')
+        file_path=''
+        if image_file and allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'arsive/', filename)
+            if not os.path.exists(file_path):
+                image_file.save(file_path)
+        newarsive = tblarsive(imagepath = file_path)
+        db.session.add(newarsive)
+        db.session.commit()        
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
+    
+    arsives = tblarsive.query.all()
+    return render_template("/arsive.html", arsives=arsives)
+
+@app.route("/deletearsive", methods=['GET', 'POST'])
+def deletearsive():
+    if request.method == "POST":
+        arsiveid = request.form.get('arsiveid')
+        if not arsiveid:  # foodid boşsa hata dön
+            return {'status': 'error', 'message': 'Game ID is missing'}, 400
+        delete = tblarsive.query.get(arsiveid)
+        if delete:
+            db.session.delete(delete)
+            db.session.commit()
+        return 'succesfull'
+    return 'str'
+# ------------------------------------------------------ arsive process end ------------------------------------------------------
 # ------------------------------------------------------ settings process start ------------------------------------------------------
 @app.route("/settings", methods=['GET', 'POST'])
 @login_required

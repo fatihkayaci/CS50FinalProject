@@ -9,7 +9,6 @@ class tblusers(db.Model):
     user_name = db.Column(db.String(30), unique=False, nullable=False)
     password = db.Column(db.String(20), nullable=False)
 
-
 class tblmediaandtext(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_name = db.Column(db.String(50), unique=False, nullable=False, default='')
@@ -32,7 +31,6 @@ class tblcomputerfiles(db.Model):
     ram = db.Column(db.String(100), unique=False, nullable=True)
     screen = db.Column(db.String(100), unique=False, nullable=True)
     keyboard = db.Column(db.String(100), unique=False, nullable=True)
-    
     
 class tblfoods(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,6 +56,10 @@ class tblservice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     imagepath = db.Column(db.String(50), unique=False, nullable=True)
     name = db.Column(db.String(100), unique=False, nullable=True)
+
+class tblarsive(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    imagepath = db.Column(db.String(50), unique=False, nullable=True)
 
 class tblsettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
