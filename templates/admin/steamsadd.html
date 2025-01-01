@@ -1,182 +1,251 @@
 {% extends "admin/adminlayout.html" %} 
 {% block main %}
-<div class="container mt-4">
-    <!-- Üst Kısım: Yemek Ekleme Formu -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <h3 class="text-center">Steam Hesap Ekle</h3>
-            <div class="form-group">
-                <label for="image">Seçilen Resim</label><br>
-                <img src="../../static/img/noImage.jpg" 
-                        alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
-            </div>
-            <div class="form-group">
-                <label for="steamName">Steam İsmi</label>
-                <input type="text" class="form-control" id="steamName" name="steamName" placeholder="Steam İsmi">
-            </div>
-            <div class="form-group">
-                <label for="gameName">Oyun İsmi</label>
-                <input type="text" class="form-control" id="gameName" name="gameName" placeholder="Oyun İsmi">
-            </div>
-            
-            <a type="button" class="btn btn-primary" onclick="addsteam()">Steam Hesabı Ekle</a>
-        </div>
-    </div>
-
-    <!-- Alt Kısım: Kayıtlı Yemekler Tablosu -->
-    <div class="row">
-        <div class="col-md-12">
-            <h3 class="text-center mb-4">Kayıtlı Steamler</h3>
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Steam Hesap ismi</th>
-                        <th>Oyun İsmi</th>
-                        <th>Oyun İcon</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for steam in steams %}
-                        <tr id="steam-{{ steam.id }}">
-                            <td>{{ steam.steamname }}</td>
-                            <td>{{ steam.gamename }}</td>
-                            <td>
-                                <img src="{{ steam.iconpath if steam.iconpath else '../../static/img/noImage.jpg' }}" alt="{{steam.gamename}} icon" class="img-thumbnail" style="width: 100px; height: 100px;">
-                            </td>
-                            <td>
-                                <a href="/updatesteam/{{steam.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
-                                <button type="button" class="btn btn-sm btn-danger" data-id="{{ steam.id }}"  onclick="deletesteam(this)"><i class="fa fa-trash"></i> Sil</button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="popup-background" id="popup" style="display: none;">
-        <div class="popup-content">
-            <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
-            <div>
-                <h3>Resim Seç</h3>
-            </div>
-            <div>
-                <table>
-                    <tr>
-                        <th><p>dosyadan seçme</p></th>
-                        <th><p>bilgisayardan seçme</p></th>
-                    </tr>
-                    <tbody>
-                        <td>
-                            <select name="" id="imageSelect">
-                                <option selected disabled></option>
-                                {% for image in all_images %}
-                                    {% if image: %}
-                                        <option value="{{image}}">{{image}}</option>
-                                    {% endif %}
+    <ul class="nav nav-tabs" id="settingsTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="genel-tab" data-bs-toggle="tab" data-bs-target="#genel" type="button" role="tab" aria-controls="genel" aria-selected="true">Steam Ekleme</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="iletisim-tab" data-bs-toggle="tab" data-bs-target="#iletisim" type="button" role="tab" aria-controls="iletisim" aria-selected="false">Steam Oyun Ekle</button>
+        </li>
+    </ul>
+    <div class="container-fluid mt-4">
+        <div class="tab-content mt-3" id="settingsTabContent">
+            <div class="tab-pane fade show active" id="genel" role="tabpanel" aria-labelledby="genel-tab">
+                <div class="container">
+                    <h3 class="text-center">Steam Hesap Ekle</h3>
+                    <div class="form-group">
+                        <label for="companyname">Steam İsmi</label>
+                        <input type="text" class="form-control" id="steamName" name="steamName" placeholder="Steam İsmi">
+                        <a type="button" class="btn btn-primary" onclick="addsteam()">Steam Hesabı Ekle</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="text-center mb-4">Kayıtlı Steamler</h3>
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Steam Hesap ismi</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for steam in steams %}
+                                    <tr id="steam-{{ steam.id }}">
+                                        <td>{{ steam.steamname }}</td>
+                                        <td>
+                                            <a href="/updatesteam/{{steam.id}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i>Düzenle</a>
+                                            <button type="button" class="btn btn-sm btn-danger" data-id="{{ steam.id }}"  onclick="deletesteam(this)"><i class="fa fa-trash"></i> Sil</button>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <input type="file" id="imageInput" accept="image/*">
-                        </td>
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div>
-                <button class="guncelle-btn" onclick="addMedia()">Güncelle</button>
+            <div class="tab-pane fade" id="iletisim" role="tabpanel" aria-labelledby="iletisim-tab">
+                <div class="container">
+                    <h3>Steame Oyun Ekleme</h3>
+                    <div class="form-group">
+                        <label for="steamname">Steam İsmi</label>
+                        <select name="steamselect" id="steamselect">
+                            <option selected disabled></option>
+                            {% for steam in steams %}
+                                {% if steam: %}
+                                    <option id="{{steam.id}}" value="{{ steam.steamname }}">{{ steam.steamname }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gamename">Oyun İsmi</label>
+                        <select name="gameselect" id="gameselect">
+                            <option selected disabled></option>
+                            {% for game in games %}
+                                {% if game: %}
+                                    <option id="{{game.id}}" value="{{ game.gamename }}">{{ game.gamename }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <a type="button" class="btn btn-primary" onclick="addSteamGame()">Steam Oyun Ekle</a>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a type="button" class="btn btn-primary steamcategory" data-steamname="all">Tümü</a>
+                            {% for steam in steams %}
+                                {% if steam: %}
+                                    <a type="button" class="btn btn-primary steamcategory" data-steamname="{{ steam.steamname }}">{{ steam.steamname }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Steam Hesap ismi</th>
+                                        <th>Oyun İsmi</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="steam-table">
+                                    {% for steam in steamgame %}
+                                        <tr id="steamgame-{{ steam.id }}" class="steam-row" data-steamname="{{ steam.steamname }}">
+                                            <td>{{ steam.steamname }}</td>
+                                            <td>{{ steam.gamename }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-danger" data-id="{{ steam.id }}" onclick="deletesteamgame(this)">
+                                                    <i class="fa fa-trash"></i> Sil
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>                        
+                    </div>
+                </div>            
             </div>
         </div>
     </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script>
-    var steamName = document.getElementById("steamName");
-    var gameName = document.getElementById("gameName");
-    var imageInput = document.getElementById("imageInput");
-    var imageSelect = document.getElementById("imageSelect");
-    
-    var popup = document.getElementById("popup");
-    var closePopup = document.getElementById("closePopup");
-    let formData = new FormData();
-    
-    function showPopup() {
-        popup.style.display = "flex";
-    }
-    function offPopup() {
-        popup.style.display = "none";
-    }
-    closePopup.addEventListener("click", offPopup);
-    function addMedia() {
-        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
 
-        if (imageSelect.value) {
-            formData.delete('image_name');
-            formData.append('image_name', imageSelect.value);
-            previewImage.src = "../../static/img/steam/" + imageSelect.value;
-        } else if (imageInput.files[0]) {
-            formData.delete('image_file');
-
-            formData.append('image_file', imageInput.files[0]);
-            
-            const fileReader = new FileReader();
-            fileReader.onload = function(event) {
-                previewImage.src = event.target.result;
-            };
-            fileReader.readAsDataURL(imageInput.files[0]);
-        }
-        
-        offPopup();
-    }
-    
-    function addsteam()
-    {
-        formData.append('gameName', gameName.value);
-        formData.append('steamName', steamName.value);
-        addMedia();
-        console.log(steamName.value);
-        console.log(gameName.value);
-        $.ajax({
-            url: "/steamsadd", 
-            type: "POST",
-            data: formData,
-            processData: false,  // FormData kullanıldığı için veri işlenmez
-            contentType: false,  // ContentType otomatik olarak ayarlanır
-            success: function(response) {
-                if (response.status === "success") {
-                    alert(response.message);
-                    location.reload();
-                } else {
-                    alert(response.message);
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        var steamName = document.getElementById("steamName");
+        var steamselect = document.getElementById("steamselect");
+        var gameselect = document.getElementById("gameselect");
+        function addSteamGame()
+        { 
+            let selectedGame = gameselect.options[gameselect.selectedIndex];
+            let selectedSteam = steamselect.options[steamselect.selectedIndex];
+            let gameid = selectedGame.id;
+            let steamid = selectedSteam.id;
+            let formData = new FormData();
+            formData.append('steamid', steamid);
+            formData.append('gameid', gameid);
+            $.ajax({
+                url: "/steamsadd", 
+                type: "POST",
+                data: formData,
+                processData: false,  // FormData kullanıldığı için veri işlenmez
+                contentType: false,  // ContentType otomatik olarak ayarlanır
+                success: function(response) {
+                    if (response.status === "success") {
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(error) {
+                    console.log("Hata: ", error);
+                    alert("Bir hata oluştu.");
                 }
-            },
-            error: function(error) {
-                console.log("Hata: ", error);
-                alert("Bir hata oluştu.");
-            }
-        });
-    }
+            });
+        }
+        function addsteam()
+        {
+            let formData = new FormData();
+            formData.append('steamName', steamName.value);
+            $.ajax({
+                url: "/steamsadd", 
+                type: "POST",
+                data: formData,
+                processData: false,  // FormData kullanıldığı için veri işlenmez
+                contentType: false,  // ContentType otomatik olarak ayarlanır
+                success: function(response) {
+                    if (response.status === "success") {
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(error) {
+                    console.log("Hata: ", error);
+                    alert("Bir hata oluştu.");
+                }
+            });
+        }
+        function deletesteam(button)
+        {
+            let steamId = button.getAttribute('data-id');
+            let row = document.getElementById('steam-' + steamId);
+            console.log(row);
+            let formData = new FormData();
+            formData.append('steamid', steamId);
+            $.ajax({
+                url: "/deletesteam", 
+                type: "POST",
+                data: formData,
+                processData: false,  // FormData ile çalışırken bu iki ayarı false yap
+                contentType: false,
+                success: function(response) {
+                    row.remove();
+                    alert("Steam başarıyla silindi.");
+                },
+                error: function(error) {
+                    console.log("Hata: ", error);
+                }
+            });
+        }
+        function deletesteamgame(button)
+        {
+            let steamGameId = button.getAttribute('data-id');
+            let row = document.getElementById('steamgame-' + steamGameId);
+            let formData = new FormData();
+            formData.append('steamgameid', steamGameId);
+            $.ajax({
+                url: "/deletesteamgame", 
+                type: "POST",
+                data: formData,
+                processData: false,  // FormData ile çalışırken bu iki ayarı false yap
+                contentType: false,
+                success: function(response) {
+                    row.remove();
+                    alert("Steam başarıyla silindi.");
+                },
+                error: function(error) {
+                    console.log("Hata: ", error);
+                }
+            });
+        }
+    </script>
+    <script>
+        document.querySelectorAll('.steamcategory').forEach(button => {
+            button.addEventListener('click', function () {
+                const selectedSteam = this.getAttribute('data-steamname');
+                const rows = document.querySelectorAll('.steam-row');
 
-    function deletesteam(button)
-    {
-        let steamId = button.getAttribute('data-id');
-        let row = document.getElementById('steam-' + steamId);
-        console.log(row);
-        let formData = new FormData();
-        formData.append('steamid', steamId);
-        $.ajax({
-            url: "/deletesteam", 
-            type: "POST",
-            data: formData,
-            processData: false,  // FormData ile çalışırken bu iki ayarı false yap
-            contentType: false,
-            success: function(response) {
-                row.remove();
-                alert("Steam başarıyla silindi.");
-            },
-            error: function(error) {
-                console.log("Hata: ", error);
-            }
+                rows.forEach(row => {
+                    if (selectedSteam === 'all') {
+                        row.style.display = ''; // Tümünü göster
+                    } else {
+                        row.style.display = row.getAttribute('data-steamname') === selectedSteam ? '' : 'none'; // Şarta göre göster/gizle
+                    }
+                });
+            });
         });
-    }
-</script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll("#settingsTab .nav-link");
+            const tabPanes = document.querySelectorAll(".tab-pane");
+
+            tabs.forEach(tab => {
+                tab.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    // Tüm sekmeleri pasif hale getir
+                    tabs.forEach(t => t.classList.remove("active"));
+                    tabPanes.forEach(pane => pane.classList.remove("show", "active"));
+
+                    // Seçilen sekmeyi aktif hale getir
+                    this.classList.add("active");
+                    const targetPane = document.querySelector(this.dataset.bsTarget);
+                    targetPane.classList.add("show", "active");
+                });
+            });
+        });
+    </script>
 {% endblock %}

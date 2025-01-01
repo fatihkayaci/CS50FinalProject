@@ -42,15 +42,18 @@ class tblfoods(db.Model):
 class tblgames(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     iconpath = db.Column(db.String(50), unique=False, nullable=True)
-    photopath = db.Column(db.String(50), unique=False, nullable=True)    
+    photopath = db.Column(db.String(50), unique=False, nullable=True)
     gamename = db.Column(db.String(100), unique=False, nullable=True)
-    text = db.Column(db.String(5000), unique=False, nullable=True)
+    text = db.Column(db.String(5000), unique=False, nullable=False, default=gamename)
 
 class tblsteams(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    iconpath = db.Column(db.String(50), unique=False, nullable=True)
-    gamename = db.Column(db.String(100), unique=False, nullable=True)
     steamname = db.Column(db.String(100), unique=False, nullable=True)
+    
+class tblsteamgame(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    steamid = db.Column(db.Integer, db.ForeignKey('tblsteams.id'), nullable=False)
+    gameid = db.Column(db.Integer, db.ForeignKey('tblgames.id'), nullable=False)
 
 class tblservice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -68,3 +71,5 @@ class tblsettings(db.Model):
     number = db.Column(db.String(100), unique=False, nullable=False, default="05302090732")
     mail = db.Column(db.String(100), unique=False, nullable=False, default="posta@teknikdost.com")
     adress = db.Column(db.String(100), unique=False, nullable=False, default="Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul")
+
+

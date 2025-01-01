@@ -1,7 +1,7 @@
 import os
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask.templating import render_template
-from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings, tblarsive
+from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings, tblarsive, tblsteamgame
 from flask_migrate import Migrate, migrate
 from werkzeug.utils import secure_filename
 from helpers import login_required
@@ -405,36 +405,44 @@ def updategame(id):
 def steamsadd():
     if request.method == "POST":
         steamname = request.form.get('steamName')
-        gamename = request.form.get('gameName')
-        image_file = request.files.get('image_file')
-        image_name = request.form.get('image_name')
-        if not steamname and not gamename and not (image_name or image_file):
+        steamid = request.form.get('steamid')
+        gameid = request.form.get('gameid')
+        
+        if not steamname and not steamid and not gameid:
             return jsonify({"success": False, "message": "Hata oluştu: Tüm alanlar boş bırakılamaz. Lütfen doldurunuz."})
         
-        file_path=''
-        if image_file and allowed_file(image_file.filename):
-            filename = secure_filename(image_file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'steam/', filename)
-            if not os.path.exists(file_path):
-                image_file.save(file_path)
-        elif image_name and allowed_file(image_name):
-            filename = secure_filename(image_name)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'steam/', filename)
-        newsteam = tblsteams(iconpath = file_path, gamename=gamename, steamname=steamname)
-        db.session.add(newsteam)
-        db.session.commit()        
+        if steamname:
+            newsteam = tblsteams(steamname=steamname)
+            db.session.add(newsteam)
+        if steamid and gameid:
+            newsteamgame = tblsteamgame(steamid=steamid, gameid=gameid)
+            db.session.add(newsteamgame)
+        db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'steam')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+
     steams = tblsteams.query.all()
+    games = tblgames.query.all()
+    query_result = (
+        db.session.query(tblsteamgame, tblsteams, tblgames)
+        .join(tblsteams, tblsteamgame.steamid == tblsteams.id)
+        .join(tblgames, tblsteamgame.gameid == tblgames.id)
+        .order_by(tblsteams.steamname)
+        .all()
+    )
+    steamgame = [
+        {
+            "id": steamgame.id,  # tblsteamgame.steamid
+            "steamname": steam.steamname,  # tblsteams.steamname
+            "gamename": game.gamename  # tblgames.gamename
+        }
+        for steamgame, steam, game in query_result
+    ]
     if steams is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
 
-    return render_template("/admin/steamsadd.html", steams=steams, all_images=all_images)
+    return render_template("/admin/steamsadd.html", steams=steams, games=games, steamgame=steamgame)
+
 
 @app.route("/deletesteam", methods=['GET', 'POST'])
 def deletesteam():
@@ -443,6 +451,19 @@ def deletesteam():
         if not steamid:  # foodid boşsa hata dön
             return {'status': 'error', 'message': 'Game ID is missing'}, 400
         delete = tblsteams.query.get(steamid)
+        if delete:
+            db.session.delete(delete)
+            db.session.commit()
+        return 'succesfull'
+    return 'str'
+
+@app.route("/deletesteamgame", methods=['GET', 'POST'])
+def deletesteamgame():
+    if request.method == "POST":
+        steamgameid = request.form.get('steamgameid')
+        if not steamgameid:  # foodid boşsa hata dön
+            return {'status': 'error', 'message': 'Game ID is missing'}, 400
+        delete = tblsteamgame.query.get(steamgameid)
         if delete:
             db.session.delete(delete)
             db.session.commit()
