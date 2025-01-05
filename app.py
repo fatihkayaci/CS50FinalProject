@@ -39,6 +39,26 @@ def cafeattribute():
     return render_template("users/cafeattribute.html", computerfields=computerfields, foods=foods, games=games, steams=steams)
 
 # admin paneli
+# ------------------------------------------------------General Methods Starts------------------------------------------------------
+def get_all_images(filename):
+    all_images = []
+    target_folder = os.path.join(UPLOAD_FOLDER, filename)
+    if os.path.exists(target_folder):
+        all_images = [file for file in os.listdir(target_folder) 
+                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    return all_images
+def add_file(file, image_file, image_name):
+    file_path = ''
+    if image_file and allowed_file(image_file.filename):
+        filename = secure_filename(image_file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file, '/', filename)
+        if not os.path.exists(file_path):
+            image_file.save(file_path)
+    elif image_name and allowed_file(image_name):
+        filename = secure_filename(image_name)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file, filename)
+    return file_path
+# ------------------------------------------------------General Methods Finals------------------------------------------------------
 # ------------------------------------------------------login start------------------------------------------------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -83,21 +103,11 @@ def updatemainpage(id):
         image_name = request.form.get('image_name')
         mediawithtext = tblmediaandtext.query.filter_by(id = id).first()
         if mediawithtext:
+            file_path = add_file('mainpage', image_file, image_name)
             mediawithtext.label = label
             mediawithtext.text1 = text1
             mediawithtext.text2 = text2
-            if image_file:
-                if allowed_file(image_file.filename):
-                    filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'mainpage/', filename)
-                    mediawithtext.path = file_path
-                if not os.path.exists(file_path):
-                    image_file.save(file_path)
-            elif image_name:
-                if allowed_file(image_name):
-                    filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'mainpage/', filename)
-                    mediawithtext.path = file_path
+            mediawithtext.path = file_path
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
 
@@ -106,11 +116,7 @@ def updatemainpage(id):
     if mediawithtext is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
     
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'mainpage')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    all_images = get_all_images("mainpage")
         
     return render_template("admin/updatepage/updatemainpage.html", mediawithtext=mediawithtext, all_images=all_images)
 # ------------------------------------------------------Mainpage process end------------------------------------------------------
@@ -141,6 +147,7 @@ def updatecomputerfields(id):
         image_name = request.form.get('image_name')
         computerfields = tblcomputerfiles.query.filter_by(id = id).first()
         if computerfields:
+            file_path = add_file('computerfields', image_file, image_name)
             computerfields.label = label
             computerfields.videocard = videocard
             computerfields.mothercard = mothercard
@@ -151,18 +158,7 @@ def updatecomputerfields(id):
             computerfields.ram = ram
             computerfields.screen = screen
             computerfields.keyboard = keyboard
-            if image_file:
-                if allowed_file(image_file.filename):
-                    filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'computerfields/', filename)
-                    computerfields.path = file_path
-                if not os.path.exists(file_path):
-                    image_file.save(file_path)
-            elif image_name:
-                if allowed_file(image_name):
-                    filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'computerfields/', filename)
-                    computerfields.path = file_path
+            computerfields.path = file_path
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
 
@@ -170,11 +166,7 @@ def updatecomputerfields(id):
     if computerfields is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
 
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'computerfields')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    all_images = get_all_images("computerfields")
     return render_template("/admin/updatepage/updatecomputerfields.html", computerfields=computerfields, all_images=all_images)
 # ------------------------------------------------------computer fields process end------------------------------------------------------
 # ------------------------------------------------------foods process start------------------------------------------------------
@@ -189,26 +181,15 @@ def foodsadd():
         image_name = request.form.get('image_name')
         if not foodname and not foodtext and not (image_name or image_file):
             return jsonify({"success": False, "message": "Hata oluştu: Tüm alanlar boş bırakılamaz. Lütfen doldurunuz."})
-        file_path=''
-        if image_file and allowed_file(image_file.filename):
-            filename = secure_filename(image_file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
-            if not os.path.exists(file_path):
-                image_file.save(file_path)
-        elif image_name and allowed_file(image_name):
-            filename = secure_filename(image_name)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
+        
+        file_path = add_file("foods", image_file, image_name)
         newfood = tblfoods(path = file_path, label=foodname, text=foodtext)
         db.session.add(newfood)
 
         db.session.commit()        
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'foods')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    all_images = get_all_images("foods")
     foods = tblfoods.query.all()
     return render_template("/admin/foodsadd.html", foods=foods, all_images=all_images)
 
@@ -239,20 +220,10 @@ def updatefood(id):
         image_name = request.form.get('image_name')
         foods = tblfoods.query.filter_by(id = id).first()
         if foods:
+            file_path = add_file('foods', image_file, image_name)
             foods.label = label
             foods.text = text
-            if image_file:    
-                if allowed_file(image_file.filename):
-                    filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
-                    foods.path = file_path
-                if not os.path.exists(file_path):
-                    image_file.save(file_path)
-            elif image_name:
-                if allowed_file(image_name):
-                    filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'],'foods/', filename)
-                    foods.path = file_path
+            foods.path = file_path
         
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
@@ -260,12 +231,9 @@ def updatefood(id):
     foods = tblfoods.query.filter_by(id = id).first()
     if foods is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
-        
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'foods')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+     
+
+    all_images = get_all_images("foods")
     return render_template("/admin/updatepage/updatefood.html", foods=foods, all_images=all_images)
 
 # ------------------------------------------------------foods process end------------------------------------------------------
@@ -285,15 +253,8 @@ def gamesadd():
             return jsonify({"success": False, "message": "Hata oluştu: Tüm alanlar boş bırakılamaz. Lütfen doldurunuz."})
         image_path=''
         icon_path=''
-        if image_file and allowed_file(image_file.filename):
-            filename = secure_filename(image_file.filename)
-            image_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/images/', filename)
-            if not os.path.exists(image_path):
-                image_file.save(image_path)
-        elif image_name and allowed_file(image_name):
-            filename = secure_filename(image_name)
-            image_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/images/', filename)
         
+        image_path = add_file('games/images', image_file, image_name)
         if icon_file and allowed_file(icon_file.filename):
             filename = secure_filename(icon_file.filename)
             icon_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/icon/', filename)
@@ -307,13 +268,8 @@ def gamesadd():
         db.session.add(newgame)
         db.session.commit()        
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
-
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'games/images')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
-        
+    
+    all_images = get_all_images("games/images")
     all_icon = []
     target_folder = os.path.join(UPLOAD_FOLDER, 'games/icon')
     if os.path.exists(target_folder):
@@ -349,20 +305,10 @@ def updategame(id):
         icon_file = request.files.get('icon_file')
         games = tblgames.query.filter_by(id = id).first()
         if games:
+            file_path = add_file('games/images', image_file, image_name)
             games.gamename = gamename
             games.text = gametext
-            if image_name and allowed_file(image_name):
-                filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/images/', filename)
-                games.photopath = file_path
-                if not os.path.exists(file_path):
-                    image_name.save(file_path)
-            elif image_file and allowed_file(image_file.filename):
-                filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'games/images/', filename)
-                games.photopath = file_path
-                if not os.path.exists(file_path):
-                    image_name.save(file_path)
+            image_name.save(file_path)
 
             if icon_name and allowed_file(icon_name):
                 filename = secure_filename(icon_name)  # Dosya adını güvenli hale getir
@@ -380,11 +326,7 @@ def updategame(id):
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'games/images')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    all_images = get_all_images("games/images")
         
     all_icon = []
     target_folder = os.path.join(UPLOAD_FOLDER, 'games/icon')
@@ -481,19 +423,10 @@ def updatesteam(id):
         image_name = request.form.get('image_name')
         steam = tblsteams.query.filter_by(id = id).first()
         if steam:
-            #iconpath
+            file_path = add_file('steam', image_file, image_name)
             steam.gamename = gamename
             steam.steamname = steamname
-            if image_file and allowed_file(image_file.filename):
-                filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'steam/', filename)
-                steam.iconpath = file_path
-                if not os.path.exists(file_path):
-                    image_file.save(file_path)
-            elif image_name and allowed_file(image_name):
-                filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'steam/', filename)
-                steam.iconpath = file_path
+            steam.iconpath = file_path
         
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
@@ -502,12 +435,8 @@ def updatesteam(id):
 
     if steam is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
-        
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'steam')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+
+    all_images = get_all_images("steam")
     return render_template("/admin/updatepage/updatesteam.html", steam=steam, all_images=all_images)
 # ------------------------------------------------------ steam process end ------------------------------------------------------
 
@@ -524,25 +453,14 @@ def service():
             return jsonify({"success": False, "message": "Hata oluştu: Tüm alanlar boş bırakılamaz. Lütfen doldurunuz."})
         
         file_path=''
-        if image_file and allowed_file(image_file.filename):
-            filename = secure_filename(image_file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'service/', filename)
-            if not os.path.exists(file_path):
-                image_file.save(file_path)
-        elif image_name and allowed_file(image_name):
-            filename = secure_filename(image_name)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'service/', filename)
+        file_path = add_file("service", image_file, image_name, file_path)
         newservice = tblservice(imagepath = file_path, name=servicename)
         db.session.add(newservice)
         db.session.commit()        
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'service')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
     
+    all_images = get_all_images("service")    
     services = tblservice.query.all()
     return render_template("/admin/service.html", services=services, all_images=all_images)
 
@@ -569,17 +487,9 @@ def updateservice(id):
         image_name = request.form.get('image_name')
         service = tblservice.query.filter_by(id = id).first()
         if service:
+            file_path = add_file('service', image_file, image_name)
             service.name = servicename
-            if image_file and allowed_file(image_file.filename):
-                filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'service/', filename)
-                service.imagepath = file_path
-                if not os.path.exists(file_path):
-                    image_file.save(file_path)
-            elif image_name and allowed_file(image_name):
-                filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'service/', filename)
-                service.imagepath = file_path
+            service.imagepath = file_path
         
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
@@ -588,12 +498,8 @@ def updateservice(id):
 
     if service is None:
         print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
-        
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'service')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+
+    all_images = get_all_images("service")    
         
     return render_template("/admin/updatepage/updateservice.html", service=service, all_images=all_images)
 # ------------------------------------------------------ service process end ------------------------------------------------------
@@ -634,11 +540,7 @@ def deletearsive():
 @app.route("/settings", methods=['GET', 'POST'])
 @login_required
 def settings():
-    all_images = []
-    target_folder = os.path.join(UPLOAD_FOLDER, 'generalsettings')
-    if os.path.exists(target_folder):
-        all_images = [file for file in os.listdir(target_folder) 
-                    if file.lower().endswith(('png', 'jpg', 'jpeg', 'gif', 'webp'))]
+    all_images = get_all_images("generalsettings")
     setting = tblsettings.query.first()
     user = tblusers.query.filter_by(id = session['user_id']).first()
     return render_template("/admin/settings.html", all_images=all_images, setting=setting, user=user)
@@ -667,22 +569,15 @@ def updatesettings():
         if user:
             user.user_name = username
             if password == passwordagain:user.password = password
+
         settings = tblsettings.query.first()
         if settings:
             settings.name = companyname
             settings.number = phonenumber
             settings.mail = email
             settings.adress = adress
-            if image_file and allowed_file(image_file.filename):
-                filename = secure_filename(image_file.filename)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'generalsettings/', filename)
-                settings.logopath = file_path
-                if not os.path.exists(file_path):
-                    image_file.save(file_path)
-            elif image_name and allowed_file(image_name):
-                filename = secure_filename(image_name)  # Dosya adını güvenli hale getir
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'generalsettings/', filename)
-                settings.logopath = file_path
+            file_path = add_file('generalsettings', image_file, image_name)
+            settings.logopath = file_path
         
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200

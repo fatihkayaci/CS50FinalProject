@@ -54,43 +54,15 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../../../static/js/popup.js"></script>
+<script src="../../../static/js/updatemedia.js"></script>
 <script>
-    var popup = document.getElementById("popup");
-    var closePopup = document.getElementById("closePopup");
     var imageSelect = document.getElementById("imageSelect");
     var imageInput = document.getElementById("imageInput");
     var servicename = document.getElementById("servicename");
-    let formData = new FormData();
+
     var path = window.location.pathname;
     var id = path.split('/')[2];
-
-    function showPopup() {
-        document.getElementById("popup").style.display = "flex";
-    }
-    function offPopup() {
-        popup.style.display = "none";
-    }
-    closePopup.addEventListener("click", offPopup);
-    function updateMedia() {
-        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
-
-        if (imageSelect.value) {
-            formData.delete('image_name');
-            formData.append('image_name', imageSelect.value);
-            previewImage.src = "../../static/img/service/" + imageSelect.value;
-        } else if (imageInput.files[0]) {
-            formData.delete('image_file');
-
-            formData.append('image_file', imageInput.files[0]);
-            
-            const fileReader = new FileReader();
-            fileReader.onload = function(event) {
-                previewImage.src = event.target.result;
-            };
-            fileReader.readAsDataURL(imageInput.files[0]);
-        }
-        offPopup();
-    }
 
     function updateservice()
     {   

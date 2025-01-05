@@ -38,9 +38,9 @@
                     <th><p>dosyadan seçme</p></th>
                     <th><p>bilgisayardan seçme</p></th>
                 </tr>
-                <tbody>
+                <tbody>           
                     <td>
-                        <select name="" id="photoSelect">
+                        <select name="" id="imageSelect">
                             <option selected disabled></option>
                             {% for image in all_images %}
                                 {% if image: %}
@@ -50,57 +50,25 @@
                         </select>
                     </td>
                     <td>
-                        <input type="file" id="photoInput" accept="image/*">
+                        <input type="file" id="imageInput" accept="image/*">
                     </td>
                 </tbody>
             </table>
         </div>
         <div>
-            <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
+            <button class="guncelle-btn" onclick="updateMedia(filename = 'mainpage')">Güncelle</button>
         </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../../../static/js/popup.js"></script>
+<script src="../../../static/js/updatemedia.js"></script>
 <script>
-    var popup = document.getElementById("popup");
-    var closePopup = document.getElementById("closePopup");
     var label = document.getElementById("label");
     var text1 = document.getElementById("text1");
     var text2 = document.getElementById("text2");
-    var photoSelect = document.getElementById('photoSelect');
-    var photoInput = document.getElementById('photoInput');
-    let formData = new FormData();
-    
     var path = window.location.pathname;
     var id = path.split('/')[2];
-
-    function showPopup() {
-        popup.style.display = "flex";
-    }
-    function offPopup() {
-        popup.style.display = "none";
-    }
-    closePopup.addEventListener("click", offPopup);
-    function updateMedia() {
-        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
-
-        if (photoSelect.value) {
-            formData.delete('image_name');
-            formData.append('image_name', photoSelect.value);
-            previewImage.src = "../../static/img/mainpage/" + photoSelect.value;
-        } else if (photoInput.files[0]) {
-            formData.delete('image_file');
-
-            formData.append('image_file', photoInput.files[0]);
-            
-            const fileReader = new FileReader();
-            fileReader.onload = function(event) {
-                previewImage.src = event.target.result;
-            };
-            fileReader.readAsDataURL(photoInput.files[0]);
-        }
-        offPopup();
-    }
 
     function updatetextandmedia()
     {   
