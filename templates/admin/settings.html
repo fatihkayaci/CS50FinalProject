@@ -59,7 +59,6 @@
     </div>
     <a type="button" class="btn btn-primary" onclick="updateSettings()">Ayarları Güncelle</a>
 </div>
-
 <div class="popup-background" id="popup" style="display: none;">
     <div class="popup-content">
         <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
@@ -90,56 +89,24 @@
             </table>
         </div>
         <div>
-            <button class="guncelle-btn" onclick="addMedia()">Güncelle</button>
+            <button class="guncelle-btn" onclick="updateMedia(filename = 'generalsettings')">Güncelle</button>
         </div>
     </div>
 </div>
-
 <!-- Custom Script -->
 
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../../static/js/popup.js"></script>
+<script src="../../static/js/updatemedia.js"></script>
 <script>
     var companyname = document.getElementById("companyname");
-    var imageInput = document.getElementById("imageInput");
-    var imageSelect = document.getElementById("imageSelect");
     var number = document.getElementById("number");
     var mail = document.getElementById("mail");
     var address = document.getElementById("address");
     var username = document.getElementById("username");
     var password = document.getElementById("password");
     var passwordagain = document.getElementById("passwordagain");
-    var popup = document.getElementById("popup");
-    var closePopup = document.getElementById("closePopup");
-    let formData = new FormData();
-    
-    function showPopup() {
-        popup.style.display = "flex";
-    }
-    function offPopup() {
-        popup.style.display = "none";
-    }
-    closePopup.addEventListener("click", offPopup);
-    function addMedia() {
-        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
-
-        if (imageSelect.value) {
-            formData.delete('image_name');
-            formData.append('image_name', imageSelect.value);
-            previewImage.src = "../../static/img/generalsettings/" + imageSelect.value;
-        } else if (imageInput.files[0]) {
-            formData.delete('image_file');
-
-            formData.append('image_file', imageInput.files[0]);
-            
-            const fileReader = new FileReader();
-            fileReader.onload = function(event) {
-                previewImage.src = event.target.result;
-            };
-            fileReader.readAsDataURL(imageInput.files[0]);
-        }
-        
-        offPopup();
-    }
     
     function updateSettings()
     {
@@ -156,7 +123,6 @@
             formData.append('username', username.value);
             formData.append('password', password.value);
             formData.append('passwordagain', passwordagain.value);
-            addMedia();
             $.ajax({
                 url: "/updatesettings", 
                 type: "POST",

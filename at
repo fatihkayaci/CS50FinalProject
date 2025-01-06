@@ -1,3 +1,45 @@
+class tblsettings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=False, nullable=False, default="Dost Oyun Merkezi")
+    logopath = db.Column(db.String(50), unique=False, nullable=False, default="img/generalsettings/logo.webp")
+    number = db.Column(db.String(100), unique=False, nullable=False, default="05302090732")
+    mail = db.Column(db.String(100), unique=False, nullable=False, default="posta@teknikdost.com")
+    adress = db.Column(db.String(100), unique=False, nullable=False, default="Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul")
+INSERT INTO tblsettings (name, logopath, number, mail, adress) VALUES('Dost Oyun Merkezi', 'img/generalsettings/logo.webp', '05302090732', 'posta@teknikdost.com', 'Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul');
+
+-- text
+INSERT INTO tbltext (text_message) VALUES('Dost Oyun Merkezi2');
+INSERT INTO tblmedia (image_path) VALUES('img/generalsettings/log22o.webp');
+INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('2', '2', 'mainpage', 'başlık1', 'title1');
+INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('1', '1', 'archivepage', 'ssds', 'afdadf');
+
+1|1|1|mainpage|başlık2|title1
+2|2|2|mainpage|başlık1|title1
+
+1|static/img/generalimage\images.jpeg
+
+1|dd
+
+class tbltext(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    textmessage = db.Column(db.String(5000), nullable=True)
+
+class tblmedia(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_path = db.Column(db.String(50), unique=False, nullable=True)
+
+class tblmediaandtext(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    textid = db.Column(db.Integer, db.ForeignKey('tbltext.id'), nullable=False)
+    mediaid = db.Column(db.Integer, db.ForeignKey('tblmedia.id'), nullable=False)
+    page_name = db.Column(db.String(50), unique=False, nullable=True)
+    title = db.Column(db.String(100), unique=False, nullable=True)    
+    label = db.Column(db.String(100), unique=False, nullable=True)
+
+
+
+
+
 -- settings
 INSERT INTO tblsettings (name, logopath, number, mail, adress) VALUES('Dost Oyun Merkezi', 'img/generalsettings/logo.webp', '05302090732', 'posta@teknikdost.com', 'Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul');
 

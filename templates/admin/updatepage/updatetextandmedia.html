@@ -1,26 +1,23 @@
 {% extends "admin/adminlayout.html" %} 
 {% block main %}
 <div class="container-fluid mt-4">
-    <h3 class="mb-4">Veri Düzenle</h3>
-    <!-- Label -->
     <div class="form-group">
-        <label for="label">Yemek İsmi</label>
-        <input type="text" name="label" id="label" class="form-control" value="{{ foods.label }}">
+        <label for="label">Başlık</label>
+        <input autocomplete="off" autofocus type="text" name="label" id="label" class="form-control" value="{{mediawithtext.label}}">
     </div>
-    
+
+    <div class="form-group">
+        <label for="text">Yazı</label>
+        <textarea autocomplete="off" name="text" id="text" class="form-control" rows="4">{{mediawithtext.text_message}}</textarea>
+    </div>
+
     <div class="form-group">
         <label for="image">Mevcut Resim</label><br>
-        <img  src="../{{ foods.path if foods.path else '../../static/img/noImage.jpg' }}" 
+        <img  src="../{{ mediawithtext.image_path if mediawithtext.image_path else '../../static/img/noImage.jpg' }}" 
                 alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
     </div>
-    
-    <div class="form-group">
-        <label for="text">Yemek Açıklama</label>
-        <textarea name="text" id="text" class="form-control" rows="4">{{ foods.text }}</textarea>
-    </div>
-    
-    <a onclick="updatefood()" class="btn btn-success">Güncelle</a>
-    <a href="/foodsadd" class="btn btn-secondary">İptal</a>
+    <a onclick="updatetextandmedia()" class="btn btn-success">Güncelle</button>
+    <a href="/indexa" class="btn btn-secondary">İptal</a>
 </div>
 
 <div class="popup-background" id="popup" style="display: none;">
@@ -53,10 +50,11 @@
             </table>
         </div>
         <div>
-            <button class="guncelle-btn" onclick="updateMedia(filename = 'foods')">Güncelle</button>
+            <button class="guncelle-btn" onclick="updateMedia(filename = 'generalimage')">Güncelle</button>
         </div>
     </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="../../../static/js/popup.js"></script>
 <script src="../../../static/js/updatemedia.js"></script>
@@ -65,13 +63,14 @@
     var text = document.getElementById("text");
     var path = window.location.pathname;
     var id = path.split('/')[2];
-    function updatefood()
+
+    function updatetextandmedia()
     {
         formData.append('id', id);
         formData.append('label', label.value);
         formData.append('text', text.value);
         $.ajax({
-            url: "/updatefood/" + id, 
+            url: "/updatetextandmedia/" + id, 
             type: "POST",
             data: formData,
             processData: false,  // FormData kullanıldığı için veri işlenmez
@@ -79,15 +78,17 @@
             success: function(response) {
                 if (response.status === "success") {
                     alert(response.message);
-                    window.location.href = "/foodsadd";
+                    window.location.href = "/indexa";
                 } else {
                     alert(response.message);
                 }
             },
             error: function(error) {
                 console.log("Hata: ", error);
+                alert("Bir hata oluştu.");
             }
         });
     }
+
 </script>
 {% endblock %}

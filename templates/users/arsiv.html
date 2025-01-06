@@ -1,0 +1,41 @@
+{%extends "users/layout.html" %}
+{% block main %}
+
+    <main>
+        <div class="mainHizmet">
+            <img class="mainPageImg" src="assets/img/sliders/20.webp" alt="main">
+            <div class="overlay dark"></div>
+
+            <div class="main-textHiz">
+                <div class="mainTextInsideHiz">
+                    <h1>ARŞİV</h1>
+
+                    <h2><span>DOST</span> OYUN MERKEZİ</h2>
+
+                    <p>Yanımızda olduğunuz için teşekkür ederiz. Geçmişten günümüze tüm değişimimizi ve büyümemizi bu
+                        arşivde keşfedebilirsiniz. Sizlerle birlikte her zaman en iyisi için çalıştık.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section id="galeri" class="hizmetSec">
+        <div class="baslik">
+            <h2><span>Kafe</span> Görselleri</h2>
+        </div>
+        {% for arsive in arsives %}
+            <div class="imgArsiv">
+                <img src="{{arsive.imagepath}}" alt="Dost Oyun Merkezi" loading="lazy">
+            </div>
+        {% endfor %}
+
+        <div class="modal" id="imageModal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="modalImg">
+        </div>
+    </section>
+
+ <script src="/static/js/arsivImgModal.js"></script>
+
+
+{% endblock %}

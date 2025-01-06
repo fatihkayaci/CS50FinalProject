@@ -1,7 +1,7 @@
 import os
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask.templating import render_template
-from models import db, tblusers, tblmediaandtext, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings, tblarsive, tblsteamgame
+from models import db, tblusers, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings, tblarsive, tblsteamgame, tbltext, tblmedia, tblmediaandtext
 from flask_migrate import Migrate, migrate
 from werkzeug.utils import secure_filename
 from helpers import login_required
@@ -18,13 +18,13 @@ def allowed_file(filename):
 # burayakadar
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dostcafe.db'
 
-db.init_app(app)
 
 # sessions 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 migrate = Migrate(app, db)
 
+db.init_app(app)
 @app.route("/")
 def indexp():
     return render_template("users/indexp.html")
@@ -36,8 +36,34 @@ def cafeattribute():
     foods = tblfoods.query.all()
     games = tblgames.query.all()
     steams = tblsteams.query.all()
-    return render_template("users/cafeattribute.html", computerfields=computerfields, foods=foods, games=games, steams=steams)
+    services = tblservice.query.all() 
+    query_result = (
+    db.session.query(
+        tblsteamgame.id,
+        tblsteams.steamname,
+        tblgames.gamename,
+        tblgames.iconpath
+    )
+    .join(tblsteams, tblsteamgame.steamid == tblsteams.id)
+    .join(tblgames, tblsteamgame.gameid == tblgames.id)
+    .order_by(tblsteams.steamname)
+    .all()
+    )
+    steamgames = [
+        {
+            "id": steamgame_id,  # tblsteamgame.steamid
+            "steamname": steamname,  # tblsteams.steamname
+            "gamename": gamename,  # tblgames.gamename
+            "imagepath": iconpath  # tblgames.iconpath
+        }
+        for steamgame_id, steamname, gamename, iconpath in query_result
+    ]
+    return render_template("users/cafeattribute.html", computerfields=computerfields, foods=foods, games=games, steams=steams, steamgames=steamgames, services=services)
 
+@app.route('/arsiv')
+def arsiv():
+    arsives = tblarsive.query.all()
+    return render_template("users/arsiv.html", arsives=arsives)
 # admin paneli
 # ------------------------------------------------------General Methods Starts------------------------------------------------------
 def get_all_images(filename):
@@ -51,7 +77,7 @@ def add_file(file, image_file, image_name):
     file_path = ''
     if image_file and allowed_file(image_file.filename):
         filename = secure_filename(image_file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file, '/', filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file, filename)
         if not os.path.exists(file_path):
             image_file.save(file_path)
     elif image_name and allowed_file(image_name):
@@ -59,6 +85,11 @@ def add_file(file, image_file, image_name):
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file, filename)
     return file_path
 # ------------------------------------------------------General Methods Finals------------------------------------------------------
+# ------------------------------------------------------Welcome Page Start------------------------------------------------------
+@app.route("/welcome")
+def welcome():
+    return render_template("welcome.html")
+# ------------------------------------------------------Welcome Page Finish------------------------------------------------------
 # ------------------------------------------------------login start------------------------------------------------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -77,8 +108,32 @@ def login():
         user = tblusers.query.filter_by(user_name = username).first()
         if user and user.password == password:
             session["user_id"] = user.id
-            mediawithtext = tblmediaandtext.query.all()
-            return render_template("admin/indexa.html", mediawithtext=mediawithtext)
+            query_result = (
+                db.session.query(
+                    tblmediaandtext.id,
+                    tblmediaandtext.page_name,
+                    tblmediaandtext.title,
+                    tblmediaandtext.label,
+                    tbltext.text_message,
+                    tblmedia.image_path
+                )
+                .join(tbltext, tblmediaandtext.textid == tbltext.id)
+                .join(tblmedia, tblmediaandtext.mediaid == tblmedia.id)
+                .all()
+            )
+
+            mediawithtext = [
+                {
+                    "id": id,
+                    "page_name": page_name,
+                    "title": title,
+                    "label": label,
+                    "text_message": text_message,
+                    "image_path": image_path
+                }
+                for id, page_name, title, label, text_message, image_path in query_result
+            ]
+            return render_template("admin/welcome.html", mediawithtext=mediawithtext)
         else:
             return render_template("admin/login.html")
         
@@ -87,38 +142,78 @@ def login():
 # ------------------------------------------------------Mainpage process start------------------------------------------------------
 @app.route("/indexa", methods=["GET", "POST"])
 @login_required
-def indexa():                   
-    mediawithtext = tblmediaandtext.query.all()
-    return render_template("admin/indexa.html", mediawithtext=mediawithtext)
+def indexa():              
+    query_result = (
+        db.session.query(
+            tblmediaandtext.id,
+            tblmediaandtext.page_name,
+            tblmediaandtext.title,
+            tblmediaandtext.label,
+            tbltext.text_message,
+            tblmedia.image_path
+        )
+        .join(tbltext, tblmediaandtext.textid == tbltext.id)
+        .join(tblmedia, tblmediaandtext.mediaid == tblmedia.id)
+        .all()
+    )
 
-@app.route("/updatemainpage/<int:id>", methods=['GET', 'POST'])
+    mediawithtext = [
+        {
+            "id": id,
+            "page_name": page_name,
+            "title": title,
+            "label": label,
+            "text_message": text_message,
+            "image_path": image_path
+        }
+        for id, page_name, title, label, text_message, image_path in query_result
+    ]
+    all_images = get_all_images("generalimage")
+    return render_template("admin/indexa.html", mediawithtext=mediawithtext, all_images=all_images)
+
+
+@app.route("/updatetextandmedia/<int:id>", methods=['GET', 'POST'])
 @login_required
-def updatemainpage(id):        
+def updatetextandmedia(id):
+    mediawithtext = (
+        db.session.query(
+            tblmediaandtext.id,
+            tblmediaandtext.textid,
+            tblmediaandtext.mediaid,
+            tblmediaandtext.page_name,
+            tblmediaandtext.title,
+            tblmediaandtext.label,
+            tbltext.text_message,
+            tblmedia.image_path,
+            tbltext.id.label('text_id'),
+            tblmedia.id.label('media_id')
+        )
+        .join(tbltext, tblmediaandtext.textid == tbltext.id)
+        .join(tblmedia, tblmediaandtext.mediaid == tblmedia.id)
+        .filter(tblmediaandtext.id == id)
+        .first()
+    )
+    if mediawithtext:
+        text = tbltext.query.filter(tblmediaandtext.textid == id).first()
+        media = tblmedia.query.filter(tblmediaandtext.mediaid == id).first()
+        tbltextandmedia = tblmediaandtext.query.filter(tblmediaandtext.id == id).first()
+
     if request.method == "POST":
-        id = request.form.get('id')
         label = request.form.get('label')
-        text1 = request.form.get('text1')
-        text2 = request.form.get('text2')
-        image_file = request.files.get('image_file')
+        text_message = request.form.get('text')
+        image_file = request.files.get('image')
         image_name = request.form.get('image_name')
-        mediawithtext = tblmediaandtext.query.filter_by(id = id).first()
-        if mediawithtext:
-            file_path = add_file('mainpage', image_file, image_name)
-            mediawithtext.label = label
-            mediawithtext.text1 = text1
-            mediawithtext.text2 = text2
-            mediawithtext.path = file_path
+        file_path = add_file('generalimage', image_file, image_name)
+        if file_path:
+            media.image_path = file_path
+        text.text_message=text_message
+        tbltextandmedia.label = label
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
 
+    all_images = get_all_images("generalimage")
+    return render_template("admin/updatepage/updatetextandmedia.html", mediawithtext=mediawithtext, all_images=all_images)
 
-    mediawithtext = tblmediaandtext.query.filter_by(id = id).first()
-    if mediawithtext is None:
-        print("böyle bir veri yok: not bunlar için bir şey yap fatih 404 için")
-    
-    all_images = get_all_images("mainpage")
-        
-    return render_template("admin/updatepage/updatemainpage.html", mediawithtext=mediawithtext, all_images=all_images)
 # ------------------------------------------------------Mainpage process end------------------------------------------------------
 # ------------------------------------------------------computer fields process start------------------------------------------------------
 
@@ -403,7 +498,7 @@ def deletesteam():
 def deletesteamgame():
     if request.method == "POST":
         steamgameid = request.form.get('steamgameid')
-        if not steamgameid:  # foodid boşsa hata dön
+        if not steamgameid:
             return {'status': 'error', 'message': 'Game ID is missing'}, 400
         delete = tblsteamgame.query.get(steamgameid)
         if delete:
@@ -448,12 +543,13 @@ def service():
         servicename = request.form.get('servicename')
         image_file = request.files.get('image_file')
         image_name = request.form.get('image_name')
-        
+        print(servicename)
+        print(image_file)
+        print(image_name)
         if not servicename and not (image_name or image_file):
             return jsonify({"success": False, "message": "Hata oluştu: Tüm alanlar boş bırakılamaz. Lütfen doldurunuz."})
         
-        file_path=''
-        file_path = add_file("service", image_file, image_name, file_path)
+        file_path = add_file("service", image_file, image_name)
         newservice = tblservice(imagepath = file_path, name=servicename)
         db.session.add(newservice)
         db.session.commit()        
@@ -503,25 +599,22 @@ def updateservice(id):
         
     return render_template("/admin/updatepage/updateservice.html", service=service, all_images=all_images)
 # ------------------------------------------------------ service process end ------------------------------------------------------
-# ------------------------------------------------------ arsive process end ------------------------------------------------------
+# ------------------------------------------------------ arsive process start ------------------------------------------------------
 @app.route("/arsive", methods=['GET', 'POST'])
 @login_required
 def arsive():
     if request.method == "POST":
         image_file = request.files.get('image_file')
-        file_path=''
-        if image_file and allowed_file(image_file.filename):
-            filename = secure_filename(image_file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'],'arsive/', filename)
-            if not os.path.exists(file_path):
-                image_file.save(file_path)
+        image_name = request.form.get('image_name')
+        file_path = add_file('arsive', image_file, image_name)
         newarsive = tblarsive(imagepath = file_path)
         db.session.add(newarsive)
         db.session.commit()        
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
     
+    all_images = get_all_images("arsive")
     arsives = tblarsive.query.all()
-    return render_template("/admin/arsive.html", arsives=arsives)
+    return render_template("/admin/arsive.html", arsives=arsives, all_images=all_images)
 
 @app.route("/deletearsive", methods=['GET', 'POST'])
 def deletearsive():
@@ -572,11 +665,11 @@ def updatesettings():
 
         settings = tblsettings.query.first()
         if settings:
+            file_path = add_file('generalsettings', image_file, image_name)
             settings.name = companyname
             settings.number = phonenumber
             settings.mail = email
             settings.adress = adress
-            file_path = add_file('generalsettings', image_file, image_name)
             settings.logopath = file_path
         
         db.session.commit()

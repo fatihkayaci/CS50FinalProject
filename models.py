@@ -9,15 +9,6 @@ class tblusers(db.Model):
     user_name = db.Column(db.String(30), unique=False, nullable=False)
     password = db.Column(db.String(20), nullable=False)
 
-class tblmediaandtext(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    page_name = db.Column(db.String(50), unique=False, nullable=False, default='')
-    label = db.Column(db.String(100), unique=False, nullable=True)
-    path = db.Column(db.String(50), unique=False, nullable=False, default='')
-    file_name = db.Column(db.String(255), nullable=False, default='')
-    text1 = db.Column(db.String(5000), nullable=True)
-    text2 = db.Column(db.String(5000), nullable=True)
-
 class tblcomputerfiles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(100), unique=False, nullable=True)
@@ -72,4 +63,19 @@ class tblsettings(db.Model):
     mail = db.Column(db.String(100), unique=False, nullable=False, default="posta@teknikdost.com")
     adress = db.Column(db.String(100), unique=False, nullable=False, default="Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul")
 
+class tbltext(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text_message = db.Column(db.String(5000), nullable=True)
+
+class tblmedia(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_path = db.Column(db.String(50), unique=False, nullable=True)
+
+class tblmediaandtext(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    textid = db.Column(db.Integer, db.ForeignKey('tbltext.id'), nullable=False)
+    mediaid = db.Column(db.Integer, db.ForeignKey('tblmedia.id'), nullable=False)
+    page_name = db.Column(db.String(50), unique=False, nullable=True)
+    title = db.Column(db.String(100), unique=False, nullable=True)    
+    label = db.Column(db.String(100), unique=False, nullable=True)
 

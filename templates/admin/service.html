@@ -50,7 +50,7 @@
         <div class="popup-content">
             <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
             <div>
-                <h3>Resim Seç</h3>
+                <h3>Media Seç</h3>
             </div>
             <div>
                 <table>
@@ -76,56 +76,22 @@
                 </table>
             </div>
             <div>
-                <button class="guncelle-btn" onclick="addMedia()">Güncelle</button>
+                <button class="guncelle-btn" onclick="updateMedia(filename = 'service')">Güncelle</button>
             </div>
         </div>
     </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../../static/js/popup.js"></script>
+<script src="../../static/js/updatemedia.js"></script>
 <script>
     var servicename = document.getElementById("servicename");
-    var imageSelect = document.getElementById("imageSelect");
-    var imageInput = document.getElementById("imageInput");
-    
-    var popup = document.getElementById("popup");
-    var closePopup = document.getElementById("closePopup");
-    let formData = new FormData();
-    
-    function showPopup() {
-        popup.style.display = "flex";
-    }
-    function offPopup() {
-        popup.style.display = "none";
-    }
-    closePopup.addEventListener("click", offPopup);
-
-    function addMedia() {
-        const previewImage = document.querySelector(".img-thumbnail"); // Önizleme resmi
-
-        if (imageSelect.value) {
-            formData.delete('image_name');
-            formData.append('image_name', imageSelect.value);
-            previewImage.src = "../../static/img/service/" + imageSelect.value;
-        } else if (imageInput.files[0]) {
-            formData.delete('image_file');
-
-            formData.append('image_file', imageInput.files[0]);
-            
-            const fileReader = new FileReader();
-            fileReader.onload = function(event) {
-                previewImage.src = event.target.result;
-            };
-            fileReader.readAsDataURL(imageInput.files[0]);
-        }
-        
-        offPopup();
-    }
+   
     
     function addservice()
     {
         formData.append('servicename', servicename.value);
-        addMedia();
-        console.log(formData.get('servicename'))
         $.ajax({
             url: "/service", 
             type: "POST",

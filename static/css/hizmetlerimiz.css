@@ -406,7 +406,7 @@ td{
 
 .imgArsiv img {
     flex: 1 1 20%;
-    max-width: calc(20% - 20px);
+    max-width: calc(33% - 20px);
     height: 200px;
     object-fit: cover;
     border-radius: 10px;
@@ -433,9 +433,7 @@ td{
 }
 
 .modal-content {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: scale-down;
+    width: 50%;
     border-radius: 10px;
 }
 
