@@ -5,6 +5,7 @@ from models import db, tblusers, tblfoods, tblcomputerfiles, tblgames, tblsteams
 from flask_migrate import Migrate, migrate
 from werkzeug.utils import secure_filename
 from helpers import login_required
+from collections import defaultdict
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -142,7 +143,7 @@ def login():
 # ------------------------------------------------------Mainpage process start------------------------------------------------------
 @app.route("/indexa", methods=["GET", "POST"])
 @login_required
-def indexa():              
+def indexa():
     query_result = (
         db.session.query(
             tblmediaandtext.id,
@@ -152,24 +153,28 @@ def indexa():
             tbltext.text_message,
             tblmedia.image_path
         )
-        .join(tbltext, tblmediaandtext.textid == tbltext.id)
-        .join(tblmedia, tblmediaandtext.mediaid == tblmedia.id)
+        .join(tbltext, tblmediaandtext.textid == tbltext.id, isouter=True)  # tbltext'e LEFT JOIN
+        .join(tblmedia, tblmediaandtext.mediaid == tblmedia.id, isouter=True)  # tblmedia'ya LEFT JOIN
         .all()
     )
 
-    mediawithtext = [
-        {
+    # page_name'e göre gruplama
+    grouped_by_page = defaultdict(lambda: defaultdict(list))
+
+    for id, page_name, title, label, text_message, image_path in query_result:
+        # Verileri page_name ve title ile gruplama
+        grouped_by_page[page_name][title].append({
             "id": id,
-            "page_name": page_name,
-            "title": title,
             "label": label,
-            "text_message": text_message,
-            "image_path": image_path
-        }
-        for id, page_name, title, label, text_message, image_path in query_result
-    ]
-    all_images = get_all_images("generalimage")
-    return render_template("admin/indexa.html", mediawithtext=mediawithtext, all_images=all_images)
+            "text_message": text_message or "",  # Boş mesajlar için varsayılan değer
+            "image_path": image_path or ""       # Boş resim yolları için varsayılan değer
+        })
+
+    all_images_main = get_all_images("generalimage/mainpage")
+    all_images_services = get_all_images("generalimage/servicespage")
+    all_images_archive = get_all_images("generalimage/archivepage")
+
+    return render_template("admin/indexa.html", grouped_by_page=grouped_by_page, all_images_main=all_images_main, all_images_services=all_images_services, all_images_archive=all_images_archive)
 
 
 @app.route("/updatetextandmedia/<int:id>", methods=['GET', 'POST'])
