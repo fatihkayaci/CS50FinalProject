@@ -17,70 +17,76 @@
     </ul>
     <div class="tab-content mt-3" id="settingsTabContent">
         <div class="tab-pane fade show active" id="main" role="tabpanel" aria-labelledby="main-tab">
-            {% for title, items in grouped_by_page['mainpage'].items() %}
+            {% set titles = ["maintitle", "services", "software", "aboutus"] %}
+            {% for title in titles %}
                 <div class="container-fluid border mb-3">
-                    <h3>{{ title }}</h3>
+                    <h3>{{ title | capitalize }}</h3>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">Label</th>
                                 <th scope="col">Text Message</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in items %}
-                                {% if item.label != '' %}
+                            {% for text in texts %}
+                                {% if text.title == title and text.page_name == "mainpage" %}
                                     <tr>
-                                        <td>{{ item.label }}</td>
-                                        <td>{{ item.text_message }}</td>
-                                        <td><a href="/updatetextandmedia/{{ item.id }}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Düzenle</a></td>
+                                        <td>{{ text.text_message }}</td>
+                                        <td>
+                                            <a href="/updatetextandmedia/{{ text.id }}" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-pencil"></i> Düzenle
+                                            </a>
+                                        </td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
-                    <!-- Resimleri div'in altına ekleme -->
+                    <!-- Sadece ilgili gruba ait ve mainpage'e ait resimleri göster -->
                     <div class="text-center mt-3">
-                        {% for item in items %}
-                            {% if item.image_path %}
-                                <img src="{{ item.image_path }}" alt="Image" class="img-fluid m-2" onclick="showPopup()" style="max-width: 200px;">
+                        {% for media in medias %}
+                            {% if media.title == title and media.page_name == "mainpage" and media.image_path %}
+                                <img src="{{ media.image_path }}" id="mediaphoto" alt="Image" class="img-fluid m-2" data-id="{{ media.id }}" onclick="showPopup(this)" style="max-width: 200px;">
                             {% endif %}
                         {% endfor %}
                     </div>
                 </div>
             {% endfor %}
         </div>
-
+        
         <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
-            {% for title, items in grouped_by_page['servicespage'].items() %}
+            {% set titles = ["servicetitle", "computer", "food", "game", "steam", "speedtest", "maintenanceservice", "servishizmetler", "cafephotos"] %}
+            {% for title in titles %}
                 <div class="container-fluid border mb-3">
-                    <h3>{{ title }}</h3>
+                    <h3>{{ title | capitalize }}</h3>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">Label</th>
                                 <th scope="col">Text Message</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in items %}
-                                {% if item.label != '' %}
+                            {% for text in texts %}
+                                {% if text.title == title and text.page_name == "servicespage" %}
                                     <tr>
-                                        <td>{{ item.label }}</td>
-                                        <td>{{ item.text_message }}</td>
-                                        <td><a href="/updatetextandmedia/{{ item.id }}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Düzenle</a></td>
-                                    </tr>    
+                                        <td>{{ text.text_message }}</td>
+                                        <td>
+                                            <a href="/updatetextandmedia/{{ text.id }}" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-pencil"></i> Düzenle
+                                            </a>
+                                        </td>
+                                    </tr>
                                 {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
-                    <!-- Resimleri div'in altına ekleme -->
+                    <!-- Sadece ilgili gruba ait ve mainpage'e ait resimleri göster -->
                     <div class="text-center mt-3">
-                        {% for item in items %}
-                            {% if item.image_path %}
-                                <img src="{{ item.image_path }}" alt="Image" class="img-fluid m-2" onclick="showPopup()" style="max-width: 200px;">
+                        {% for media in medias %}
+                            {% if media.title == title and media.page_name == "servicespage" and media.image_path %}
+                                <img src="{{ media.image_path }}" alt="Image" class="img-fluid m-2" onclick="showPopup()" style="max-width: 200px;">
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -89,34 +95,37 @@
         </div>
         
         <div class="tab-pane fade" id="archive" role="tabpanel" aria-labelledby="archive-tab">
-            {% for title, items in grouped_by_page['archivepage'].items() %}
+            {% set titles = ["cafephotos"] %}
+            {% for title in titles %}
                 <div class="container-fluid border mb-3">
-                    <h3>{{ title }}</h3>
+                    <h3>{{ title | capitalize }}</h3>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">Label</th>
                                 <th scope="col">Text Message</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in items %}
-                                {% if item.label != '' %}
+                            {% for text in texts %}
+                                {% if text.title == title and text.page_name == "archivepage" %}
                                     <tr>
-                                        <td>{{ item.label }}</td>
-                                        <td>{{ item.text_message }}</td>
-                                        <td><a href="/updatetextandmedia/{{ item.id }}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Düzenle</a></td>
-                                    </tr>    
+                                        <td>{{ text.text_message }}</td>
+                                        <td>
+                                            <a href="/updatetextandmedia/{{ text.id }}" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-pencil"></i> Düzenle
+                                            </a>
+                                        </td>
+                                    </tr>
                                 {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
-                    <!-- Resimleri div'in altına ekleme -->
+                    <!-- Sadece ilgili gruba ait ve mainpage'e ait resimleri göster -->
                     <div class="text-center mt-3">
-                        {% for item in items %}
-                            {% if item.image_path %}
-                                <img src="{{ item.image_path }}" alt="Image" class="img-fluid m-2" onclick="showPopup()" style="max-width: 200px;">
+                        {% for media in medias %}
+                            {% if media.title == title and media.page_name == "archivepage" and media.image_path %}
+                                <img src="{{ media.image_path }}" alt="Image" class="img-fluid m-2" onclick="showPopup()" style="max-width: 200px;">
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -125,7 +134,6 @@
         </div>
     </div>
 </div>
-
 <div class="popup-background" id="popup" style="display: none;">
     <div class="popup-content">
         <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
@@ -142,7 +150,7 @@
                     <td>
                         <select name="" id="imageSelect">
                             <option selected disabled></option>
-                            {% for image in all_images %}
+                            {% for image in all_images_main %}
                                 {% if image: %}
                                     <option value="{{image}}">{{image}}</option>
                                 {% endif %}
@@ -156,14 +164,43 @@
             </table>
         </div>
         <div>
-            <button class="guncelle-btn" onclick="updateMedia(filename = 'foods')">Güncelle</button>
+            <button class="guncelle-btn" onclick="updateMedia()">Güncelle</button>
         </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="../../static/js/popup.js"></script>
-<script src="../../static/js/updatemedia.js"></script>
+<!-- <script src="../../static/js/updatemedia.js"></script> -->
 <script>
+    var imageSelect = document.getElementById('imageSelect');
+    var imageInput = document.getElementById('imageInput');
+
+    function updateMedia() {
+        if (imageSelect.value) 
+            formData.append('image_name', imageSelect.value);
+        else if (imageInput.files[0])
+            formData.append('image_file', imageInput.files[0]);
+        $.ajax({
+            url: "/indexa", 
+            type: "POST",
+            data: formData,
+            processData: false,  // FormData kullanıldığı için veri işlenmez
+            contentType: false,  // ContentType otomatik olarak ayarlanır
+            success: function(response) {
+                if (response.status === "success") {
+                    alert(response.message);
+                    window.location.href = "/indexa";
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(error) {
+                console.log("Hata: ", error);
+                alert("Bir hata oluştu.");
+            }
+        });
+    }
+    
     document.addEventListener("DOMContentLoaded", function () {
         const tabs = document.querySelectorAll("#settingsTab .nav-link");
         const tabPanes = document.querySelectorAll(".tab-pane");

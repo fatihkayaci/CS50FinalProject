@@ -1,7 +1,7 @@
 import os
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask.templating import render_template
-from models import db, tblusers, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings, tblarsive, tblsteamgame, tbltext, tblmedia, tblmediaandtext
+from models import db, tblusers, tblfoods, tblcomputerfiles, tblgames, tblsteams, tblservice, tblsettings, tblarsive, tblsteamgame, tbltext, tblmedia
 from flask_migrate import Migrate, migrate
 from werkzeug.utils import secure_filename
 from helpers import login_required
@@ -28,7 +28,11 @@ migrate = Migrate(app, db)
 db.init_app(app)
 @app.route("/")
 def indexp():
-    return render_template("users/indexp.html")
+    text = tbltext.query.all()
+    all_images_main = get_all_images("generalimage/mainpage")
+    all_images_services = get_all_images("generalimage/servicespage")
+    all_images_archive = get_all_images("generalimage/archivepage")
+    return render_template("users/indexp.html", all_images_main=all_images_main, all_images_services=all_images_services, all_images_archive=all_images_archive)
 
 @app.route("/cafeattribute")
 def cafeattribute():
@@ -109,32 +113,7 @@ def login():
         user = tblusers.query.filter_by(user_name = username).first()
         if user and user.password == password:
             session["user_id"] = user.id
-            query_result = (
-                db.session.query(
-                    tblmediaandtext.id,
-                    tblmediaandtext.page_name,
-                    tblmediaandtext.title,
-                    tblmediaandtext.label,
-                    tbltext.text_message,
-                    tblmedia.image_path
-                )
-                .join(tbltext, tblmediaandtext.textid == tbltext.id)
-                .join(tblmedia, tblmediaandtext.mediaid == tblmedia.id)
-                .all()
-            )
-
-            mediawithtext = [
-                {
-                    "id": id,
-                    "page_name": page_name,
-                    "title": title,
-                    "label": label,
-                    "text_message": text_message,
-                    "image_path": image_path
-                }
-                for id, page_name, title, label, text_message, image_path in query_result
-            ]
-            return render_template("admin/welcome.html", mediawithtext=mediawithtext)
+            return render_template("admin/welcome.html")
         else:
             return render_template("admin/login.html")
         
@@ -144,80 +123,38 @@ def login():
 @app.route("/indexa", methods=["GET", "POST"])
 @login_required
 def indexa():
-    query_result = (
-        db.session.query(
-            tblmediaandtext.id,
-            tblmediaandtext.page_name,
-            tblmediaandtext.title,
-            tblmediaandtext.label,
-            tbltext.text_message,
-            tblmedia.image_path
-        )
-        .join(tbltext, tblmediaandtext.textid == tbltext.id, isouter=True)  # tbltext'e LEFT JOIN
-        .join(tblmedia, tblmediaandtext.mediaid == tblmedia.id, isouter=True)  # tblmedia'ya LEFT JOIN
-        .all()
-    )
+    if request.method == "POST":
+        image_file = request.files.get('image')
+        image_name = request.form.get('image_name')
+        file_path = add_file('generalimage/mainpage', image_file, image_name)
+        data_id = request.form.get('dataid')
+        media = tblmedia.query.filter_by(id = data_id).first()
+        if media:
+            media.image_path = file_path
 
-    # page_name'e göre gruplama
-    grouped_by_page = defaultdict(lambda: defaultdict(list))
+        db.session.commit()
+        return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
 
-    for id, page_name, title, label, text_message, image_path in query_result:
-        # Verileri page_name ve title ile gruplama
-        grouped_by_page[page_name][title].append({
-            "id": id,
-            "label": label,
-            "text_message": text_message or "",  # Boş mesajlar için varsayılan değer
-            "image_path": image_path or ""       # Boş resim yolları için varsayılan değer
-        })
-
+    texts = tbltext.query.all()
+    medias = tblmedia.query.all()
     all_images_main = get_all_images("generalimage/mainpage")
     all_images_services = get_all_images("generalimage/servicespage")
     all_images_archive = get_all_images("generalimage/archivepage")
-
-    return render_template("admin/indexa.html", grouped_by_page=grouped_by_page, all_images_main=all_images_main, all_images_services=all_images_services, all_images_archive=all_images_archive)
+    return render_template("admin/indexa.html", texts=texts, medias=medias, all_images_main=all_images_main, all_images_services=all_images_services, all_images_archive=all_images_archive)
 
 
 @app.route("/updatetextandmedia/<int:id>", methods=['GET', 'POST'])
 @login_required
 def updatetextandmedia(id):
-    mediawithtext = (
-        db.session.query(
-            tblmediaandtext.id,
-            tblmediaandtext.textid,
-            tblmediaandtext.mediaid,
-            tblmediaandtext.page_name,
-            tblmediaandtext.title,
-            tblmediaandtext.label,
-            tbltext.text_message,
-            tblmedia.image_path,
-            tbltext.id.label('text_id'),
-            tblmedia.id.label('media_id')
-        )
-        .join(tbltext, tblmediaandtext.textid == tbltext.id)
-        .join(tblmedia, tblmediaandtext.mediaid == tblmedia.id)
-        .filter(tblmediaandtext.id == id)
-        .first()
-    )
-    if mediawithtext:
-        text = tbltext.query.filter(tblmediaandtext.textid == id).first()
-        media = tblmedia.query.filter(tblmediaandtext.mediaid == id).first()
-        tbltextandmedia = tblmediaandtext.query.filter(tblmediaandtext.id == id).first()
-
+    text = tbltext.query.filter_by(id = id).first()
     if request.method == "POST":
-        label = request.form.get('label')
-        text_message = request.form.get('text')
-        image_file = request.files.get('image')
-        image_name = request.form.get('image_name')
-        file_path = add_file('generalimage', image_file, image_name)
-        if file_path:
-            media.image_path = file_path
-        text.text_message=text_message
-        tbltextandmedia.label = label
+        if text:
+            text.text_message = request.form.get('text')
         db.session.commit()
         return jsonify({"message": "Güncelleme başarılı", "status": "success"}), 200
+    
 
-    all_images = get_all_images("generalimage")
-    return render_template("admin/updatepage/updatetextandmedia.html", mediawithtext=mediawithtext, all_images=all_images)
+    return render_template("admin/updatepage/updatetextandmedia.html", text = text)
 
 # ------------------------------------------------------Mainpage process end------------------------------------------------------
 # ------------------------------------------------------computer fields process start------------------------------------------------------

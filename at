@@ -1,181 +1,128 @@
 INSERT INTO tblsettings (name, logopath, number, mail, adress) VALUES('Dost Oyun Merkezi', 'img/generalsettings/logo.webp', '05302090732', 'posta@teknikdost.com', 'Dost Kafe, Tarabya, Çıra Sk. no 26, 34457 Sarıyer/İstanbul');
-
+CREATE TABLE tblmedia (
+        id INTEGER NOT NULL,
+        image_path VARCHAR(50),
+        page_name VARCHAR(50),
+        title VARCHAR(100),
+        PRIMARY KEY (id)
+);
+CREATE TABLE tbltext (
+        id INTEGER NOT NULL,
+        text_message VARCHAR(5000),
+        page_name VARCHAR(50),
+        title VARCHAR(100),
+        PRIMARY KEY (id)
+);
 -- text
-mainpage başlık
-INSERT INTO tbltext (text_message) VALUES('23 YILDIR HİZMETİNİZDEYİZ');
-INSERT INTO tbltext (text_message) VALUES('KALİTE ASLA TESADÜF DEĞİLDİR');
-INSERT INTO tbltext (text_message) VALUES('Yanımızda olduğunuz için teşekkür ederiz. Sizlere daima en iyi hizmeti sunmaya devam edeceğiz.');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('1', '', 'mainpage', 'maintitle', 'Başlık1');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('2', '', 'mainpage', 'maintitle', 'Başlık2');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('3', '', 'mainpage', 'maintitle', 'Başlık3');
+-- mainpage başlık
+INSERT INTO tbltext (text_message, page_name, title) VALUES('23 YILDIR HİZMETİNİZDEYİZ', 'mainpage', 'maintitle');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('KALİTE ASLA TESADÜF DEĞİLDİR', 'mainpage', 'maintitle');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Yanımızda olduğunuz için teşekkür ederiz. Sizlere daima en iyi hizmeti sunmaya devam edeceğiz.', 'mainpage', 'maintitle');
 
-mainpage Hizmetlerimiz
-INSERT INTO tbltext (text_message) VALUES('Dost Oyun Merkezi');
-INSERT INTO tbltext (text_message) VALUES('KAFEMİZ');
-INSERT INTO tbltext (text_message) VALUES('Güvenilir bilgisayar parçaları, üstün performans!');
-INSERT INTO tbltext (text_message) VALUES('Bilgisayar Alanları');
-INSERT INTO tbltext (text_message) VALUES('Lezzetli molalar, enerji dolu anlar!');
-INSERT INTO tbltext (text_message) VALUES('Yiyecek Hizmeti');
-INSERT INTO tbltext (text_message) VALUES('Oyun hesaplarıyla dilediğiniz oyunun keyfini çıkarın!');
-INSERT INTO tbltext (text_message) VALUES('Oyun Hesapları');
-INSERT INTO tbltext (text_message) VALUES('Yüksek Hızlı İnternet ile kesintisiz oyun ve eğlence!');
-INSERT INTO tbltext (text_message) VALUES('İnternet');
-INSERT INTO tbltext (text_message) VALUES('Profesyonel bakım, kesintisiz performans!');
-INSERT INTO tbltext (text_message) VALUES('Bakım Servisi');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/mainpage/computerfields.jpg');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/mainpage/foods.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/mainpage/games.jpg');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/mainpage/speedtest.jpg');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/mainpage/services.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/mainpage/kafemiz.webp');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('4', '', 'mainpage', 'hizmetler', 'hizmetler1');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('5', '1', 'mainpage', 'hizmetler', 'hizmetler2');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('6', '', 'mainpage', 'hizmetler', 'hizmetler3');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('7', '2', 'mainpage', 'hizmetler', 'hizmetler4');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('8', '', 'mainpage', 'hizmetler', 'hizmetler5');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('9', '3', 'mainpage', 'hizmetler', 'hizmetler6');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('10', '', 'mainpage', 'hizmetler', 'hizmetler7');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('11', '4', 'mainpage', 'hizmetler', 'hizmetler8');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('12', '', 'mainpage', 'hizmetler', 'hizmetler9');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('13', '5', 'mainpage', 'hizmetler', 'hizmetler10');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('14', '', 'mainpage', 'hizmetler', 'hizmetler11');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('15', '6', 'mainpage', 'hizmetler', 'hizmetler12');
+-- mainpage Hizmetlerimiz
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Dost Oyun Merkezi', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('KAFEMİZ', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Güvenilir bilgisayar parçaları, üstün performans!', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Bilgisayar Alanları', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Lezzetli molalar, enerji dolu anlar!', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Yiyecek Hizmeti', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Oyun hesaplarıyla dilediğiniz oyunun keyfini çıkarın!', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Oyun Hesapları', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Yüksek Hızlı İnternet ile kesintisiz oyun ve eğlence!', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('İnternet', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Profesyonel bakım, kesintisiz performans!', 'mainpage', 'services');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Bakım Servisi', 'mainpage', 'services');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/mainpage/computerfields.jpg', 'mainpage', 'services');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/mainpage/foods.webp', 'mainpage', 'services');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/mainpage/games.jpg', 'mainpage', 'services');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/mainpage/speedtest.jpg', 'mainpage', 'services');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/mainpage/services.webp', 'mainpage', 'services');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/mainpage/kafemiz.webp', 'mainpage', 'services');
 
-mainpage Yazılım Geliştirme Hizmetleri
-INSERT INTO tbltext (text_message) VALUES('Yazılım');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/mainpage/software.webp');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('16', '7', 'mainpage', 'software', 'software');
+-- mainpage Yazılım Geliştirme Hizmetleri
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Yazılım', 'mainpage', 'software');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/mainpage/software.webp', 'mainpage', 'software');
 
-mainpage Hakkımızda
-INSERT INTO tbltext (text_message) VALUES('Hakkımızda');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/mainpage/hakkimizda.webp');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('17', '8', 'mainpage', 'hakkimizda', 'hakkimizda');
+-- mainpage Hakkımızda
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Hakkımızda', 'mainpage', 'aboutus');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/mainpage/hakkimizda.webp', 'aboutus', 'aboutus');
 
-services baslik
-INSERT INTO tbltext (text_message) VALUES('KAFEMİZ');
-INSERT INTO tbltext (text_message) VALUES('DOST OYUN MERKEZİ');
-INSERT INTO tbltext (text_message) VALUES('Yanımızda olduğunuz için teşekkür ederiz. Sizlere daima en iyi hizmeti sunmaya devam edeceğiz.');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('18', '', 'servicespage', 'hizmetler', 'hizmetlerbaslik1');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('19', '', 'servicespage', 'hizmetler', 'hizmetlerbaslik2');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('20', '', 'servicespage', 'hizmetler', 'hizmetlerbaslik3');
+-- services baslik
+INSERT INTO tbltext (text_message, page_name, title) VALUES('KAFEMİZ', 'servicespage', 'servicetitle');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('DOST OYUN MERKEZİ', 'servicespage', 'servicetitle');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Yanımızda olduğunuz için teşekkür ederiz. Sizlere daima en iyi hizmeti sunmaya devam edeceğiz.', 'servicespage', 'servicetitle');
 
-services bilgisayar
-INSERT INTO tbltext (text_message) VALUES('Bilgisayar');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('21', '', 'servicespage', 'bilgisayar', 'bilgisayar');
+-- services bilgisayar 
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Bilgisayar', 'servicespage', 'computer');
 
-services foods
-INSERT INTO tbltext (text_message) VALUES('Yiyecek Hizmeti');
-INSERT INTO tbltext (text_message) VALUES('Atıştırmalıklarımız');
-INSERT INTO tbltext (text_message) VALUES('İçeceklerimiz');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/yiyecekler.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/icecekler.webp');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('22', '', 'servicespage', 'yiyecek', 'yiyecekbaslik');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('23', '9', 'servicespage', 'yiyecek', 'atistirmalikbaslik');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('24', '10', 'servicespage', 'yiyecek', 'icecekbaslik');
+-- services foods
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Yiyecek Hizmeti', 'servicespage', 'food');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Atıştırmalıklarımız', 'servicespage', 'food');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('İçeceklerimiz', 'servicespage', 'food');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/yiyecekler.webp', 'servicespage', 'food');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/icecekler.webp', 'servicespage', 'food');
 
-services ozeloyunlar
-INSERT INTO tbltext (text_message) VALUES('Özel Oyunlarımız');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('25', '', 'servicespage', 'ozeloyunlar', 'ozeloyunlarbaslik');
+-- services ozeloyunlar
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Özel Oyunlarımız', 'servicespage', 'game');
 
-services steamgame
-INSERT INTO tbltext (text_message) VALUES('Steam Hesapları');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('26', '', 'servicespage', 'steam', 'steam');
+-- services steamgame
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Steam Hesapları', 'servicespage', 'steam');
 
-services HizTest
-INSERT INTO tbltext (text_message) VALUES('Hız Testi');
-INSERT INTO tbltext (text_message) VALUES('Kesintisiz Hız, Maksimum Performans');
-INSERT INTO tbltext (text_message) VALUES('İnternet');
-INSERT INTO tbltext (text_message) VALUES('Oyunlardan Alınan Pingler');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/speedtest.webp');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('27', '11', 'servicespage', 'hiztest', 'hiztestbaslik');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('28', '', 'servicespage', 'hiztest', 'hiztestbaslik2');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('29', '', 'servicespage', 'hiztest', 'hiztestmetin');
+-- services HizTest
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Hız Testi', 'servicespage', 'speedtest');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Kesintisiz Hız, Maksimum Performans', 'servicespage', 'speedtest');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('İnternet', 'servicespage', 'speedtest');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Oyunlardan Alınan Pingler', 'servicespage', 'speedtest');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/speedtest.webp', 'servicespage', 'speedtest');
 
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('30', '', 'servicespage', 'hiztest', 'hiztestoyun');
+-- services Bakım Servisi
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Bakım Servisi', 'servicespage', 'maintenanceservice');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/fixInside.webp', 'servicespage', 'maintenanceservice');
 
-services Bakım Servisi
-INSERT INTO tbltext (text_message) VALUES('Bakım Servisi');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/fixInside.webp');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('31', '12', 'servicespage', 'bakimservis', 'bakimservisbaslik');
+-- services Servis Hizmetlerimiz
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Servis Hizmetlerimiz', 'servicespage', 'servishizmetler');
 
+-- services Kafe Görselleri buradan devam edeceğim
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Kafe Görselleri', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/01.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/02.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/03.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/04.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/05.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/06.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/07.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/08.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/09.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/10.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/11.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/12.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/13.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/14.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/15.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/16.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/17.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/18.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/19.webp', 'servicespage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/servicespage/21.webp', 'servicespage', 'cafephotos');
 
-services Servis Hizmetlerimiz
-INSERT INTO tbltext (text_message) VALUES('Servis Hizmetlerimiz');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('32', '', 'servicespage', 'servishizmetler', 'servishizmetlerbaslik');
+-- archive ARŞİV
+INSERT INTO tbltext (text_message, page_name, title) VALUES('ARŞİV', 'archivepage', 'archivetitle');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('DOST OYUN MERKEZİ', 'archivepage', 'archivetitle');
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Yanımızda olduğunuz için teşekkür ederiz. Geçmişten günümüze tüm değişimimizi ve büyümemizi bu arşivde keşfedebilirsiniz. Sizlerle birlikte her zaman en iyisi için çalıştık.', 'archivepage', 'archivetitle');
 
-services Kafe Görselleri
-INSERT INTO tbltext (text_message) VALUES('Kafe Görselleri');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/01.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/02.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/03.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/04.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/05.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/06.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/07.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/08.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/09.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/10.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/11.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/12.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/13.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/14.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/15.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/16.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/17.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/18.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/19.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/servicespage/21.webp');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('32', '13', 'servicespage', 'kafegorsel', 'servishizmetlerbaslik');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '14', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '15', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '16', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '17', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '18', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '19', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '20', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '21', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '22', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '23', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '24', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '25', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '26', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '27', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '28', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '29', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '30', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '31', 'servicespage', 'kafegorsel', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '32', 'servicespage', 'kafegorsel', '');
+-- archive arşiv
+INSERT INTO tbltext (text_message, page_name, title) VALUES('Arşiv', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/01.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/02.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/03.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/04.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/05.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/06.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/07.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/08.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/09.webp', 'archivepage', 'cafephotos');
+INSERT INTO tblmedia (image_path, page_name, title) VALUES('static/img/generalimage/archivepage/10.webp', 'archivepage', 'cafephotos');
 
-archive ARŞİV
-INSERT INTO tbltext (text_message) VALUES('ARŞİV');
-INSERT INTO tbltext (text_message) VALUES('DOST OYUN MERKEZİ');
-INSERT INTO tbltext (text_message) VALUES('Yanımızda olduğunuz için teşekkür ederiz. Geçmişten günümüze tüm değişimimizi ve büyümemizi bu arşivde keşfedebilirsiniz. Sizlerle birlikte her zaman en iyisi için çalıştık.');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('33', '', 'archivepage', 'Arşive Başlık', 'arsivebaslik1');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('34', '', 'archivepage', 'Arşive Başlık', 'arsivebaslik2');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('35', '', 'archivepage', 'Arşive Başlık', 'arsivebaslik3');
-
-archive arşiv
-INSERT INTO tbltext (text_message) VALUES('Arşiv');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/01.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/02.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/03.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/04.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/05.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/06.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/07.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/08.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/09.webp');
-INSERT INTO tblmedia (image_path) VALUES('static/img/generalimage/archivepage/10.webp');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('39', '33', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '34', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '35', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '36', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '37', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '38', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '39', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '40', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '41', 'archivepage', 'kafe görselleri', '');
-INSERT INTO tblmediaandtext (textid, mediaid, page_name, title, label) VALUES('', '42', 'archivepage', 'kafe görselleri', '');
 
 -------------------------------------------------------------anasayfa bitiş--------------------------------------------------------------
 

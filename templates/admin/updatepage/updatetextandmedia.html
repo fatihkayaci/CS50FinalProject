@@ -2,59 +2,12 @@
 {% block main %}
 <div class="container-fluid mt-4">
     <div class="form-group">
-        <label for="label">Başlık</label>
-        <input autocomplete="off" autofocus type="text" name="label" id="label" class="form-control" value="{{mediawithtext.label}}">
-    </div>
-
-    <div class="form-group">
         <label for="text">Yazı</label>
-        <textarea autocomplete="off" name="text" id="text" class="form-control" rows="4">{{mediawithtext.text_message}}</textarea>
-    </div>
-
-    <div class="form-group">
-        <label for="image">Mevcut Resim</label><br>
-        <img  src="../{{ mediawithtext.image_path if mediawithtext.image_path else '../../static/img/noImage.jpg' }}" 
-                alt="photo" class="img-thumbnail mb-3" style="width: 150px; height: 150px;" onclick="showPopup()">
+        <textarea autocomplete="off" name="text" id="text" class="form-control" rows="4">{{text.text_message}}</textarea>
     </div>
     <a onclick="updatetextandmedia()" class="btn btn-success">Güncelle</button>
     <a href="/indexa" class="btn btn-secondary">İptal</a>
 </div>
-
-<div class="popup-background" id="popup" style="display: none;">
-    <div class="popup-content">
-        <button class="close-btn kapat" id="closePopup"><h3>X</h3></button>
-        <div>
-            <h3>Media Seç</h3>
-        </div>
-        <div>
-            <table>
-                <tr>
-                    <th><p>dosyadan seçme</p></th>
-                    <th><p>bilgisayardan seçme</p></th>
-                </tr>
-                <tbody>
-                    <td>
-                        <select name="" id="imageSelect">
-                            <option selected disabled></option>
-                            {% for image in all_images %}
-                                {% if image: %}
-                                    <option value="{{image}}">{{image}}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td>
-                        <input type="file" id="imageInput" accept="image/*">
-                    </td>
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <button class="guncelle-btn" onclick="updateMedia(filename = 'generalimage')">Güncelle</button>
-        </div>
-    </div>
-</div>
-
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="../../../static/js/popup.js"></script>
 <script src="../../../static/js/updatemedia.js"></script>
@@ -63,11 +16,10 @@
     var text = document.getElementById("text");
     var path = window.location.pathname;
     var id = path.split('/')[2];
-
+    
     function updatetextandmedia()
     {
         formData.append('id', id);
-        formData.append('label', label.value);
         formData.append('text', text.value);
         $.ajax({
             url: "/updatetextandmedia/" + id, 
